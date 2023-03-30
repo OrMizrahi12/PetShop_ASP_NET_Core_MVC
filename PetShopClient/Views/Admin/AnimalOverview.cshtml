@@ -1,0 +1,10 @@
+﻿@model IEnumerable<PetShopApiServise.DtoModels.Animals>
+
+@{
+    ViewData["Title"] = "AnimalOverview";
+}
+
+
+
+@await Html.PartialAsync("Admin/_AdminDeshbord", ViewData)
+@await Html.PartialAsync("Admin/_AnimalOverview", Model)

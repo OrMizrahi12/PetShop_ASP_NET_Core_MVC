@@ -1,0 +1,69 @@
+﻿@model PetShopApiServise.DtoModels.Animals
+
+@* Show Model.Image, Model.Age, Model.Catetegory, Model.Name Model.AnimalId*@
+
+<head>
+    <link rel="stylesheet" href="~/styles/Forms/EditAnimalForm.css" />
+    <script src="~/scripts/jquery.min.js"></script>
+    <script src="~/scripts/jquery.validate.min.js"></script>
+    <script src="~/ValidationForms/AddAnimalFormValidation.js"></script>
+
+</head>
+@{
+    var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = Model.Image }); 
+    var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = Model.CategoryId });
+}
+<form asp-controller="Admin" asp-action="UpdateAnimal" method="post" enctype="multipart/form-data" class="AnimalEditor">
+    <div class="form-group">
+        <label for="Name" class="AnimalEditor-label">Name:</label>
+        <input type="text" id="Name" name="Name" value="@Model.Name" class="AnimalEditor-input" required />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Age" class="AnimalEditor-label">Age:</label>
+        <input type="number" id="Age" name="Age" value="@Model.Age" class="AnimalEditor-input" min="0" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="ImageFile" class="AnimalEditor-label">Image:</label>
+        <input type="file" id="ImageFile" name="ImageFile" class="AnimalEditor-file-input" accept="image/*" />
+        <label for="ImageFile" class="AnimalEditor-file-label">Choose a file</label>
+        <img src="@ImageSrc" alt="Animal Image" width="100" id="preview" class="AnimalEditor-img">
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Description" class="AnimalEditor-label">Description:</label>
+        <textarea id="Description" name="Description" class="AnimalEditor-textarea">@Model.Description</textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="CategoryId" class="AnimalEditor-label">Category:</label>
+        <select asp-for="CategoryId" id="CategoryId" name="CategoryId" class="AnimalEditor-select">
+            <option value="@Model.CategoryId">@CategoryName</option>
+            @if (ViewData["Categories"] is List<PetShopApiServise.DtoModels.Categories> categories)
+            {
+                foreach (var item in categories)
+                {
+                    <option value="@item.CategoryId">@item.CategoryName</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+    <input type="hidden" id="AnimalId" name="AnimalId" value="@Model.AnimalId" />
+    <button type="submit" class="AnimalEditor-button">Edit Animal</button>
+</form>
+
+<script>
+    const fileInput = document.querySelector('input[type="file"]');
+    const myFile = new File(['Hello World!'], 'myFile.txt', {
+        type: 'text/plain',
+        lastModified: new Date(),
+    });
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(myFile);
+    fileInput.files = dataTransfer.files;
+</script>
+
+
+

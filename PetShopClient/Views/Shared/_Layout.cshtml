@@ -1,0 +1,27 @@
+﻿
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+   <link rel="stylesheet" href="~/styles/NavBar.css" />
+</head>
+    <header>
+       <div style="margin-top: 70px"></div>
+        <nav class="nav-menu">
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+    <footer>
+        <!-- Your footer content here -->
+    </footer>
+
+</html>
+

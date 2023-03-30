@@ -1,0 +1,42 @@
+﻿@model IEnumerable<PetShopApiServise.DtoModels.Animals>
+
+    <head>
+        <link rel="stylesheet" href="~/styles/Admin/OverviewTable.css" />
+    </head>
+
+<table class="overviewTable">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Category</th>
+        <th>Edit</th>
+        <th>Delet</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+        {
+      <tr>
+        <td><img src="~/Images/Jako.png" alt="Animal Image" width="100"></td>
+        <td>@item.Name</td>
+        <td>@item.AnimalId</td>
+       <td>@(await Component.InvokeAsync("CategoryName", new { categoryId = item.CategoryId }))</td>
+<td>
+     <form asp-controller="Admin" asp-action="AnimalDetailsEditor" method="post">
+         <button type="submit" class="editBtn">Edit</button>
+         <input type="hidden" name="id" value="@item.AnimalId" /> 
+     </form>
+</td>
+<td>
+          <form asp-controller="Admin" asp-action="DeleteAnimalById" method="post">
+          <button type="submit" class="deleteBtn">Delete</button>
+          <input type="hidden" name="id" value="@item.AnimalId" />   
+           </form>
+</td>
+      </tr>            
+        }
+    </tbody>
+  </table>

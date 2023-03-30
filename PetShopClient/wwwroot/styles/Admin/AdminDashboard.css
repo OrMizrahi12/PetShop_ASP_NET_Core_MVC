@@ -1,0 +1,48 @@
+﻿/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar styles */
+.AdminNavbar {
+    background-color: black;
+    height: 100vh;
+    overflow: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    margin-top: 55px;
+}
+
+    .AdminNavbar ul {
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .AdminNavbar li {
+        margin: 0;
+    }
+
+    .AdminNavbar a {
+        color: #fff;
+        display: block;
+        font-size: 16px;
+        padding: 15px 25px;
+        text-decoration: none;
+    }
+
+        .AdminNavbar a:hover {
+            background-color: #444;
+        }
+
+/* Main content */
+main {
+    margin-left: 220px;
+    padding: 20px;
+}

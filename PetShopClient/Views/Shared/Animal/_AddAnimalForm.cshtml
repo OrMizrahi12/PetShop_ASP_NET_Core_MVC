@@ -1,0 +1,50 @@
+﻿
+@model PetShopApiServise.DtoModels.Animals
+<head>
+    <link rel="stylesheet" href="~/styles/Forms/AddAnimalForm.css" />
+    <script src="~/scripts/jquery.min.js"></script>
+    <script src="~/scripts/jquery.validate.min.js"></script>
+    <script src="~/ValidationForms/AddAnimalFormValidation.js"></script>
+</head>
+
+
+     <form asp-controller="Admin" asp-action="AddAnimal" method="post" enctype="multipart/form-data">
+    <div>
+        <label for="Name">Name:</label>
+        <input type="text" id="Name" name="Name" required />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="Age" for="Age">Age:</label>
+        <input asp-for="Age" type="number" id="Age" name="Age" min="0" />
+        <span asp-validation-for="Age"></span>
+    </div>
+    <div>
+        <label asp-for="ImageFile" for="ImageFile">Image:</label>
+        <input asp-for="ImageFile" type="file" id="ImageFile" name="ImageFile" accept="image/*" />
+        <span asp-validation-for="ImageFile"></span>
+    </div>
+    <div>
+        <label asp-for="Description" for="Description">Description:</label>
+        <textarea asp-for="Description" id="Description" rows="4" cols="50"></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+    <div>
+        <label asp-for="CategoryId" for="CategoryId">Category:</label>
+        <select asp-for="CategoryId" id="CategoryId" name="CategoryId">
+            <option value="">Select a category</option>
+            @if (ViewData["Categories"] is List<PetShopApiServise.DtoModels.Categories> categories)
+            {
+                foreach (var item in categories)
+                {
+                    <option value="@item.CategoryId">@item.CategoryName</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="CategoryId"></span>
+    </div>
+    
+    <div>
+        <input type="submit" id="submitBtn" value="Add Animal"  />
+    </div>
+</form>

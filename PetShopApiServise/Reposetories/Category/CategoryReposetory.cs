@@ -1,0 +1,94 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using PetShopApiServise.Models;
+
+namespace PetShopApiServise.Reposetories.Category;
+
+public class CategoryReposetory : ICategoryReposetory
+{
+    private readonly PetShopDBContext _context;
+    private readonly ILogger<CategoryReposetory> _logger;
+
+    public CategoryReposetory(PetShopDBContext context, ILogger<CategoryReposetory> logger)
+    {
+        _context = context;
+        _logger = logger;
+    }
+
+    public async Task<int> AddCategory(Categories category)
+    {
+        try
+        {
+            _context.Categories.Add(category);
+            return await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogError(ex, "Error while adding category {CategoryName} to the database", category.CategoryName);
+            return -1;
+        }
+    }
+
+    public async Task<IEnumerable<Categories>> GetAllCategories()
+    {
+        try
+        {
+            return await _context.Categories.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error: {ex}", ex);
+            return Enumerable.Empty<Categories>();
+        }
+    }
+
+    public async Task<Categories> GetCategoryById(int id)
+    {
+        try
+        {
+            var category = await _context.Categories.FindAsync(id);
+            return category!;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error while looking up category with ID {CategoryId}", id);
+            return null!;
+        }
+    }
+
+    public async Task<int> UpdateCategory(Categories category)
+    {
+        try
+        {
+            _context.Categories.Update(category);
+            return await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Updating error.");
+            return -1;
+        }
+
+    }
+
+    public async Task<int> DeleteCategoryById(int id)
+    {
+        try
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return -1;
+            }
+           
+            _context.Categories.Remove(category);
+            _logger.LogInformation("Category {CategoryId} has been deleted", id);
+            return await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformation("Error: {CategoryId}", ex);
+            return -1;
+        }
+    }
+}
