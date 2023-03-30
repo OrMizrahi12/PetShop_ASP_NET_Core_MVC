@@ -9,5 +9,6 @@ namespace PetShopApiServise.Reposetories.Comment
         Task<int> UpdateComment(Comments comment);
         Task<int> DeleteCommentById(int commentId);
         Task<IEnumerable<Comments>> GetAllComments();
+        Task<IEnumerable<Comments>> GetCommentsByAnimalId(int id);
     }
 }

@@ -14,15 +14,14 @@ namespace PetShopClient.Controllers
             _animalApiServise = animalApiServise;
             _categoryApiServise = categoryApiServise;
         }
-        //
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("AnimalOverview");
         }
 
         public async Task<IActionResult> AddAnimal(Animals animals)
         {
-            
+            ViewData["Categories"] = await _categoryApiServise.GetAllCategories()!; 
             await _animalApiServise.AddAnimal(animals);
             return View();
         }

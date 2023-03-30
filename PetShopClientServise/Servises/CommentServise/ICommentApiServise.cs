@@ -14,6 +14,7 @@ namespace PetShopClientServise.Servises.CommentServise
         Task<IEnumerable<Comments>> GetAllComments();
         Task<Comments> GetCommentById(int id);
         Task<int> UpdateComment(Comments comment);
+        Task<IEnumerable<Comments>> GetCommentsByAnimalId(int id);
         
     }
 }

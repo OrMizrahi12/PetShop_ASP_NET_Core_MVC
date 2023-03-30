@@ -37,4 +37,10 @@ public class CommentApiServise : ICommentApiServise
         return res.IsSuccessStatusCode ? 0 : 1;
     }
 
+    public async Task<IEnumerable<Comments>> GetCommentsByAnimalId(int id)
+    {
+        var res = await HttpClientInfo.HttpClientServises.GetFromJsonAsync<List<Comments>?>($"api/Comment/GetCommentsByAnimalId/{id}");
+        return res!;
+    }
+
 }

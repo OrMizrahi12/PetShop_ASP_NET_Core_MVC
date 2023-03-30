@@ -90,4 +90,11 @@ public class CommentController : ControllerBase
             return NotFound(ex.Message);
         }
     }
+
+    [HttpGet("GetCommentsByAnimalId/{id}")]
+    public async Task<ActionResult<IEnumerable<Comments>>> GetCommentsByAnimalId(int id)
+    {
+        var comments = await _commentRepository.GetCommentsByAnimalId(id);
+        return Ok(comments);
+    }
 }

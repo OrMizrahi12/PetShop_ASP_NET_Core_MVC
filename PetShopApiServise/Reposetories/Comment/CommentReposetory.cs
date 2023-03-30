@@ -90,5 +90,18 @@ namespace PetShopApiServise.Reposetories.Comment
                 return -1;
             }
         }
+
+        public async Task<IEnumerable<Comments>> GetCommentsByAnimalId(int id)
+        {
+            try
+            {
+                return await _context.Comments.Where(x => x.AnimalId == id).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "");
+                return Enumerable.Empty<Comments>();
+            }
+        }
     }
 }
