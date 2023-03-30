@@ -1,0 +1,34 @@
+﻿@model PetShopApiServise.DtoModels.Animals
+@{
+    ViewBag.Title = "AnimalDetailsById";
+}
+
+<header>
+    <link href="~/styles/Home/AnimalDetailsById.css" rel="stylesheet" />
+</header>
+
+<div class="animal-details-wrapper">
+    <div class="animal-details-container">
+        <h1 class="animal-title">@Model.Name</h1>
+        <img class="animal-image" src="~/Images/Jako.png"  alt="@Model.Name" />
+        <div class="animal-info">
+            <div class="animal-age"><strong>Age:</strong> @Model.Age</div>
+            <div class="animal-category"><strong>Category:</strong> @Model.Category</div>
+        </div>
+        <h2 class="comments-title">Comments</h2>
+        <ul class="comments-list">
+            @foreach (var comment in Model.Comments)
+            {
+                <li class="comment-item">@comment.CommentText</li>
+            }
+        </ul>
+     </div>
+
+        @*TO DO *@
+<div class="comment-form">
+            <form asp-controller="Home" asp-action="AddComment" method="post">
+                <input type="text" name="commentText" placeholder="Add comment" />
+                <button type="submit">Add</button>
+            </form>         
+    </div>
+</div>

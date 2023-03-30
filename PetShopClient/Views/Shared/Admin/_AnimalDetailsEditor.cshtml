@@ -13,6 +13,9 @@
     var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = Model.Image }); 
     var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = Model.CategoryId });
 }
+
+
+<a asp-action="AnimalOverview" asp-controller="Admin" class="btnBack">Back</a>
 <form asp-controller="Admin" asp-action="UpdateAnimal" method="post" enctype="multipart/form-data" class="AnimalEditor">
     <div class="form-group">
         <label for="Name" class="AnimalEditor-label">Name:</label>

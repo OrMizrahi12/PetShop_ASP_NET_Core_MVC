@@ -17,5 +17,10 @@ namespace PetShopClient.Controllers
             return View(animals!.ToList());
         }
         
+        public async Task<IActionResult> ShowAnimalById(int id)
+        {
+            var animal = await _animalApiServise.GetAnimalById(id);
+            return View(animal);
+        }
     }
 }
