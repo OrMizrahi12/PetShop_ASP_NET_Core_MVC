@@ -23,7 +23,7 @@ namespace PetShopClient.Controllers
         public async Task<IActionResult> AddAnimal(Animals animals)
         {
             
-           var res = await _animalApiServise.AddAnimal(animals);
+            await _animalApiServise.AddAnimal(animals);
             return View();
         }
 
