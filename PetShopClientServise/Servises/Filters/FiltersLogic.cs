@@ -33,19 +33,32 @@ namespace PetShopClientServise.Servises.Filters
         }
         private async static Task<List<Animals>> FilterTopByAttributeAndHowMany(List<Animals> animals, string attribute, int howMany)
         {
-            var comments = await CommentApiServise.GetAllCommentsStatic();
-
             if (attribute == "Comments" && howMany > 0)
             {
-                return animals
-                       .OrderByDescending(a => comments.Count(c => a.AnimalId == c.AnimalId))
-                       .Take(howMany)
-                       .ToList();
+                return await FilterByTopComment(animals, howMany);
+            }
+            else if(attribute == "Age" && howMany > 0)
+            {
+                return FilterTopByAge(animals, howMany);    
             }
             else
             {
                 return animals;
             }
+        }
+
+        private static List<Animals> FilterTopByAge(List<Animals> animals, int howMany)
+        {
+            return animals.OrderByDescending(a => a.Age).Take(howMany).ToList();
+        }
+        private async static Task<List<Animals>> FilterByTopComment(List<Animals> animals, int howMany)
+        {
+            var comments = await CommentApiServise.GetAllCommentsStatic();
+
+            return animals
+                   .OrderByDescending(a => comments.Count(c => a.AnimalId == c.AnimalId))
+                   .Take(howMany)
+                   .ToList();
         }
 
     }

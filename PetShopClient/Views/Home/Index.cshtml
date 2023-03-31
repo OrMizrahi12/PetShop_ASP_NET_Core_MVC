@@ -6,4 +6,6 @@
 
 @await Html.PartialAsync("FiltersTool/_AddAttributeToTopFilter")
 @await Html.PartialAsync("FiltersTool/_CategoriesFilter", ViewData)
+@await Html.PartialAsync("FiltersTool/_BtnRemoveAllFilters", ViewData)
+
 @await Html.PartialAsync("Home/_ShowingAllAnimals", Model, ViewData)

@@ -33,5 +33,15 @@ namespace PetShopClient.Controllers
             FilterUtils.AnimalCurrunFilter = "ByTop";
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpPost]
+        public IActionResult RemoveAllFilters()
+        {
+            TopFilter.Attribute = ""; 
+            TopFilter.HowMany = 0;
+            CategoryFilter.CategoryIdArray!.Clear();
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

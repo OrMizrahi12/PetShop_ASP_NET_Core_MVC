@@ -49,6 +49,26 @@ namespace PetShopClient.Controllers
             return View(animals);
         }
 
+        public async Task<IActionResult> AddCategory(Categories category)
+        {
+            await _categoryApiServise.AddCategory(category);
+            return RedirectToAction("CategoryOverview");
+        }
+
+        public async Task<IActionResult> DeleteCategoryById(int id)
+        {
+            var res = await _categoryApiServise.DeleteCategoryById(id);
+            return RedirectToAction("CategoryOverview");
+        }
+
+        public async Task<IActionResult> CategoryOverview()
+        {
+           var categories =  await _categoryApiServise.GetAllCategories();
+            return View(categories);
+        }
+
+
+
     }
 }
 
