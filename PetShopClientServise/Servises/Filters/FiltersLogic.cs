@@ -1,4 +1,5 @@
 ﻿using PetShopApiServise.DtoModels;
+using PetShopClientServise.Servises.CommentServise;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,46 +10,42 @@ namespace PetShopClientServise.Servises.Filters
 {
     public class FiltersLogic
     {
-        public static List<Animals> PreperFilters(List<Animals> animals)
+        public static async Task<List<Animals>> PreperFilters(List<Animals> animals)
         {
-            List<Animals> animalsUnderFilter = new();
-
             List<int> categoriesIds = CategoryFilter.CategoryIdArray ?? new List<int>();
 
             if (animals != null && categoriesIds.Count > 0)
             {
-                animalsUnderFilter = FiltersByCategories(animals, categoriesIds); 
+                animals = FiltersByCategories(animals, categoriesIds);
             }
             if (TopFilter.Attribute != null && TopFilter.HowMany > 0)
             {
-                animalsUnderFilter = FilterTopByAttributeAndHowMany(animals!, TopFilter.Attribute, TopFilter.HowMany);
+                animals = await FilterTopByAttributeAndHowMany(animals!, TopFilter.Attribute, TopFilter.HowMany);
             }
 
-
-
-
-            if(animalsUnderFilter.Count > 0)
-            {
-                return animalsUnderFilter;
-            }
-            else
-            {
-                return animals!;
-            }
+            return animals!;
         }
+
 
         private static List<Animals> FiltersByCategories(List<Animals> animals, List<int> categoriesIds)
         {
             return animals.Where(a => categoriesIds.Contains(a.CategoryId)).ToList();
         }
-        private static List<Animals> FilterTopByAttributeAndHowMany(List<Animals> animals, string attribute, int howMany)
+        private async static Task<List<Animals>> FilterTopByAttributeAndHowMany(List<Animals> animals, string attribute, int howMany)
         {
-            if(attribute == "Comments" && howMany > 0)
+            var comments = await CommentApiServise.GetAllCommentsStatic();
+
+            if (attribute == "Comments" && howMany > 0)
             {
-
+                return animals
+                       .OrderByDescending(a => comments.Count(c => a.AnimalId == c.AnimalId))
+                       .Take(howMany)
+                       .ToList();
             }
-
-            return animals;
+            else
+            {
+                return animals;
+            }
         }
 
     }

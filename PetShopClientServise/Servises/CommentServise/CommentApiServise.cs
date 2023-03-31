@@ -26,6 +26,12 @@ public class CommentApiServise : ICommentApiServise
         return res!;
     }
 
+    public static async Task<IEnumerable<Comments>> GetAllCommentsStatic()
+    {
+        var res = await HttpClientInfo.HttpClientServises.GetFromJsonAsync<List<Comments>?>("api/Comment");
+        return res!;
+    }
+
     public async Task<Comments> GetCommentById(int id)
     {
         var res = await HttpClientInfo.HttpClientServises.GetFromJsonAsync<Comments?>($"api/Comment/{id}");
@@ -43,5 +49,7 @@ public class CommentApiServise : ICommentApiServise
         var res = await HttpClientInfo.HttpClientServises.GetFromJsonAsync<List<Comments>?>($"api/Comment/GetCommentsByAnimalId/{id}");
         return res!;
     }
+
+
 
 }

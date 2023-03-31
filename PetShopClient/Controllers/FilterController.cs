@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using PetShopClientServise.Servises.Filters;
-using System.Net;
-using System.Xml.Linq;
+
 
 namespace PetShopClient.Controllers
 {
@@ -22,6 +19,9 @@ namespace PetShopClient.Controllers
                 CategoryFilter.CategoryIdArray.Add(id);
             }
 
+            FilterUtils.AnimalCurrunFilter = "ByCategory"; 
+
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -30,6 +30,7 @@ namespace PetShopClient.Controllers
         {
             TopFilter.Attribute = attribute;
             TopFilter.HowMany = howMany;
+            FilterUtils.AnimalCurrunFilter = "ByTop";
             return RedirectToAction("Index", "Home");
         }
     }

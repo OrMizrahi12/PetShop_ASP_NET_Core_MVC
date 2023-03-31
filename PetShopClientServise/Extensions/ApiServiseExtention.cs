@@ -21,6 +21,7 @@ namespace PetShopClientServise.Extensions
             services.AddTransient<CategoryFilter>();
             services.AddTransient<TopFilter>();
             services.AddTransient<FiltersLogic>();
+            services.AddTransient<FilterUtils>();
 
             return services;
         }

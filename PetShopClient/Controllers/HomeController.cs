@@ -32,7 +32,7 @@ namespace PetShopClient.Controllers
 
             //}
 
-            animals = FiltersLogic.PreperFilters(animals.ToList());
+            animals = await FiltersLogic.PreperFilters(animals.ToList());
 
             return View(animals!.ToList());
         }
