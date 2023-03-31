@@ -1,0 +1,38 @@
+﻿
+<head>
+    <meta charset="utf-8" />
+    <title>CategoriesFilter</title>
+    <link rel="stylesheet" href="~/styles/Filters/CategoryFilter.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<form class="categories-container" asp-action="AddCategoryToFilter" asp-controller="Filter" method="post" id="category-form">
+    @{
+        if (ViewData["Categories"] is List<PetShopApiServise.DtoModels.Categories> categories)
+        {
+            @foreach (var category in categories)
+            {
+                 if (ViewData["CateforiesArrayFiltersId"] is List<int> checkedCategories)
+                {
+                    <div class="category-filter">
+                        <input type="checkbox" id="category-@category.CategoryId" value="@category.CategoryId"  class="category-checkbox" name="id" />
+                        <label for="category-@category.CategoryId" style="color: @(checkedCategories.Contains(category.CategoryId) ? "blue" : "black")">@category.CategoryName</label>
+                    </div>
+                }
+            }
+        }
+    }
+</form>
+
+     
+<script>
+    var checkboxes = document.getElementsByClassName('category-checkbox');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener('click', function() {
+            var form = document.getElementById('category-form');
+            form.submit();
+        });
+    }
+</script>
+

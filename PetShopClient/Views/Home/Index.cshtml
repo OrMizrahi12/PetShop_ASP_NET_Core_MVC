@@ -4,5 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-
-@await Html.PartialAsync("Home/_ShowingAllAnimals", Model)
+@await Html.PartialAsync("FiltersTool/_AddAttributeToTopFilter")
+@await Html.PartialAsync("FiltersTool/_CategoriesFilter", ViewData)
+@await Html.PartialAsync("Home/_ShowingAllAnimals", Model, ViewData)

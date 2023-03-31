@@ -2,6 +2,7 @@
 using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CategoryServise;
 using PetShopClientServise.Servises.CommentServise;
+using PetShopClientServise.Servises.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,9 @@ namespace PetShopClientServise.Extensions
             services.AddTransient<IAnimalApiServise, AnimalApiServise>();
             services.AddTransient<ICategoryApiServise, CategoryApiServise>();
             services.AddTransient<ICommentApiServise, CommentApiServise>();
+            services.AddTransient<CategoryFilter>();
+            services.AddTransient<TopFilter>();
+            services.AddTransient<FiltersLogic>();
 
             return services;
         }

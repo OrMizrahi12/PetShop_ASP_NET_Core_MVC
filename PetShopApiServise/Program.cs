@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 builder.Services.AddDbContext<PetShopDBContext>
     (o => o.UseSqlServer(builder.Configuration.GetConnectionString("PetShopDbConnectionString")));
 builder.Services.AddRepositories();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetShopApiServise.Models;
+using PetShopApiServise.Reposetories.Category;
 using PetShopApiServise.Utils.Serialization;
 
 namespace PetShopApiServise.Reposetories.Animal;
@@ -8,6 +9,11 @@ public class AnimalReposetory : IAnimalReposetory
 {
     private readonly PetShopDBContext _context;
     private readonly ILogger<AnimalReposetory> _logger;
+
+    public int getNum(int id)
+    {
+        return id;  
+    }  
 
     public AnimalReposetory(PetShopDBContext context, ILogger<AnimalReposetory> logger)
     {
@@ -36,7 +42,6 @@ public class AnimalReposetory : IAnimalReposetory
 
     public async Task<IEnumerable<Animals>> GetAllAnimals()
     {
-        
         try
         {
             return await _context.Animals.ToListAsync();
@@ -112,4 +117,6 @@ public class AnimalReposetory : IAnimalReposetory
             return -1;
         }
     }
+
+
 }

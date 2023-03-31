@@ -9,6 +9,7 @@ public class CommentApiServise : ICommentApiServise
 {
     public async Task<int> AddComment(Comments comment)
     {
+        comment.CommentDate = DateTime.Now;
         var res = await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Comment", comment);
         return res.IsSuccessStatusCode ? 0 : 1;
     }

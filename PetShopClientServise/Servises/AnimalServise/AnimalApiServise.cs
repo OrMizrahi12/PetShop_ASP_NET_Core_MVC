@@ -45,9 +45,11 @@ namespace PetShopClientServise.Servises.AnimalServise
             return res.IsSuccessStatusCode ? 0 : 1;
         }
 
-        async Task<IEnumerable<Animals>> IAnimalApiServise.GetAllAnimals()
+        public async Task<IEnumerable<Animals>> GetAllAnimals()
         {
             var res = await HttpClientInfo.HttpClientServises.GetFromJsonAsync<List<Animals>?>("api/Animal");
+
+
 
             return res!;
         }

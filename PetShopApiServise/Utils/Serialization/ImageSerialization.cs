@@ -10,6 +10,5 @@ namespace PetShopApiServise.Utils.Serialization
             formFile.CopyTo(memoryStream);
             return memoryStream.ToArray();
         }
-
     }
 }

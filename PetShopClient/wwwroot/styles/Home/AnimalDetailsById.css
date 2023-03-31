@@ -86,3 +86,57 @@
         background-color: #e9ecef;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
+/* Styles for the .addCommentForm div */
+.addCommentForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+    /* Styles for the .addCommentForm form */
+    .addCommentForm form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Styles for the .addCommentForm input[type="text"] */
+    .addCommentForm input[type="text"] {
+        width: 300px;
+        height: 40px;
+        padding: 10px;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 16px;
+        color: #333;
+        background-color: #f9f9f9;
+    }
+
+    /* Styles for the .addCommentForm button[type="submit"] */
+    .addCommentForm button[type="submit"] {
+        width: 100px;
+        height: 40px;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #009688;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+        /* Styles for the .addCommentForm button[type="submit"] on hover */
+        .addCommentForm button[type="submit"]:hover {
+            background-color: #00796b;
+        }

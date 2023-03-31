@@ -9,11 +9,13 @@
     <link href="~/styles/Home/Home.css" rel="stylesheet" />
 </head>
 
+
 <body>
     <div class="container">
+                      
         @foreach(var item in Model)
         {
-            <div class="animal-item">
+            <div class="animal-item" >
                 <h2>@item.Name</h2>
                 <p>@item.Age</p>
                 <img class="animal-image" src="~/Images/Jako.png"  alt="@item.Name" />
@@ -22,5 +24,11 @@
             </div>
             </div>
         }
+            @{
+
+    }
     </div>
+
+
+
 </body>

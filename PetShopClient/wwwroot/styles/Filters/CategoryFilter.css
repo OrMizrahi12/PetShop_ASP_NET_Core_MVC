@@ -1,0 +1,120 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    line-height: 1.6;
+}
+
+/* Categories container */
+.categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+}
+
+/* Category filter */
+.category-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+    .category-filter:hover {
+        border-color: #007bff;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    }
+
+    .category-filter input[type="checkbox"] {
+        display: none;
+    }
+
+    .category-filter label {
+        cursor: pointer;
+        font-size: 16px;
+        color: #495057;
+    }
+
+        .category-filter label:hover {
+            color: #007bff;
+        }
+
+    .category-filter input[type="checkbox"]:checked + label {
+        font-weight: 600;
+        color: #007bff;
+    }
+
+    .category-filter-checked{
+font-weight: 600;
+        color: #007bff;
+    }
+    /* Responsive styles */
+    @media screen and (max-width: 768px) {
+        .categories-container {
+        max-width: 90%;
+    }
+}
+
+/* Inputs wrapper */
+.inputs-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+    .inputs-wrapper label {
+        font-weight: 600;
+    }
+
+    .inputs-wrapper input[type="text"],
+    .inputs-wrapper input[type="email"],
+    .inputs-wrapper textarea {
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        font-size: 16px;
+        color: #495057;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+        .inputs-wrapper input[type="text"]:focus,
+        .inputs-wrapper input[type="email"]:focus,
+        .inputs-wrapper textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    .inputs-wrapper textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .inputs-wrapper input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+        .inputs-wrapper input[type="submit"]:hover {
+            background-color: #0069d9;
+        }

@@ -9,7 +9,5 @@ namespace PetShopApiServise.Reposetories.Animal
         Task<int> UpdateAnimal(Animals animal);
         Task<int> DeleteAnimalById(int animalId);
         Task<IEnumerable<Animals>> GetAllAnimals();
-
-
     }
 }

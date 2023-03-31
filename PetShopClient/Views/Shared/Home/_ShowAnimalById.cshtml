@@ -17,18 +17,25 @@
         </div>
         <h2 class="comments-title">Comments</h2>
         <ul class="comments-list">
-            @foreach (var comment in Model.Comments)
+
+            @if(ViewData["Comments"] is List<PetShopApiServise.DtoModels.Comments> comments)
             {
-                <li class="comment-item">@comment.CommentText</li>
+                @foreach (var comment in comments)
+                {
+                    <li class="comment-item">@comment.CommentText</li>
+                }                
             }
+
         </ul>
      </div>
 
         @*TO DO *@
-<div class="comment-form">
-            <form asp-controller="Home" asp-action="AddComment" method="post">
-                <input type="text" name="commentText" placeholder="Add comment" />
-                <button type="submit">Add</button>
-            </form>         
-    </div>
+<div class="addCommentForm">
+  <form asp-controller="Comment" asp-action="AddCommentOnAnimal" method="post">
+    <input  type="text" name="CommentText" placeholder="Add comment" />
+    <input hidden name="AnimalId" value="@Model.AnimalId" />
+      <button type="submit">Add</button>
+  </form>
+</div>
+
 </div>

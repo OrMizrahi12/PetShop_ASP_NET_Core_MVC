@@ -5,11 +5,11 @@ namespace PetShopClientServise.Servises.AnimalServise
 {
      public interface IAnimalApiServise
      {
-        Task<Animals?> GetAnimalById(int id);
-        Task<int> AddAnimal(Animals animal);
-        Task<int> UpdateAnimal(Animals animal);
-        Task<int> DeleteAnimalById(int animalId);
-        Task<IEnumerable<Animals>> GetAllAnimals();
+        public Task<Animals?> GetAnimalById(int id);
+        public Task<int> AddAnimal(Animals animal);
+        public Task<int> UpdateAnimal(Animals animal);
+        public Task<int> DeleteAnimalById(int animalId);
+        public Task<IEnumerable<Animals>> GetAllAnimals();
 
 
 

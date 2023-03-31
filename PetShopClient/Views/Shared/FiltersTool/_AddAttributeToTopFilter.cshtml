@@ -1,0 +1,32 @@
+﻿
+
+@{
+    var attributes = new string[] { "Comments", "Age" };
+}
+
+<head>
+<meta charset="utf-8" />
+    <title>AddAttributeToTopFilter</title>
+<link rel="stylesheet" href="~/styles/Filters/AddAttributeToTopFilter.css" />
+</head>
+
+
+<form class="formAttribute" asp-controller="Filter" asp-action="AddAttributeToTopFilter" method="post">
+    <div class="topAttribute">
+        <label for="attribute">Attribute:</label>
+        <select id="attribute" name="attribute" class="topAttributeInput">
+            @foreach (var attribute in attributes)
+            {
+                <option value="@(@attribute)">@(@attribute)</option>
+            }
+        </select>
+    </div>
+    <div class="topAttribute">
+        <label for="howMany">How many:</label>
+        <input type="number" id="howMany" name="howMany" min="0" value="0" class="topAttributeInput" />
+    </div>
+    <button type="submit" class="topAttributeButton">Filter</button>
+</form>
+
+
+
