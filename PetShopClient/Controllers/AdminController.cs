@@ -2,6 +2,7 @@
 using PetShopApiServise.DtoModels;
 using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CategoryServise;
+using PetShopClientServise.Servises.Filters;
 
 namespace PetShopClient.Controllers
 {
@@ -46,7 +47,8 @@ namespace PetShopClient.Controllers
         public async Task<IActionResult> AnimalOverview()
         {
             var animals = await _animalApiServise.GetAllAnimals();
-            return View(animals);
+            var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(animals.ToList());
+            return View(animalsUnderFilter);
         }
 
         public async Task<IActionResult> AddCategory(Categories category)

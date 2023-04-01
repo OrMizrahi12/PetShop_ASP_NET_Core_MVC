@@ -20,6 +20,13 @@
         text-transform: uppercase;
     }
 
+        .overviewTable th.name-th:hover,
+        .overviewTable th.id-th:hover,
+        .overviewTable th.category-th:hover {
+            background-color: !important gray;
+            color: black !important;
+        }
+
     .overviewTable tbody tr:nth-child(even) {
         background-color: #f2f2f2;
     }

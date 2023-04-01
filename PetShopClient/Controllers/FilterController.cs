@@ -43,5 +43,14 @@ namespace PetShopClient.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+
+        [HttpPost]
+        public IActionResult SortByColumnName(string columnName)
+        {
+            FilterColumnAnimalOverview.ColumnName = columnName;
+            FilterColumnAnimalOverview.CheckOrderRequrements(columnName);
+            return RedirectToAction("AnimalOverview", "Admin");
+        }
     }
 }

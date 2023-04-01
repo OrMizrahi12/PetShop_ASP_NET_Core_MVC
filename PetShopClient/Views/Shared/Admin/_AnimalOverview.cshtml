@@ -2,18 +2,19 @@
 
     <head>
         <link rel="stylesheet" href="~/styles/Admin/OverviewTable.css" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
 
 <table class="overviewTable">
     <thead>
       <tr>
         <th>Image</th>
-        <th>Name</th>
-        <th>ID</th>
-        <th>Category</th>
+        <th class="name-th">Name</th>
+        <th class="id-th">Id</th>
+        <th class="category-th">Category</th>
+        <th class="age-th">Age</th>
         <th>Edit</th>
-        <th>Delet</th>
-        
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -24,6 +25,7 @@
         <td>@item.Name</td>
         <td>@item.AnimalId</td>
        <td>@(await Component.InvokeAsync("CategoryName", new { categoryId = item.CategoryId }))</td>
+       <td>@item.Age</td>
 <td>
      <form asp-controller="Admin" asp-action="AnimalDetailsEditor" method="post">
          <button type="submit" class="editBtn">Edit</button>
@@ -40,3 +42,40 @@
         }
     </tbody>
   </table>
+
+     <script>
+    $(document).ready(function () {
+        $('th').click(function () {
+            var columnName = $(this).text().trim();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SortByColumnName", "Filter")' + '?columnName=' + columnName,
+                success: function (data) {
+                    $('#animalTable').html(data);
+                    // refresh the page
+                     location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error);
+                    console.log('Status: ' + status);
+                    console.log(xhr);
+                }
+            });
+        });
+    });
+
+
+    $(document).ready(function() {
+  $('.name-th, .id-th, .category-th, .age-th').hover(
+    function() {
+      $(this).css('background-color', 'gray');
+      $(this).css('color', 'black');
+      $(this).css('cursor', 'pointer');
+    },
+    function() {
+      $(this).css('background-color', '');
+      $(this).css('color', 'white');
+    }
+  );
+});
+</script>
