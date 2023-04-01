@@ -1,13 +1,54 @@
 ﻿@model  IEnumerable<PetShopApiServise.DtoModels.Categories>
 
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/styles/Admin/CategoryOverview.css" rel="stylesheet" />
+    <link href="~/styles/Popup.css" rel="stylesheet" />
+   
+</head>
+<body>
+    <div class="category-container">
+        @foreach (var item in Model)
+        {
+            <div class="category-item">
+                <div class="category-name">@item.CategoryName</div>
+                <button type="button" class="category-remove-btn" onclick="openModal('@item.CategoryId');" aria-label="Remove category">
+                    X
+                </button>
+                <form asp-action="CategoryDetailsEditor" asp-controller="Admin" asp-route-id="@item.CategoryId" method="post">
+                    <button type="submit" class="category-see-more-btn" aria-label="Remove category">
+                        >> See More >>
+                    </button>
+                </form>
+            </div>
+        }
+    </div>
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to remove this category?</p>
+            <form id="deleteForm" asp-action="DeleteCategoryById" asp-controller="Admin" method="post">
+                <input type="hidden" id="deleteCategoryId" name="id" value="">
+<button type="submit" class="modal-button yes">Yes</button>
+<button type="button" class="modal-button no" onclick="closeModal();">No</button>
 
+            </form>
+        </div>
+    </div>
+    <script>
+function openModal(categoryId) {
+    var modal = document.getElementById("confirmModal");
+    modal.classList.add("show");
+    document.getElementById("deleteCategoryId").value = categoryId;
+}
 
-
-    
-    @{
-        foreach (var item in Model)
-    {
-        @item.CategoryName
-    }
-    }
+function closeModal() {
+    var modal = document.getElementById("confirmModal");
+    modal.classList.remove("show");
+}
+    </script>
+</body>
+</html>

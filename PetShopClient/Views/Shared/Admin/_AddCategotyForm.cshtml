@@ -1,0 +1,23 @@
+﻿@model PetShopApiServise.DtoModels.Categories
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Category</title>
+<link rel="stylesheet" href="~/styles/Forms/AddCategoryForm.css" />
+</head>
+<body>
+	<div class="addCategoryForm">
+
+		<h2>Add Category</h2>
+		<form method="post"  asp-action="AddCategory" asp-controller="Admin">
+		 <label for="CategoryName">Category Name:</label>
+    <input type="text" id="CategoryName" name="CategoryName" required>
+    <span class="error-message" style="display: none;">Please enter a category name.</span>
+    <button type="submit">Add Category</button>
+		</form>
+
+	
+	</div>
+</body>
+</html>

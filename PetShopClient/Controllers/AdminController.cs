@@ -67,7 +67,16 @@ namespace PetShopClient.Controllers
             return View(categories);
         }
 
+        public async Task<IActionResult> CategoryDetailsEditor(int id)
+        {
+            var category = await _categoryApiServise.GetCategoryById(id);
+            return View(category); 
+        }
 
+        public IActionResult AddCategotyForm ()
+        {
+            return View();
+        }
 
     }
 }

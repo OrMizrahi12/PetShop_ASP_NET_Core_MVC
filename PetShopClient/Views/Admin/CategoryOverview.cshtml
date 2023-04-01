@@ -4,6 +4,8 @@
     ViewData["Title"] = "CategoryOverview";
 }
 
+
+@await Html.PartialAsync("Admin/_AdminDeshbord", ViewData)
 @await Html.PartialAsync("Admin/_CategoryOverview", Model)
 
 

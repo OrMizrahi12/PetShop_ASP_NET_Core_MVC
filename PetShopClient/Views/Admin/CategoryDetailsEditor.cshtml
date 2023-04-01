@@ -1,0 +1,16 @@
+﻿@model PetShopApiServise.DtoModels.Categories;
+@{
+    ViewData["Title"] = "CategoryDetailsEditor";
+}
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/styles/Admin/CategoryDetailsEditor.css" rel="stylesheet" />
+</head>
+
+@await Html.PartialAsync("Admin/_AdminDeshbord", ViewData)
+
+
+<h1>@Model.CategoryName</h1>
+
