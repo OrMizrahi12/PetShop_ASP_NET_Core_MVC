@@ -8,10 +8,16 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\Images\Jako.png" />
+    <Content Remove="wwwroot\ValidationForms\CategoryFormValidation.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\ValidationForms\CategoryFormValidation.js" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\Images\Jako.png" />
+    <None Include="wwwroot\ValidationForms\CategoryFormValidation.js" />
   </ItemGroup>
 
   <ItemGroup>

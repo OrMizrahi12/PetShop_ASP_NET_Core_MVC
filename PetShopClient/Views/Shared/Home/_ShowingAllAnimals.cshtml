@@ -14,21 +14,22 @@
     <div class="container">
                       
         @foreach(var item in Model)
-        {
+        {            
+            var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = item.Image }); 
+            var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = item.CategoryId });
+
             <div class="animal-item" >
-                <h2>@item.Name</h2>
-                <p>@item.Age</p>
-                <img class="animal-image" src="~/Images/Jako.png"  alt="@item.Name" />
+                <h2 class="animal-name" > Name @item.Name</h2>
+                <hr />
+                <br /> 
+                <p class="animal-age">Age: @item.Age</p>
+                <p class="animal-category">Category: @CategoryName</p>
+                <br /> 
+                <img class="animal-image" src="@ImageSrc"  alt="@item.Name" />
               <div class="centerize">
                 <a class="see-more" asp-controller="Home" asp-action="ShowAnimalById" asp-route-id="@item.AnimalId">See More</a>
-            </div>
+              </div>
             </div>
         }
-            @{
-
-    }
     </div>
-
-
-
 </body>

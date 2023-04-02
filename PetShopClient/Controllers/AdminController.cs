@@ -20,9 +20,16 @@ namespace PetShopClient.Controllers
             return RedirectToAction("AnimalOverview");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> AddAnimal()
+        {
+            ViewData["Categories"] = await _categoryApiServise.GetAllCategories()!;
+            return View();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddAnimal(Animals animals)
         {
-            ViewData["Categories"] = await _categoryApiServise.GetAllCategories()!; 
             await _animalApiServise.AddAnimal(animals);
             return View();
         }

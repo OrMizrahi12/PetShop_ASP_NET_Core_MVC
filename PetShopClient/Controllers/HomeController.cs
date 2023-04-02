@@ -22,15 +22,9 @@ namespace PetShopClient.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["CateforiesArrayFiltersId"] = CategoryFilter.CategoryIdArray ?? new List<int>();
-
             ViewData["Categories"] = await _categoryApiServise.GetAllCategories();
+
             var animals = await _animalApiServise.GetAllAnimals();
-
-            //if (CategoryFilter.CategoryIdArray!.Count != 0)
-            //{
-            //    return View(animals.Where(x => CategoryFilter.CategoryIdArray.Contains(x.CategoryId)));
-
-            //}
 
             animals = await FiltersLogic.PreperFilters(animals.ToList());
 

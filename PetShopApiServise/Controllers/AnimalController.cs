@@ -65,8 +65,7 @@ public class AnimalController : ControllerBase
             {
                 return Ok(result);
             }
-        }
-        catch (ArgumentException ex)
+        }catch (ArgumentException ex)
         {
             return NotFound(ex.Message);
         }

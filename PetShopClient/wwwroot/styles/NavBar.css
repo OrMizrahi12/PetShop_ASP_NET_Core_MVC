@@ -5,16 +5,18 @@ html, body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #333;
+    z-index: 9999;
 }
 
 nav.nav-menu {
     background-color: black;
     overflow: hidden;
-    width: 100%; 
-    left:0;
-    top:0;
-    height:55px;
-    position:fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    height: 55px;
+    position: fixed;
+    z-index: 9999;
 }
 
 nav.nav-menu ul {

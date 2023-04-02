@@ -6,7 +6,7 @@
 
     $.validator.addMethod("fileType", function (value, element) {
         var maxSize = 5 * 1024 * 1024; // 5 MB
-        if (element.files.length > 0) {
+        //if (element.files.length > 0) {
             var file = element.files[0];
             var fileType = file.type.match(/^image\//);
             if (!fileType) {
@@ -16,7 +16,7 @@
                 this.message = "File size must not exceed 5 MB";
                 return false;
             }
-        }
+        //}
         return true;
     }, "");
 

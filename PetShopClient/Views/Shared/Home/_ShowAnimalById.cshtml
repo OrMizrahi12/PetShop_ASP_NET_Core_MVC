@@ -6,14 +6,17 @@
 <header>
     <link href="~/styles/Home/AnimalDetailsById.css" rel="stylesheet" />
 </header>
-
+@{
+    var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = Model.Image }); 
+    var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = Model.CategoryId });
+}
 <div class="animal-details-wrapper">
     <div class="animal-details-container">
         <h1 class="animal-title">@Model.Name</h1>
-        <img class="animal-image" src="~/Images/Jako.png"  alt="@Model.Name" />
+        <img class="animal-image" src="@ImageSrc"  alt="@Model.Name" />
         <div class="animal-info">
             <div class="animal-age"><strong>Age:</strong> @Model.Age</div>
-            <div class="animal-category"><strong>Category:</strong> @Model.Category</div>
+            <div class="animal-category"><strong>Category:</strong>@CategoryName</div>
         </div>
         <h2 class="comments-title">Comments</h2>
         <ul class="comments-list">

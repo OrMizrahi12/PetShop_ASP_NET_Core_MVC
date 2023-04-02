@@ -5,6 +5,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
 
+
 <table class="overviewTable">
     <thead>
       <tr>
@@ -20,13 +21,17 @@
     <tbody>
       @foreach (var item in Model)
         {
+
+        var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = item.Image }); 
+        var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = item.CategoryId });
+
       <tr>
-        <td><img src="~/Images/Jako.png" alt="Animal Image" width="100"></td>
+        <td><img src="@ImageSrc" alt="Animal Image" width="100"></td>
         <td>@item.Name</td>
         <td>@item.AnimalId</td>
-       <td>@(await Component.InvokeAsync("CategoryName", new { categoryId = item.CategoryId }))</td>
-       <td>@item.Age</td>
-<td>
+        <td>@CategoryName</td>
+        <td>@item.Age</td>
+        <td>
      <form asp-controller="Admin" asp-action="AnimalDetailsEditor" method="post">
          <button type="submit" class="editBtn">Edit</button>
          <input type="hidden" name="id" value="@item.AnimalId" /> 

@@ -72,11 +72,18 @@ public class AnimalReposetory : IAnimalReposetory
         try
         {
             var existingAnimal = await GetAnimalById(animal.AnimalId);
+            byte[] imageBt = existingAnimal!.Image;
+
             if (existingAnimal != null)
             {
-                if (animal.ImageFile?.FileName != "myFile.txt" && animal.ImageFile?.FileName != null)
+
+                if(animal.Image.Length != 0) 
                 {
-                    existingAnimal.Image = ImageSerialization.ImageToByteArray(animal.ImageFile!);
+                    existingAnimal.Image = animal.Image;
+                }
+                else
+                {
+                    existingAnimal.Image = imageBt;
                 }
 
                 existingAnimal.Name = animal.Name;
