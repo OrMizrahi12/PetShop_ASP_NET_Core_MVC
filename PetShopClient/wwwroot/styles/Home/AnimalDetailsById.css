@@ -7,12 +7,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 80vh;
     padding: 20px;
 }
 
 .animal-details-container {
-    max-width: 800px;
+    max-width: 700px;
     padding: 30px;
     background-color: #fff;
     border-radius: 10px;
@@ -140,3 +140,59 @@
         .addCommentForm button[type="submit"]:hover {
             background-color: #00796b;
         }
+.show-comments-btn,
+.hide-comments-btn {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 100%; 
+    font-weight: bold;
+
+
+}
+.show-comments-btn:hover,
+.hide-comments-btn:hover {
+    background-color: #0069d9;
+}
+
+
+.hide-comments-btn {
+    display: none;
+}
+
+.centerice{
+    text-align:center;
+}
+.animal-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.animal-age,
+.animal-category {
+    display: flex;
+    align-items: center;
+}
+
+.animal-age {
+    margin-right: 20px;
+}
+
+.animal-age strong,
+.animal-category strong {
+    margin-right: 10px;
+}
+
+    .animal-age span,
+    .animal-category span {
+        font-weight: normal;
+    }

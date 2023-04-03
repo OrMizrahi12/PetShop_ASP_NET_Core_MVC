@@ -9,7 +9,7 @@
 
 <form class="categories-container" asp-action="AddCategoryToFilter" asp-controller="Filter" method="post" id="category-form">
     @{
-        if (ViewData["Categories"] is List<PetShopApiServise.DtoModels.Categories> categories)
+        if (ViewData["Categories"] is List<PetShopClientServise.DtoModels.Categories> categories)
         {
             @foreach (var category in categories)
             {
@@ -17,7 +17,7 @@
                 {
                     <div class="category-filter">
                         <input type="checkbox" id="category-@category.CategoryId" value="@category.CategoryId"  class="category-checkbox" name="id" />
-                        <label for="category-@category.CategoryId" style="color: @(checkedCategories.Contains(category.CategoryId) ? "blue" : "black")">@category.CategoryName</label>
+                        <label for="category-@category.CategoryId" style="color: @(checkedCategories.Contains(category.CategoryId) ? "blue" : "black")">@category.Name</label>
                     </div>
                 }
             }

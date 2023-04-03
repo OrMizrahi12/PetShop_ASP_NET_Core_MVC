@@ -1,13 +1,9 @@
-﻿@model PetShopApiServise.DtoModels.Animals
+﻿@model PetShopClientServise.DtoModels.Animals
 @*@model PetShopClientServise.CustomModelsForView.ShowAnimalByIdModel*@
 
 @{
     ViewData["Title"] = "ShowAnimalById";
 }
-
-<h1>ShowAnimalById</h1>
-
-<h3>Comments</h3>
 
 @await Html.PartialAsync("Home/_ShowAnimalById", Model, ViewData)
 

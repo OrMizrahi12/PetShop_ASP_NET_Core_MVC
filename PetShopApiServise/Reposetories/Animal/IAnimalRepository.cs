@@ -1,8 +1,9 @@
-﻿using PetShopApiServise.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using PetShopApiServise.Models;
 
 namespace PetShopApiServise.Reposetories.Animal
 {
-    public interface IAnimalReposetory
+    public interface IAnimalRepository
     {
         Task<Animals?> GetAnimalById(int id);
         Task<int> AddAnimal(Animals animal);

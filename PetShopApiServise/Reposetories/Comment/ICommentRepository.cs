@@ -2,7 +2,7 @@
 
 namespace PetShopApiServise.Reposetories.Comment
 {
-    public interface ICommentReposetory
+    public interface ICommentRepository
     {
         Task<Comments?> GetCommentById(int id);
         Task<int> AddComment(Comments comment);

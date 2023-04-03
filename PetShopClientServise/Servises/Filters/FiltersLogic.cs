@@ -1,4 +1,4 @@
-﻿using PetShopApiServise.DtoModels;
+﻿using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.CommentServise;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace PetShopClientServise.Servises.Filters
 
         private static List<Animals> FiltersByCategories(List<Animals> animals, List<int> categoriesIds)
         {
-            return animals.Where(a => categoriesIds.Contains(a.CategoryId)).ToList();
+            return animals.Where(a => categoriesIds.Contains((int)a.CategoryId!)).ToList();
         }
         private async static Task<List<Animals>> FilterTopByAttributeAndHowMany(List<Animals> animals, string attribute, int howMany)
         {
@@ -53,7 +53,7 @@ namespace PetShopClientServise.Servises.Filters
         }
         private async static Task<List<Animals>> FilterByTopComment(List<Animals> animals, int howMany)
         {
-            var comments = await CommentApiServise.GetAllCommentsStatic();
+            var (comments ,_) = await CommentApiService.GetAllCommentsStatic();
 
             return animals
                    .OrderByDescending(a => comments.Count(c => a.AnimalId == c.AnimalId))

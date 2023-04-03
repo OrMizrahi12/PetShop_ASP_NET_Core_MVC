@@ -4,12 +4,12 @@ using PetShopApiServise.Models;
 
 namespace PetShopApiServise.Reposetories.Category;
 
-public class CategoryReposetory : ICategoryReposetory
+public class CategoryRepository : ICategoryRepository
 {
     private readonly PetShopDBContext _context;
-    private readonly ILogger<CategoryReposetory> _logger;
+    private readonly ILogger<CategoryRepository> _logger;
 
-    public CategoryReposetory(PetShopDBContext context, ILogger<CategoryReposetory> logger)
+    public CategoryRepository(PetShopDBContext context, ILogger<CategoryRepository> logger)
     {
         _context = context;
         _logger = logger;
@@ -24,7 +24,7 @@ public class CategoryReposetory : ICategoryReposetory
         }
         catch (DbUpdateException ex)
         {
-            _logger.LogError(ex, "Error while adding category {CategoryName} to the database", category.CategoryName);
+            _logger.LogError(ex, "Error while adding category {CategoryName} to the database", category.Name);
             return -1;
         }
     }

@@ -15,15 +15,7 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[dbo].[Addresses]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Animals]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Cart]",
          "ObjectType": 0
       },
       {
@@ -35,43 +27,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Discounts]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[OrderItems]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Orders]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[PetProducts]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[PetSales]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Roles]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ShippingOptions]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Users]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[WishList]",
          "ObjectType": 0
       }
    ],
-   "UiHint": "laptop-r1vm67l4\\localdb#a260993f.PetShopDB_v2.dbo",
+   "UiHint": "laptop-r1vm67l4\\localdb#51eaab7e.PetShopDB.dbo",
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,

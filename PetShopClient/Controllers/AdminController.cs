@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetShopApiServise.DtoModels;
+using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CategoryServise;
 using PetShopClientServise.Servises.Filters;
+using System.Net;
 
 namespace PetShopClient.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly IAnimalApiServise _animalApiServise;
-        private readonly ICategoryApiServise _categoryApiServise;
-        public AdminController(IAnimalApiServise animalApiServise, ICategoryApiServise categoryApiServise)
+        private readonly IAnimalApiService _animalApiServise;
+        private readonly ICategoryApiService _categoryApiServise;
+        public AdminController(IAnimalApiService animalApiServise, ICategoryApiService categoryApiServise)
         {
             _animalApiServise = animalApiServise;
             _categoryApiServise = categoryApiServise;
@@ -23,66 +24,111 @@ namespace PetShopClient.Controllers
         [HttpGet]
         public async Task<IActionResult> AddAnimal()
         {
-            ViewData["Categories"] = await _categoryApiServise.GetAllCategories()!;
+            var (categories, status) = await _categoryApiServise.GetAllCategories();
+
+            ViewData["Categories"] = categories; 
             return View();
         }
 
-        [HttpPost]
         public async Task<IActionResult> AddAnimal(Animals animals)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             await _animalApiServise.AddAnimal(animals);
             return View();
         }
 
         public async Task<IActionResult> DeleteAnimalById(int id)
         {
-            var res = await _animalApiServise.DeleteAnimalById(id);
+            if (id < 0)
+            {
+                RedirectToAction("AnimalOverview");
+            }
+            await _animalApiServise.DeleteAnimalById(id);
             return RedirectToAction("AnimalOverview");
         }
+
         public async Task<IActionResult> UpdateAnimal(Animals animal)
         {
-            var res = await _animalApiServise.UpdateAnimal(animal);
-            return RedirectToAction("AnimalDetailsEditor", new { id = animal.AnimalId });
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("AnimalDetailsEditor", new { id = animal.AnimalId });
+            }
+            await _animalApiServise.UpdateAnimal(animal);
+            return RedirectToAction("AnimalOverview");
         }
+
         public async Task<IActionResult> AnimalDetailsEditor(int id)
         {
-            ViewData["Categories"] = await _categoryApiServise.GetAllCategories()!;
-            var animal = await _animalApiServise.GetAnimalById(id);
+            var (categories, _) = await _categoryApiServise.GetAllCategories();
+            ViewData["Categories"] =  categories;
+
+            var (animal, status) = await _animalApiServise.GetAnimalById(id);
+            if (status != HttpStatusCode.OK)
+            {
+                return RedirectToAction("Index", "Error", new { status });
+            }
+
             return View(animal);
         }
 
         public async Task<IActionResult> AnimalOverview()
         {
-            var animals = await _animalApiServise.GetAllAnimals();
+            var (animals, status) = await _animalApiServise.GetAllAnimals();
             var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(animals.ToList());
             return View(animalsUnderFilter);
         }
 
         public async Task<IActionResult> AddCategory(Categories category)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("AddCategotyForm");
+            }
             await _categoryApiServise.AddCategory(category);
             return RedirectToAction("CategoryOverview");
         }
 
         public async Task<IActionResult> DeleteCategoryById(int id)
         {
+            if (id < 0)
+            {
+                RedirectToAction("CategoryOverview");
+            }
+
             var res = await _categoryApiServise.DeleteCategoryById(id);
             return RedirectToAction("CategoryOverview");
         }
 
         public async Task<IActionResult> CategoryOverview()
         {
-           var categories =  await _categoryApiServise.GetAllCategories();
+            var (categories, status) = await _categoryApiServise.GetAllCategories();
+
+            if(status != HttpStatusCode.OK)
+            {
+                return RedirectToAction("Index", "Error", new { status });
+            }
+
             return View(categories);
         }
 
         public async Task<IActionResult> CategoryDetailsEditor(int id)
         {
-            var category = await _categoryApiServise.GetCategoryById(id);
-            return View(category); 
+
+            var (category, status) = await _categoryApiServise.GetCategoryById(id);
+
+            if (status != HttpStatusCode.OK)
+            {
+                return RedirectToAction("Index", "Error", new { status });
+            }
+
+            return View(category);
         }
 
-        public IActionResult AddCategotyForm ()
+        public IActionResult AddCategotyForm()
         {
             return View();
         }

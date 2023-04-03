@@ -1,4 +1,4 @@
-﻿@model  IEnumerable<PetShopApiServise.DtoModels.Categories>
+﻿@model  IEnumerable<PetShopClientServise.DtoModels.Categories>
 
 
 <!DOCTYPE html>
@@ -15,7 +15,7 @@
         @foreach (var item in Model)
         {
             <div class="category-item">
-                <div class="category-name">@item.CategoryName</div>
+                <div class="category-name">@item.Name</div>
                 <button type="button" class="category-remove-btn" onclick="openModal('@item.CategoryId');" aria-label="Remove category">
                     X
                 </button>

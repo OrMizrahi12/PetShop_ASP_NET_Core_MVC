@@ -8,9 +8,9 @@ namespace PetShopApiServise.Extensions
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddTransient<IAnimalReposetory, AnimalReposetory>();
-            services.AddTransient<ICategoryReposetory, CategoryReposetory>();
-            services.AddTransient<ICommentReposetory, CommentReposetory>();
+            services.AddTransient<IAnimalRepository, AnimalRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<ICommentRepository, CommentRepository>();
 
             return services;
         }

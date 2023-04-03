@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PetShopApiServise.Models;
 
@@ -9,19 +10,17 @@ public partial class Comments
 {
     public int CommentId { get; set; }
 
-    public int? UserId { get; set; }
-
-    public int? ProductId { get; set; }
-
+    [Required]
     public int? AnimalId { get; set; }
 
-    public string CommentText { get; set; }
+    [Required(ErrorMessage = "Please enter a comment")]
+    [MinLength(5, ErrorMessage = "Comment must be at least 5 characters long")]
+    [MaxLength(100, ErrorMessage = "The comment cant be larger than 100 chars")]
+    public string Comment { get; set; }
 
-    public DateTime CommentDate { get; set; }
+    public int? UserId { get; set; }
 
     public virtual Animals Animal { get; set; }
-
-    public virtual PetProducts Product { get; set; }
 
     public virtual Users User { get; set; }
 }

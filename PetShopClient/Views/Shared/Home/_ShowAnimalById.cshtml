@@ -1,13 +1,24 @@
-﻿@model PetShopApiServise.DtoModels.Animals
+﻿@model PetShopClientServise.DtoModels.Animals
 @{
     ViewBag.Title = "AnimalDetailsById";
 }
 
 <header>
     <link href="~/styles/Home/AnimalDetailsById.css" rel="stylesheet" />
+    <script src="~/scripts/jquery.min.js"></script>
+    <script src="~/scripts/jquery.validate.min.js"></script>
+    <script src="~/ValidationForms/CommentForm.js"></script>
+    
 </header>
+
+<style>
+    label.error {
+        color: red;
+    }
+</style>
+
 @{
-    var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = Model.Image }); 
+    var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = Model.Picture }); 
     var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = Model.CategoryId });
 }
 <div class="animal-details-wrapper">
@@ -19,26 +30,63 @@
             <div class="animal-category"><strong>Category:</strong>@CategoryName</div>
         </div>
         <h2 class="comments-title">Comments</h2>
+
+        <div class="addCommentForm">
+
+        <form asp-controller="Comment" asp-action="AddCommentOnAnimal" method="post">
+            <input type="text" name="Comment" placeholder="Add comment" />
+            <input hidden name="AnimalId" value="@Model.AnimalId" />
+            <button type="submit">Add</button>
+        </form>
+</div>
+<div class="centerice">
+    <button class="show-comments-btn">Show comments</button>
+<button class="hide-comments-btn">Hide comments</button>
+</div>
+        
         <ul class="comments-list">
+    @if(ViewData["Comments"] is List<PetShopClientServise.DtoModels.Comments> comments)
+    {
+        @foreach (var comment in comments)
+        {
+            <li class="comment-item">@comment.Comment</li>
+        }                
+    }
+    </ul>
 
-            @if(ViewData["Comments"] is List<PetShopApiServise.DtoModels.Comments> comments)
-            {
-                @foreach (var comment in comments)
-                {
-                    <li class="comment-item">@comment.CommentText</li>
-                }                
-            }
-
-        </ul>
      </div>
 
-        @*TO DO *@
-<div class="addCommentForm">
-  <form asp-controller="Comment" asp-action="AddCommentOnAnimal" method="post">
-    <input  type="text" name="CommentText" placeholder="Add comment" />
-    <input hidden name="AnimalId" value="@Model.AnimalId" />
-      <button type="submit">Add</button>
-  </form>
-</div>
 
 </div>
+
+
+  <script>
+        var showCommentsBtn = document.querySelector('.show-comments-btn');
+        var hideCommentsBtn = document.querySelector('.hide-comments-btn');
+        var commentItems = document.querySelectorAll('.comment-item');
+        var commentDetails = document.querySelectorAll('.comments-list');
+
+        commentDetails.forEach(function (commentDetail) {
+            commentDetail.style.display = 'none';
+        });
+
+        showCommentsBtn.addEventListener('click', function () {
+
+            commentItems.forEach(function (commentItem) {
+                commentItem.style.display = 'block';
+            });
+            commentDetails.forEach(function (commentDetail) {
+                commentDetail.style.display = 'block';
+            });
+            showCommentsBtn.style.display = 'none';
+            hideCommentsBtn.style.display = 'block';
+        });
+        hideCommentsBtn.addEventListener('click', function () {
+            commentDetails.forEach(function (commentDetail) {
+                commentDetail.style.display = 'none';
+            });
+            hideCommentsBtn.style.display = 'none';
+            showCommentsBtn.style.display = 'block';
+        });
+    </script>
+}

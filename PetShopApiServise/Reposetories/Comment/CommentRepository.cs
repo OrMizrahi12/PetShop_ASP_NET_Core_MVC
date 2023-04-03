@@ -3,13 +3,13 @@ using PetShopApiServise.Models;
 
 namespace PetShopApiServise.Reposetories.Comment
 {
-    public class CommentReposetory : ICommentReposetory
+    public class CommentRepository : ICommentRepository
     {
         private readonly PetShopDBContext _context;
-        private readonly ILogger<CommentReposetory> _logger;
+        private readonly ILogger<CommentRepository> _logger;
 
 
-        public CommentReposetory(PetShopDBContext context, ILogger<CommentReposetory> logger)
+        public CommentRepository(PetShopDBContext context, ILogger<CommentRepository> logger)
         {
             _context = context;
             _logger = logger;

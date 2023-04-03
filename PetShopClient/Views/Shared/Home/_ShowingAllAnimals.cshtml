@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PetShopApiServise.DtoModels.Animals>
+﻿@model IEnumerable<PetShopClientServise.DtoModels.Animals>
 @{
     ViewBag.Title = "Index";
 }
@@ -15,7 +15,7 @@
                       
         @foreach(var item in Model)
         {            
-            var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = item.Image }); 
+            var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = item.Picture }); 
             var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = item.CategoryId });
 
             <div class="animal-item" >

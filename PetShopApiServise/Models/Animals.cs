@@ -2,8 +2,8 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetShopApiServise.Models;
 
@@ -21,23 +21,20 @@ public partial class Animals
     public int Age { get; set; }
 
     [NotMapped]
-   // [Required(ErrorMessage = "Please enter an Image")]
     public IFormFile ImageFile { get; set; }
 
-    public byte[] Image { get; set; }
-
-    [Required(ErrorMessage = "Please select a category")]
-    [Range(1, int.MaxValue, ErrorMessage = "Please select a category")]
-    public int CategoryId { get; set; }
+    [Required(ErrorMessage = "Please select a picture")]
+    public byte[] Picture { get; set; }
 
     [Required(ErrorMessage = "Please enter a description")]
     [StringLength(255, MinimumLength = 10, ErrorMessage = "Description must be between 10 and 255 characters")]
     public string Description { get; set; }
 
+    [Required(ErrorMessage = "Please select a category")]
+    [Range(1, int.MaxValue, ErrorMessage = "Please select a category")]
+    public int? CategoryId { get; set; }
 
     public virtual Categories Category { get; set; }
 
     public virtual ICollection<Comments> Comments { get; } = new List<Comments>();
-
-    public virtual ICollection<PetSales> PetSales { get; } = new List<PetSales>();
 }

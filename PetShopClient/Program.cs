@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Diagnostics;
 using PetShopClient.ViewComponents;
 using PetShopClientServise.Extensions;
 using PetShopClientServise.Servises.AnimalServise;
@@ -5,7 +6,7 @@ using PetShopClientServise.Servises.AnimalServise;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<IAnimalApiServise, AnimalApiServise>();
+builder.Services.AddTransient<IAnimalApiService, AnimalApiService>();
 builder.Services.AddApiServises();
 
 builder.Services.AddDistributedMemoryCache();
@@ -18,8 +19,15 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
+
+
+app.UseStatusCodePagesWithReExecute("/Error/Index/{0}");
+
+
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
+
+
 app.MapDefaultControllerRoute();
 app.Run();

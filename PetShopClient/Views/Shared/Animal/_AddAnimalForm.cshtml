@@ -1,5 +1,5 @@
 ﻿
-@model PetShopApiServise.DtoModels.Animals
+@model PetShopClientServise.DtoModels.Animals
 <head>
     <link rel="stylesheet" href="~/styles/Forms/AddAnimalForm.css" />
     <script src="~/scripts/jquery.min.js"></script>
@@ -33,11 +33,11 @@
         <label asp-for="CategoryId" for="CategoryId">Category:</label>
         <select asp-for="CategoryId" id="CategoryId" name="CategoryId">
             <option value="">Select a category</option>
-            @if (ViewData["Categories"] is List<PetShopApiServise.DtoModels.Categories> categories)
+            @if (ViewData["Categories"] is List<PetShopClientServise.DtoModels.Categories> categories)
             {
                 foreach (var item in categories)
                 {
-                    <option value="@item.CategoryId">@item.CategoryName</option>
+                    <option value="@item.CategoryId">@item.Name</option>
                 }
             }
         </select>

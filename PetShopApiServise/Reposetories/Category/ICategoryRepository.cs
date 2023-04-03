@@ -2,7 +2,7 @@
 
 namespace PetShopApiServise.Reposetories.Category;
 
-public interface ICategoryReposetory
+public interface ICategoryRepository
 {
 
     Task<Categories> GetCategoryById(int id);

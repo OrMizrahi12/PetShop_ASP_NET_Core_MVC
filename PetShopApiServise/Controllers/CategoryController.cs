@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PetShopApiServise.Attributes.ExeptionAttributes;
 using PetShopApiServise.Models;
 using PetShopApiServise.Reposetories.Category;
 
@@ -9,14 +10,15 @@ namespace PetShopApiServise.Controllers;
 [ApiController]
 public class CategoryController : ControllerBase
 {
-    private readonly ICategoryReposetory _categoryReposetory;
+    private readonly ICategoryRepository _categoryReposetory;
 
-    public CategoryController(ICategoryReposetory categoryReposetory)
+    public CategoryController(ICategoryRepository categoryReposetory)
     {
         _categoryReposetory = categoryReposetory;
     }
 
     [HttpGet]
+    [PetShopExceptionFilter]
     public async Task<ActionResult<IEnumerable<Categories>>> GetAllCategories()
     {
         var categories = await _categoryReposetory.GetAllCategories();
@@ -24,6 +26,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [PetShopExceptionFilter]
     public async Task<ActionResult<Categories>> GetCategoryById(int id)
     {
         var category = await _categoryReposetory.GetCategoryById(id);
@@ -35,6 +38,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
+    [PetShopExceptionFilter]
     public async Task<ActionResult<int>> AddCategory([FromBody] Categories category)
     {
         if (!ModelState.IsValid)
@@ -52,41 +56,22 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut]
+    [PetShopExceptionFilter]
     public async Task<IActionResult> UpdateCategory([FromBody] Categories category)
     {
-        try
+        if (!ModelState.IsValid)
         {
-            var result = await _categoryReposetory.UpdateCategory(category);
-            if (result == -1)
-            {
-                return BadRequest("Invalid category data.");
-            }
-            else
-            {
-                return Ok(result);
-            }
+            return BadRequest(ModelState);
         }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var result = await _categoryReposetory.UpdateCategory(category);
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
+    [PetShopExceptionFilter]
     public async Task<IActionResult> DeleteCategoryById(int id)
     {
-        try
-        {
-            var result = await _categoryReposetory.DeleteCategoryById(id);
-            if (result == -1)
-            {
-                return NotFound();
-            }
-            return Ok(result);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var result = await _categoryReposetory.DeleteCategoryById(id);
+        return Ok(result);
     }
 }

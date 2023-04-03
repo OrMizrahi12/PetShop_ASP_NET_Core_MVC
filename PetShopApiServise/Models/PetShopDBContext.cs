@@ -13,330 +13,60 @@ public partial class PetShopDBContext : DbContext
     {
     }
 
-    public virtual DbSet<Addresses> Addresses { get; set; }
-
     public virtual DbSet<Animals> Animals { get; set; }
-
-    public virtual DbSet<Cart> Cart { get; set; }
 
     public virtual DbSet<Categories> Categories { get; set; }
 
     public virtual DbSet<Comments> Comments { get; set; }
 
-    public virtual DbSet<Discounts> Discounts { get; set; }
-
-    public virtual DbSet<OrderItems> OrderItems { get; set; }
-
-    public virtual DbSet<Orders> Orders { get; set; }
-
-    public virtual DbSet<PetProducts> PetProducts { get; set; }
-
-    public virtual DbSet<PetSales> PetSales { get; set; }
-
-    public virtual DbSet<Roles> Roles { get; set; }
-
-    public virtual DbSet<ShippingOptions> ShippingOptions { get; set; }
-
     public virtual DbSet<Users> Users { get; set; }
-
-    public virtual DbSet<WishList> WishList { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Addresses>(entity =>
-        {
-            entity.HasKey(e => e.AddressId).HasName("PK__Addresse__091C2A1B6317A20A");
-
-            entity.HasIndex(e => e.UserId, "IX_Addresses_UserID");
-
-            entity.Property(e => e.AddressId).HasColumnName("AddressID");
-            entity.Property(e => e.City)
-                .IsRequired()
-                .HasMaxLength(50);
-            entity.Property(e => e.Country)
-                .IsRequired()
-                .HasMaxLength(50);
-            entity.Property(e => e.State).HasMaxLength(50);
-            entity.Property(e => e.Street)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-            entity.Property(e => e.ZipCode)
-                .IsRequired()
-                .HasMaxLength(10);
-
-            entity.HasOne(d => d.User).WithMany(p => p.Addresses)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Addresses__UserI__2F10007B");
-        });
-
         modelBuilder.Entity<Animals>(entity =>
         {
-            entity.HasKey(e => e.AnimalId).HasName("PK__Animals__A21A73274C060CDE");
+            entity.HasKey(e => e.AnimalId).HasName("PK__Animals__A21A7307C30FBD77");
 
-            entity.HasIndex(e => e.CategoryId, "IX_Animals_CategoryID");
-
-            entity.Property(e => e.AnimalId).HasColumnName("AnimalID");
-            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
-            entity.Property(e => e.Description).IsRequired();
-            entity.Property(e => e.Image).IsRequired();
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(255);
 
             entity.HasOne(d => d.Category).WithMany(p => p.Animals)
                 .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Animals__Categor__267ABA7A");
-        });
-
-        modelBuilder.Entity<Cart>(entity =>
-        {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD7978A22BF59");
-
-            entity.HasIndex(e => e.ProductId, "IX_Cart_ProductID");
-
-            entity.HasIndex(e => e.UserId, "IX_Cart_UserID");
-
-            entity.Property(e => e.CartId).HasColumnName("CartID");
-            entity.Property(e => e.ProductId).HasColumnName("ProductID");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.Cart)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__Cart__ProductID__35BCFE0A");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Cart)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Cart__UserID__34C8D9D1");
+                .HasConstraintName("FK__Animals__Categor__286302EC");
         });
 
         modelBuilder.Entity<Categories>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A2BBC3C6FFF");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0B5BCF82C3");
 
-            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
-            entity.Property(e => e.CategoryName)
+            entity.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(255);
         });
 
         modelBuilder.Entity<Comments>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFAACC864CD2");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFCAF12CFE76");
 
-            entity.HasIndex(e => e.AnimalId, "IX_Comments_AnimalID");
-
-            entity.HasIndex(e => e.ProductId, "IX_Comments_ProductID");
-
-            entity.HasIndex(e => e.UserId, "IX_Comments_UserID");
-
-            entity.Property(e => e.CommentId).HasColumnName("CommentID");
-            entity.Property(e => e.AnimalId).HasColumnName("AnimalID");
-            entity.Property(e => e.CommentDate).HasColumnType("datetime");
-            entity.Property(e => e.CommentText).IsRequired();
-            entity.Property(e => e.ProductId).HasColumnName("ProductID");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.Comment).IsRequired();
 
             entity.HasOne(d => d.Animal).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.AnimalId)
-                .HasConstraintName("FK__Comments__Animal__5070F446");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.Comments)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__Comments__Produc__4F7CD00D");
+                .HasConstraintName("FK__Comments__Animal__2B3F6F97");
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Comments__UserID__4E88ABD4");
-        });
-
-        modelBuilder.Entity<Discounts>(entity =>
-        {
-            entity.HasKey(e => e.DiscountId).HasName("PK__Discount__E43F6DF6F17942F3");
-
-            entity.HasIndex(e => e.Code, "UQ__Discount__A25C5AA7E615C108").IsUnique();
-
-            entity.Property(e => e.DiscountId).HasColumnName("DiscountID");
-            entity.Property(e => e.Code)
-                .IsRequired()
-                .HasMaxLength(20);
-            entity.Property(e => e.DiscountPercentage).HasColumnType("decimal(5, 2)");
-            entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<OrderItems>(entity =>
-        {
-            entity.HasKey(e => e.OrderItemId).HasName("PK__OrderIte__57ED06A1F1284A2C");
-
-            entity.HasIndex(e => e.OrderId, "IX_OrderItems_OrderID");
-
-            entity.HasIndex(e => e.ProductId, "IX_OrderItems_ProductID");
-
-            entity.Property(e => e.OrderItemId).HasColumnName("OrderItemID");
-            entity.Property(e => e.OrderId).HasColumnName("OrderID");
-            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.ProductId).HasColumnName("ProductID");
-
-            entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__OrderItem__Order__46E78A0C");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__OrderItem__Produ__47DBAE45");
-        });
-
-        modelBuilder.Entity<Orders>(entity =>
-        {
-            entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BAF9B535D88");
-
-            entity.HasIndex(e => e.AddressId, "IX_Orders_AddressID");
-
-            entity.HasIndex(e => e.DiscountId, "IX_Orders_DiscountID");
-
-            entity.HasIndex(e => e.ShippingOptionId, "IX_Orders_ShippingOptionID");
-
-            entity.HasIndex(e => e.UserId, "IX_Orders_UserID");
-
-            entity.Property(e => e.OrderId).HasColumnName("OrderID");
-            entity.Property(e => e.AddressId).HasColumnName("AddressID");
-            entity.Property(e => e.DiscountId).HasColumnName("DiscountID");
-            entity.Property(e => e.OrderDate).HasColumnType("datetime");
-            entity.Property(e => e.ShippingOptionId).HasColumnName("ShippingOptionID");
-            entity.Property(e => e.Status)
-                .IsRequired()
-                .HasMaxLength(50);
-            entity.Property(e => e.Total).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.Address).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.AddressId)
-                .HasConstraintName("FK__Orders__AddressI__4222D4EF");
-
-            entity.HasOne(d => d.Discount).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.DiscountId)
-                .HasConstraintName("FK__Orders__Discount__4316F928");
-
-            entity.HasOne(d => d.ShippingOption).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.ShippingOptionId)
-                .HasConstraintName("FK__Orders__Shipping__440B1D61");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Orders__UserID__412EB0B6");
-        });
-
-        modelBuilder.Entity<PetProducts>(entity =>
-        {
-            entity.HasKey(e => e.ProductId).HasName("PK__PetProdu__B40CC6ED3A2678EE");
-
-            entity.HasIndex(e => e.CategoryId, "IX_PetProducts_CategoryID");
-
-            entity.Property(e => e.ProductId).HasColumnName("ProductID");
-            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
-            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.ProductName)
-                .IsRequired()
-                .HasMaxLength(100);
-
-            entity.HasOne(d => d.Category).WithMany(p => p.PetProducts)
-                .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("FK__PetProduc__Categ__31EC6D26");
-        });
-
-        modelBuilder.Entity<PetSales>(entity =>
-        {
-            entity.HasKey(e => e.SaleId).HasName("PK__PetSales__1EE3C41F9EC7B716");
-
-            entity.HasIndex(e => e.AnimalId, "IX_PetSales_AnimalID");
-
-            entity.HasIndex(e => e.UserId, "IX_PetSales_UserID");
-
-            entity.Property(e => e.SaleId).HasColumnName("SaleID");
-            entity.Property(e => e.AnimalId).HasColumnName("AnimalID");
-            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.SaleDate).HasColumnType("datetime");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.Animal).WithMany(p => p.PetSales)
-                .HasForeignKey(d => d.AnimalId)
-                .HasConstraintName("FK__PetSales__Animal__4BAC3F29");
-
-            entity.HasOne(d => d.User).WithMany(p => p.PetSales)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__PetSales__UserID__4AB81AF0");
-        });
-
-        modelBuilder.Entity<Roles>(entity =>
-        {
-            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE3A60A9B327");
-
-            entity.Property(e => e.RoleId).HasColumnName("RoleID");
-            entity.Property(e => e.RoleName)
-                .IsRequired()
-                .HasMaxLength(100);
-        });
-
-        modelBuilder.Entity<ShippingOptions>(entity =>
-        {
-            entity.HasKey(e => e.ShippingOptionId).HasName("PK__Shipping__642EC62D34ED34E3");
-
-            entity.Property(e => e.ShippingOptionId).HasColumnName("ShippingOptionID");
-            entity.Property(e => e.EstimatedDeliveryTime)
-                .IsRequired()
-                .HasMaxLength(50);
-            entity.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
+                .HasConstraintName("FK__Comments__UserId__2C3393D0");
         });
 
         modelBuilder.Entity<Users>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC63D4CB87");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C60B91B06");
 
-            entity.HasIndex(e => e.RoleId, "IX_Users_RoleID");
-
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D105345DFFE489").IsUnique();
-
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-            entity.Property(e => e.Email)
+            entity.Property(e => e.Username)
                 .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.Password)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.Phone).HasMaxLength(20);
-            entity.Property(e => e.RoleId).HasColumnName("RoleID");
-            entity.Property(e => e.UserName)
-                .IsRequired()
-                .HasMaxLength(100);
-
-            entity.HasOne(d => d.Role).WithMany(p => p.Users)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK__Users__RoleID__2C3393D0");
-        });
-
-        modelBuilder.Entity<WishList>(entity =>
-        {
-            entity.HasKey(e => e.WishId).HasName("PK__WishList__64BA654124DEF822");
-
-            entity.HasIndex(e => e.ProductId, "IX_WishList_ProductID");
-
-            entity.HasIndex(e => e.UserId, "IX_WishList_UserID");
-
-            entity.Property(e => e.WishId).HasColumnName("WishID");
-            entity.Property(e => e.ProductId).HasColumnName("ProductID");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.WishList)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__WishList__Produc__398D8EEE");
-
-            entity.HasOne(d => d.User).WithMany(p => p.WishList)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__WishList__UserID__38996AB5");
+                .HasMaxLength(255);
         });
 
         OnModelCreatingPartial(modelBuilder);

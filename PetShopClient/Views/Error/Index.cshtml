@@ -1,0 +1,39 @@
+﻿@model int
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<head>
+    <link rel="stylesheet" href="~/styles/ErrorPage.css" />
+</head>
+
+<div class="container">
+    <div class="error-code">@Model</div>
+    <h1 class="error-message">@GetErrorMessage(Model)</h1>
+    <p class="error-description">Sorry, something went wrong. Please try again later.</p>
+    <div class="button-container">
+        <a href="javascript:history.back()" class="back-button">Go back</a>
+    </div>
+</div>
+
+@functions {
+    private string GetErrorMessage(int status)
+    {
+        switch (status)
+        {
+            case 400:
+                return "Bad Request";
+            case 401:
+                return "Unauthorized";
+            case 403:
+                return "Forbidden";
+            case 404:
+                return "Not Found";
+            case 500:
+                return "Internal Server Error";
+            default:
+                return "Error";
+        }
+    }
+}

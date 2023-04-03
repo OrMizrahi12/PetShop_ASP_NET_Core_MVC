@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PetShopApiServise.Attributes.ExeptionAttributes;
 using PetShopApiServise.Models;
 using PetShopApiServise.Reposetories.Comment;
 using System.Collections.Generic;
@@ -10,14 +11,15 @@ namespace PetShopApiServise.Controllers;
 [ApiController]
 public class CommentController : ControllerBase
 {
-    private readonly ICommentReposetory _commentRepository;
+    private readonly ICommentRepository _commentRepository;
 
-    public CommentController(ICommentReposetory commentRepository)
+    public CommentController(ICommentRepository commentRepository)
     {
         _commentRepository = commentRepository;
     }
 
     [HttpGet]
+    [PetShopExceptionFilter]
     public async Task<ActionResult<IEnumerable<Comments>>> GetAllComments()
     {
         var comments = await _commentRepository.GetAllComments();
@@ -25,6 +27,7 @@ public class CommentController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [PetShopExceptionFilter]
     public async Task<ActionResult<Comments>> GetCommentById(int id)
     {
         var comment = await _commentRepository.GetCommentById(id);
@@ -36,62 +39,41 @@ public class CommentController : ControllerBase
     }
 
     [HttpPost]
+    [PetShopExceptionFilter]
+
     public async Task<ActionResult<int>> AddComment([FromBody] Comments comment)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-
         var result = await _commentRepository.AddComment(comment);
-        if (result == -1)
-        {
-            return BadRequest("Invalid comment data.");
-        }
-
         return Ok(result);
     }
 
     [HttpPut]
+    [PetShopExceptionFilter]
     public async Task<IActionResult> UpdateComment([FromBody] Comments comment)
     {
-        try
+        if (!ModelState.IsValid)
         {
-            var result = await _commentRepository.UpdateComment(comment);
-            if (result == -1)
-            {
-                return BadRequest("Invalid comment data.");
-            }
-            else
-            {
-                return Ok(result);
-            }
+            return BadRequest(ModelState);
         }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var result = await _commentRepository.UpdateComment(comment);
+        return Ok(result);
+
     }
 
     [HttpDelete("{id}")]
+    [PetShopExceptionFilter]
     public async Task<IActionResult> DeleteCommentById(int id)
     {
-        try
-        {
-            var result = await _commentRepository.DeleteCommentById(id);
-            if (result == -1)
-            {
-                return NotFound();
-            }
-            return Ok(result);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var result = await _commentRepository.DeleteCommentById(id);
+        return Ok(result);
     }
 
     [HttpGet("GetCommentsByAnimalId/{id}")]
+    [PetShopExceptionFilter]
     public async Task<ActionResult<IEnumerable<Comments>>> GetCommentsByAnimalId(int id)
     {
         var comments = await _commentRepository.GetCommentsByAnimalId(id);

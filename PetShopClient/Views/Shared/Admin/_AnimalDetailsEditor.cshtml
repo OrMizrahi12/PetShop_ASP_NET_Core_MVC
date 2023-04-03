@@ -1,4 +1,4 @@
-﻿@model PetShopApiServise.DtoModels.Animals
+﻿@model PetShopClientServise.DtoModels.Animals
 
 @* Show Model.Image, Model.Age, Model.Catetegory, Model.Name Model.AnimalId*@
 
@@ -10,7 +10,7 @@
 
 </head>
 @{
-    var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = Model.Image }); 
+    var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = Model.Picture }); 
     var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = Model.CategoryId });
 }
 
@@ -43,11 +43,11 @@
         <label for="CategoryId" class="AnimalEditor-label">Category:</label>
         <select asp-for="CategoryId" id="CategoryId" name="CategoryId" class="AnimalEditor-select">
             <option value="@Model.CategoryId">@CategoryName</option>
-            @if (ViewData["Categories"] is List<PetShopApiServise.DtoModels.Categories> categories)
+            @if (ViewData["Categories"] is List<PetShopClientServise.DtoModels.Categories> categories)
             {
                 foreach (var item in categories)
                 {
-                    <option value="@item.CategoryId">@item.CategoryName</option>
+                    <option value="@item.CategoryId">@item.Name</option>
                 }
             }
         </select>

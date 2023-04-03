@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetShopApiServise.DtoModels;
+using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.CommentServise;
 
 namespace PetShopClient.Controllers
 {
     public class CommentController : Controller
     {
+        private readonly ICommentApiService _commentApiServise;
 
-        ICommentApiServise _commentApiServise;
-
-        public CommentController(ICommentApiServise commentApiServise)
+        public CommentController(ICommentApiService commentApiServise)
         {
             _commentApiServise = commentApiServise;
         }
@@ -18,10 +17,15 @@ namespace PetShopClient.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> AddCommentOnAnimal(Comments comment)
+        public async Task<IActionResult> AddCommentOnAnimal(Comments comments)
         {
-            await _commentApiServise.AddComment(comment);
-            return RedirectToAction("ShowAnimalById", "Home", new { id = comment.AnimalId });
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("ShowAnimalById", "Home", new { id = comments.AnimalId });
+            }
+
+            await _commentApiServise.AddComment(comments!);
+            return RedirectToAction("ShowAnimalById", "Home", new { id = comments.AnimalId });
         }
 
 

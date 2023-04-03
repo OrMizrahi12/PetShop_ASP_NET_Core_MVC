@@ -1,4 +1,4 @@
-﻿@model PetShopApiServise.DtoModels.Categories
+﻿@model PetShopClientServise.DtoModels.Categories
 
 <!DOCTYPE html>
 <html>
@@ -15,10 +15,10 @@
 
 		<h2>Add Category</h2>
 		<form method="post"  asp-action="AddCategory" asp-controller="Admin">
-		 <label for="CategoryName">Category Name:</label>
-    <input type="text" id="CategoryName" name="CategoryName" required>
-    <span class="error-message" style="display: none;">Please enter a category name.</span>
-    <button type="submit">Add Category</button>
+		 <label for="Name">Category Name:</label>
+			<input type="text" id="Name" name="Name" required>
+			<span class="error-message" style="display: none;">Please enter a category name.</span>
+			<button type="submit">Add Category</button>
 		</form>
 	</div>
 </body>

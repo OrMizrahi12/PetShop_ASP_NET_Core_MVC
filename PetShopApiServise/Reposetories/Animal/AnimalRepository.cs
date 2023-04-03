@@ -1,21 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PetShopApiServise.Models;
 using PetShopApiServise.Reposetories.Category;
 using PetShopApiServise.Utils.Serialization;
 
 namespace PetShopApiServise.Reposetories.Animal;
 
-public class AnimalReposetory : IAnimalReposetory
+public class AnimalRepository : IAnimalRepository
 {
     private readonly PetShopDBContext _context;
-    private readonly ILogger<AnimalReposetory> _logger;
+    private readonly ILogger<AnimalRepository> _logger;
 
-    public int getNum(int id)
-    {
-        return id;  
-    }  
 
-    public AnimalReposetory(PetShopDBContext context, ILogger<AnimalReposetory> logger)
+
+    public AnimalRepository(PetShopDBContext context, ILogger<AnimalRepository> logger)
     {
         _context = context;
         _logger = logger;
@@ -27,7 +26,7 @@ public class AnimalReposetory : IAnimalReposetory
         {
             if (animal.ImageFile != null)
             {
-                animal.Image = ImageSerialization.ImageToByteArray(animal.ImageFile);
+                animal.Picture = ImageSerialization.ImageToByteArray(animal.ImageFile);
             }
 
             await _context.Animals.AddAsync(animal);
@@ -40,31 +39,16 @@ public class AnimalReposetory : IAnimalReposetory
         }
     }
 
+    [HttpGet]
     public async Task<IEnumerable<Animals>> GetAllAnimals()
     {
-        try
-        {
-            return await _context.Animals.ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error: {ex}", ex);
-            return Enumerable.Empty<Animals>().ToList();
-        }
+        return await _context.Animals.ToListAsync();
     }
 
     public async Task<Animals?> GetAnimalById(int id)
     {
-        try
-        {
-            var animal = await _context.Animals.FindAsync(id);
-            return animal!;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error while looking up animal with ID {AnimalId}", id);
-            return null!;
-        }
+        var animal = await _context.Animals.FindAsync(id);
+        return animal!;
     }
 
     public async Task<int> UpdateAnimal(Animals animal)
@@ -72,18 +56,18 @@ public class AnimalReposetory : IAnimalReposetory
         try
         {
             var existingAnimal = await GetAnimalById(animal.AnimalId);
-            byte[] imageBt = existingAnimal!.Image;
+            byte[] imageBt = existingAnimal!.Picture;
 
             if (existingAnimal != null)
             {
 
-                if(animal.Image.Length != 0) 
+                if (animal.Picture.Length != 0)
                 {
-                    existingAnimal.Image = animal.Image;
+                    existingAnimal.Picture = animal.Picture;
                 }
                 else
                 {
-                    existingAnimal.Image = imageBt;
+                    existingAnimal.Picture = imageBt;
                 }
 
                 existingAnimal.Name = animal.Name;
