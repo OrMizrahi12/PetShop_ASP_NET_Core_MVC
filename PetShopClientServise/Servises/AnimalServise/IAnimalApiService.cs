@@ -10,5 +10,7 @@ namespace PetShopClientServise.Servises.AnimalServise
         public Task<HttpStatusCode> UpdateAnimal(Animals animal);
         public Task<HttpStatusCode> DeleteAnimalById(int animalId);
         public Task<(List<Animals> animals, HttpStatusCode statusCode)> GetAllAnimals();
+
+        public Task<(List<Animals> animals, HttpStatusCode statusCode)> GetAnimalsByCategory(int id);
     }
 }

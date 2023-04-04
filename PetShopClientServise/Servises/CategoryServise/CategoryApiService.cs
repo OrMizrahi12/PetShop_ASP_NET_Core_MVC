@@ -1,4 +1,5 @@
-﻿using PetShopClientServise.DtoModels;
+﻿using PetShopClientServise.Attributes.ExeptionAttributes;
+using PetShopClientServise.DtoModels;
 using PetShopClientServise.Utils.HttpClientUtils;
 using System;
 using System.Collections.Generic;
@@ -12,18 +13,21 @@ namespace PetShopClientServise.Servises.CategoryServise
 {
     public class CategoryApiService : ICategoryApiService
     {
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> AddCategory(Categories category)
         {
             var response = await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Category", category);
             return response.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> DeleteCategoryById(int id)
         {
             var response = await HttpClientInfo.HttpClientServises.DeleteAsync($"api/Category/{id}");
             return response.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<(IEnumerable<Categories> categories, HttpStatusCode statusCode)> GetAllCategories()
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync("api/Category");
@@ -35,10 +39,11 @@ namespace PetShopClientServise.Servises.CategoryServise
             }
             else
             {
-                return (null!, response.StatusCode);
+                return (new List<Categories> { }, response.StatusCode);
             }
         }
 
+        [PetShopExceptionFilter]
         public async Task<(Categories? category, HttpStatusCode statusCode)> GetCategoryById(int id)
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync($"api/Category/{id}");
@@ -50,10 +55,11 @@ namespace PetShopClientServise.Servises.CategoryServise
             }
             else
             {
-                return (null, response.StatusCode);
+                return (new Categories { }, response.StatusCode);
             }
         }
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> UpdateCategory(Categories category)
         {
             var response = await HttpClientInfo.HttpClientServises.PutAsJsonAsync("api/Category", category);

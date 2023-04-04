@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Utils.HttpClientUtils;
 using PetShopClientServise.Utils.Serialization;
@@ -11,6 +12,7 @@ namespace PetShopClientServise.Servises.AnimalServise
     public class AnimalApiService : IAnimalApiService
     {
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> AddAnimal(Animals animal)
         {
             if (animal.ImageFile != null)
@@ -24,6 +26,7 @@ namespace PetShopClientServise.Servises.AnimalServise
             return response.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> DeleteAnimalById(int animalId)
         {
             var response = await HttpClientInfo.HttpClientServises.DeleteAsync($"api/Animal/{animalId}");
@@ -31,6 +34,7 @@ namespace PetShopClientServise.Servises.AnimalServise
             return response.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<(Animals? animal, HttpStatusCode statusCode)> GetAnimalById(int id)
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync($"api/Animal/{id}");
@@ -40,16 +44,13 @@ namespace PetShopClientServise.Servises.AnimalServise
                 var animal = await response.Content.ReadFromJsonAsync<Animals>();
                 return (animal, HttpStatusCode.OK);
             }
-            else if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return (null, HttpStatusCode.NotFound);
-            }
             else
             {
-                return (null, response.StatusCode);
+                return (new Animals { }, response.StatusCode);
             }
         }
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> UpdateAnimal(Animals animal)
         {
             if (animal.ImageFile != null)
@@ -63,6 +64,7 @@ namespace PetShopClientServise.Servises.AnimalServise
             return response.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<(List<Animals> animals, HttpStatusCode statusCode)> GetAllAnimals()
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync("api/Animal");
@@ -74,7 +76,23 @@ namespace PetShopClientServise.Servises.AnimalServise
             }
             else
             {
-                return (null!, response.StatusCode);
+                return (new List<Animals> { }, response.StatusCode);
+            }
+        }
+
+        [PetShopExceptionFilter]
+        public async Task<(List<Animals> animals, HttpStatusCode statusCode)> GetAnimalsByCategory(int id)
+        {
+            var response = await HttpClientInfo.HttpClientServises.GetAsync($"api/Animal/GetAnimalsByCategory/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var animals = await response.Content.ReadFromJsonAsync<List<Animals>>();
+                return (animals!, HttpStatusCode.OK);
+            }
+            else
+            {
+                return (new List<Animals> { }, response.StatusCode);
             }
         }
 

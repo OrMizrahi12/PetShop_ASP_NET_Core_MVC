@@ -119,13 +119,17 @@ namespace PetShopClient.Controllers
         {
 
             var (category, status) = await _categoryApiServise.GetCategoryById(id);
+            var (animals, statusAnimals) = await _animalApiServise.GetAnimalsByCategory(id);
 
-            if (status != HttpStatusCode.OK)
+            if ((status | statusAnimals) != HttpStatusCode.OK)
             {
                 return RedirectToAction("Index", "Error", new { status });
             }
 
-            return View(category);
+            var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(animals.ToList());
+            ViewData["CategoryName"] = category!.Name;
+
+            return View(animalsUnderFilter);
         }
 
         public IActionResult AddCategotyForm()

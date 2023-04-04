@@ -1,4 +1,4 @@
-﻿@model PetShopClientServise.DtoModels.Categories;
+﻿@model IEnumerable<PetShopClientServise.DtoModels.Animals>;
 @{
     ViewData["Title"] = "CategoryDetailsEditor";
 }
@@ -12,5 +12,9 @@
 @await Html.PartialAsync("Admin/_AdminDeshbord", ViewData)
 
 
-<h1>@Model.Name</h1>
+<h1>@ViewData["CategoryName"]</h1>
+
+@await Html.PartialAsync("Admin/_AnimalOverview", Model)
+
+
 

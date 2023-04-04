@@ -109,5 +109,11 @@ public class AnimalRepository : IAnimalRepository
         }
     }
 
+    public async Task<IEnumerable<Animals>> GetAnimalsByCategory(int id)
+    {
+        var animals = await _context.Animals.Where(x => x.CategoryId == id).ToListAsync();
+        return animals;
+    }
+
 
 }

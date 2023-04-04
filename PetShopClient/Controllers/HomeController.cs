@@ -23,7 +23,9 @@ namespace PetShopClient.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["CateforiesArrayFiltersId"] = CategoryFilter.CategoryIdArray ?? new List<int>();
-            ViewData["Categories"] = await _categoryApiServise.GetAllCategories();
+            
+            var (categories, _) = await _categoryApiServise.GetAllCategories();
+            ViewData["Categories"] = categories;
 
             var (animals, statusCode) = await _animalApiServise.GetAllAnimals();
 

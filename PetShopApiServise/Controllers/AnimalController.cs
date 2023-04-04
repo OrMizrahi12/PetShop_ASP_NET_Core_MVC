@@ -68,4 +68,12 @@ public class AnimalController : ControllerBase
         var result = await _animalReposetory.DeleteAnimalById(id);
         return Ok(result);
     }
+
+    [HttpGet("GetAnimalsByCategory/{id}")]
+    [PetShopExceptionFilter]
+    public async Task<IActionResult> GetAnimalsByCategory(int id)
+    {
+        var result = await _animalReposetory.GetAnimalsByCategory(id);
+        return Ok(result);
+    }
 }
