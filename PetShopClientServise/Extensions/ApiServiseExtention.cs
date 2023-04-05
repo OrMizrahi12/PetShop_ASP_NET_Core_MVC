@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PetShopClientServise.Servises.AccountServise;
 using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CategoryServise;
 using PetShopClientServise.Servises.CommentServise;
@@ -18,6 +19,7 @@ namespace PetShopClientServise.Extensions
             services.AddTransient<TopFilter>();
             services.AddTransient<FiltersLogic>();
             services.AddTransient<FilterUtils>();
+            services.AddTransient<IAccountService, AccountService>();
 
             return services;
         }

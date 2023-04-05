@@ -26,7 +26,7 @@ namespace PetShopApiServise.Controllers
         #region Login, Register, Logout
 
         [HttpPost("Login")]
-        public async Task<ActionResult<UserManager<IdentityUser>>> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.Username!, model.Password!, false, false);
 
@@ -184,6 +184,40 @@ namespace PetShopApiServise.Controllers
             userModel.Roles = userRoles.Result.ToList();
 
             return Ok(userModel);
+        }
+
+        [HttpGet("GetAllUsersInfoForClient")]
+        [IsAuthenticatedFilter]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<UserInfoModelForCilent>>> GetAllUsersInfoForClient()
+        {
+            List<UserInfoModelForCilent> usersForClient = new();
+            List<IdentityUser> users = await Task.Run(() => _userManager.Users.ToList());
+
+            foreach (var identityUser in users)
+            {
+                UserInfoModelForCilent userModel = new()
+                {
+                    Username = identityUser.UserName,
+                    Id = identityUser.Id,
+                    Roles = _userManager.GetRolesAsync(identityUser!).Result.ToList(),
+                };
+
+                usersForClient.Add(userModel);
+            }
+
+            return Ok(usersForClient);
+        }
+
+        [Authorize(Roles = "Administrators")]
+        [HttpDelete("DeleteUserById/{id}")]
+        [IsAuthenticatedFilter]
+        public async Task<IActionResult> DeleteUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.DeleteAsync(user!);
+
+            return Ok();
         }
     }
 }

@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="~/styles/Account/Register.css" />
 </head>
 
-
+@{
+    var status = ViewBag.Status;
+}
 <div class="register-container">
     <h2>Login</h2>
     <form method="post" asp-action="Register">
@@ -22,6 +24,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Register</button>
         <a class="login-link" asp-action="Login" asp-controller="Account">Member? login >></a>
+        <p class="errMsg">@status</p>
     </form>
 </div>
 

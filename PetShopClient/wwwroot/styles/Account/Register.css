@@ -71,3 +71,7 @@ label {
     color: darkblue;
     text-decoration: underline;
 }
+
+.errMsg{
+    color: red;
+}

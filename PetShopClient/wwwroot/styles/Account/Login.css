@@ -37,9 +37,9 @@ label {
     border-left: none;
     margin-bottom:10px;
 }
-    .form-control:hover {
-        border-bottom: solid 2px #007bff;
-    }
+.form-control:hover {
+    border-bottom: solid 2px #007bff;
+}
 
 .btn-primary {
     display: block;
@@ -69,4 +69,7 @@ label {
 .register-link:hover{
     color: darkblue; 
     text-decoration:underline; 
+}
+.errMsg{
+    color: red;
 }

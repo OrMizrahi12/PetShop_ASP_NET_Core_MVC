@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using PetShopClientServise.DtoModels;
+using PetShopClientServise.DtoModels.AccountModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,9 +12,8 @@ namespace PetShopClientServise.Servises.AccountServise
 {
     public interface IAccountService
     {
-        public Task<HttpStatusCode> Register();
-        public Task<HttpStatusCode> Unregister();
-        public Task<HttpStatusCode> Logout();
+        public Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> Login(LoginModel loginModel);
 
+        public Task<HttpStatusCode> Register(RegisterModel registerModel);
     }
 }
