@@ -219,5 +219,28 @@ namespace PetShopApiServise.Controllers
 
             return Ok();
         }
+
+        [HttpGet("CheckIfAuthenticated")]
+        public bool CheckIfAuthenticated()
+        {
+            return User.Identity!.IsAuthenticated;
+        }
+
+        [HttpGet("GetCurrentUser")]
+        public async Task<ActionResult<UserInfoModelForCilent>> GetCurrentUser()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            UserInfoModelForCilent userModel = new();
+
+            var userInfo = await _userManager.FindByNameAsync(user!.UserName!);
+
+            userModel.Username = userInfo!.UserName;
+            userModel.Id = userInfo.Id;
+
+            var userRoles = _userManager.GetRolesAsync(userInfo!);
+            userModel.Roles = userRoles.Result.ToList();
+            
+            return Ok(user);    
+        }
     }
 }

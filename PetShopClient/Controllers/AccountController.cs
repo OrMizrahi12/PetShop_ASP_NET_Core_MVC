@@ -22,8 +22,9 @@ namespace PetShopClient.Controllers
         }
 
         [ClientAuthExceptionFilter("Logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
+            await _accountService.Logout();
             return View("Login");
         }
 
@@ -41,6 +42,8 @@ namespace PetShopClient.Controllers
 
             if (status == HttpStatusCode.OK)
             {
+                var res = await _accountService.CheckIfAuthenticated();
+
                 return RedirectToAction("Index", "Home");
             }
             else

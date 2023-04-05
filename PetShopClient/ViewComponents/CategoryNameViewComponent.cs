@@ -17,7 +17,7 @@ namespace PetShopClient.ViewComponents
             
             if(status == HttpStatusCode.OK)
             {
-                return category.Name;
+                return category!.Name;
             }
             else
             {

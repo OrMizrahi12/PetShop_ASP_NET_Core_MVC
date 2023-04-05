@@ -41,3 +41,7 @@ nav.nav-menu a:hover {
     background-color: #ddd;
     color: black;
 }
+
+.item-rigth{
+    float:right;
+}

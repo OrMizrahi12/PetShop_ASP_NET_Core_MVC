@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.DtoModels.AccountModels;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,37 +18,20 @@ namespace PetShopClientServise.Servises.AccountServise
     [PetShopExceptionFilter]
     public class AccountService : IAccountService
     {
-        /*
-            TODO, What the clientApiService need?
-
-            1. Login, Register, Logout - that return: 'Task<IActionResult>'.
-            2. GetUserModelForClient - that get username, and return the user nodel for client.
-            3. GetAllUsersNodelForClient - that return: Task<ActionResult<IEnumerable<UserInfoModelForCilent>>>.
-            4. Task<IActionResult> CreateRole(RoleModel roleModel) - for create new roles.
-            5. Task<IActionResult> ManageRolesOnUser(ManageRolesOnUserModel manageRolesOnUserModel) - for the admin will be able to update roles for users.
-            6. DeleteUserById(string id) and return Task<IActionResult> - for the admin will able to remove user.
-
-        */
-
-
-        public Task<HttpStatusCode> Register()
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> Login(LoginModel loginModel)
         {
-           await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/Login", loginModel);
-           return GetUserModelForClient(loginModel.Username!).Result;            
+            await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/Login", loginModel);
+            return GetUserModelForClient(loginModel.Username!).Result;
         }
-        
+
         public static async Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> GetUserModelForClient(string username)
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync($"api/Account/GetUserInfoForClient/{username}");
 
             var userModel = await res.Content.ReadFromJsonAsync<UserInfoModelForCilent>();
 
-            return (userModel!,res.StatusCode);  
+            return (userModel!, res.StatusCode);
         }
 
         public async Task<HttpStatusCode> Register(RegisterModel registerModel)
@@ -59,6 +44,55 @@ namespace PetShopClientServise.Servises.AccountServise
         {
             var res = await HttpClientInfo.HttpClientServises.PostAsync("api/Account/Logout", null);
             return res.StatusCode;
+        }
+
+        public async Task<(ActionResult<IEnumerable<UserInfoModelForCilent>>, HttpStatusCode)> GetAllUsersInfoForClient()
+        {
+            var res = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/GetAllUsersInfoForClient");
+
+            var usersModelList = await res.Content.ReadFromJsonAsync<IEnumerable<UserInfoModelForCilent>>();
+
+            return (usersModelList!.ToList(), res.StatusCode);
+        }
+
+        public async Task<HttpStatusCode> CreateRole(RoleModel roleModel)
+        {
+            var res = await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/CreateRole", roleModel);
+            return res.StatusCode;
+        }
+
+        public async Task<HttpStatusCode> ManageRolesOnUser(ManageRolesOnUserModel manageRolesOnUserModel)
+        {
+            var res = await HttpClientInfo.HttpClientServises.PutAsJsonAsync("api/Account/ManageRolesOnUser", manageRolesOnUserModel);
+            return res.StatusCode;
+        }
+
+        public async Task<HttpStatusCode> DeleteUserById(string id)
+        {
+            var res = await HttpClientInfo.HttpClientServises.DeleteAsync($"api/Accoun/DeleteUserById{id}");
+            return res.StatusCode;
+        }
+
+        public async Task<bool> CheckIfAuthenticated()
+        {
+            var response = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/CheckIfAuthenticated");
+            var content = await response.Content.ReadAsStringAsync();
+            return bool.Parse(content);
+        }
+
+        public async Task<(UserInfoModelForCilent, HttpStatusCode)> GetCurrentUser()
+        {
+            var res = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/GetCurrentUser");
+            var userModel = await res.Content.ReadFromJsonAsync<UserInfoModelForCilent>();
+
+            if(res.StatusCode == HttpStatusCode.OK)
+            {
+                return (userModel!, res.StatusCode);
+            }
+            else
+            {
+                return(null!, res.StatusCode);   
+            }
         }
     }
 }

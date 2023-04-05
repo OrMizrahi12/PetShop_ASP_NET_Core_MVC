@@ -19,7 +19,10 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-
+app.UseCors(builder =>
+{
+    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+});
 
 app.UseStatusCodePagesWithReExecute("/Error/Index/{0}");
 

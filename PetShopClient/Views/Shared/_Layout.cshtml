@@ -1,22 +1,14 @@
 ﻿
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
    <link rel="stylesheet" href="~/styles/NavBar.css" />
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
     <header>
-       <div style="margin-top: 70px"></div>
-        <nav class="nav-menu">
-            <ul>
-                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
-                <li><a asp-controller="Account" asp-action="Login">Login</a></li>
-                <li><a asp-controller="Account" asp-action="Register">Register</a></li>
-                <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
-            </ul>
-        </nav>
+        @await Component.InvokeAsync("Navbar")
 
     </header>
     <main>
