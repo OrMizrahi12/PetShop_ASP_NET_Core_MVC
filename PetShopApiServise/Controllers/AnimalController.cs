@@ -10,6 +10,8 @@ namespace PetShopApiServise.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[PetShopExceptionFilter]
+
 public class AnimalController : ControllerBase
 {
     private readonly IAnimalRepository _animalReposetory;
@@ -20,7 +22,6 @@ public class AnimalController : ControllerBase
     }
 
     [HttpGet]
-    [PetShopExceptionFilter]
     public async Task<ActionResult<IEnumerable<Animals>>> GetAllAnimals()
     {
         var animals = await _animalReposetory.GetAllAnimals();
@@ -29,7 +30,6 @@ public class AnimalController : ControllerBase
 
 
     [HttpGet("{id}")]
-    [PetShopExceptionFilter]
     public async Task<ActionResult<Animals>> GetAnimalById(int id)
     {
         var animal = await _animalReposetory.GetAnimalById(id);
@@ -37,7 +37,6 @@ public class AnimalController : ControllerBase
     }
 
     [HttpPost]
-    [PetShopExceptionFilter]
     public async Task<ActionResult<int>> AddAnimal([FromBody] Animals animal)
     {
         if (!ModelState.IsValid)
@@ -49,7 +48,6 @@ public class AnimalController : ControllerBase
     }
 
     [HttpPut]
-    [PetShopExceptionFilter]
     public async Task<IActionResult> UpdateAnimal(Animals animal)
     {
         if (!ModelState.IsValid)
@@ -62,15 +60,13 @@ public class AnimalController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [PetShopExceptionFilter]
     public async Task<IActionResult> DeleteAnimalById(int id)
     {
         var result = await _animalReposetory.DeleteAnimalById(id);
         return Ok(result);
     }
 
-    [HttpGet("GetAnimalsByCategory/{id}")]
-    [PetShopExceptionFilter]
+    [HttpGet("GetAnimalsByCategory/{id}")]  
     public async Task<IActionResult> GetAnimalsByCategory(int id)
     {
         var result = await _animalReposetory.GetAnimalsByCategory(id);

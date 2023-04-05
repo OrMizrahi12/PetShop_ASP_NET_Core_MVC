@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using PetShopApiServise.Models.AccountModels;
+using PetShopApiServise.Attributes.AccountAttributes;
+using PetShopApiServise.Attributes.ExeptionAttributes;
 
 namespace PetShopApiServise.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [PetShopExceptionFilter]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -19,34 +22,75 @@ namespace PetShopApiServise.Controllers
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
-      
+
+        #region Login, Register, Logout
+
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<ActionResult<UserManager<IdentityUser>>> Login([FromBody] LoginModel model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.Username!, model.Password!, false, false);
 
             if (result.Succeeded)
             {
-                return Ok(ModelState);
+                return Ok(result);
             }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return BadRequest(ModelState);
         }
 
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        {
+            var user = new IdentityUser { UserName = model.Username };
 
-        //[Authorize(Roles = "Administrators")]
+            var result = await _userManager.CreateAsync(user, model.Password!);
+
+            if (result.Succeeded)
+            {
+                SetDefaultRoleInUser(user.UserName!);
+                return Ok(result);
+            }
+
+            var errors = result.Errors.Select(e => e.Description);
+            return BadRequest(string.Join(Environment.NewLine, errors));
+        }
+
+        [HttpPost("Logout")]
+        [IsAuthenticatedFilter]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                await _signInManager.SignOutAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while logging out: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        #endregion
+
+        #region Administrator actions
+
+        [Authorize(Roles = "Administrators")]
         [HttpPost("ManageRolesOnUser")]
+        [IsAuthenticatedFilter]
+        [AllowAnonymous]
         public async Task<IActionResult> ManageRolesOnUser([FromBody] ManageRolesOnUserModel manageRolesOnUserModel)
         {
             var user = await _userManager.FindByNameAsync(manageRolesOnUserModel.Username!);
-            var res = await _userManager.AddToRoleAsync(user!, manageRolesOnUserModel.Role!);
+            await _userManager.AddToRoleAsync(user!, manageRolesOnUserModel.Role!);
 
             return Ok(ModelState);
         }
 
-       // [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators")]
         [HttpPost("CreateRole")]
+        [IsAuthenticatedFilter]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateRole([FromBody] RoleModel roleModel)
         {
             var newRole = new IdentityRole { Name = roleModel.RoleName };
@@ -61,53 +105,27 @@ namespace PetShopApiServise.Controllers
         }
 
 
-
-
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
-        {
-            var user = new IdentityUser { UserName = model.Username };
-
-            var result = await _userManager.CreateAsync(user, model.Password!);
-
-            if (result.Succeeded)
-            {
-                return Ok(result);
-            }
-
-            var errors = result.Errors.Select(e => e.Description);
-            return BadRequest(string.Join(Environment.NewLine, errors));
-        }
-
-        [HttpPost("Logout")]
-        public async Task<IActionResult> Logout()
-        {
-            try
-            {
-                await _signInManager.SignOutAsync();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while logging out: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         [Authorize(Roles = "Administrators")]
         [HttpGet("GetUsers")]
+        [IsAuthenticatedFilter]
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetAllUsersAsync()
         {
             List<IdentityUser> users = await Task.Run(() => _userManager.Users.ToList());
-
-            // Get the role of the user
             var user = await _userManager.FindByNameAsync("OrMizrahi");
             var roles = await _userManager.GetRolesAsync(user!);
 
             return Ok(users);
         }
 
+        #endregion
+
+
+
         [HttpGet("GetUserRoles{username}")]
+        [IsAuthenticatedFilter]
+        [AllowAnonymous]
         public async Task<IActionResult> GetUserRolesAsync(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
@@ -116,10 +134,56 @@ namespace PetShopApiServise.Controllers
         }
 
         [HttpGet("GetUserByName{username}")]
-        public async Task<IActionResult> GetUserByNameAsync(string username)
+        [IsAuthenticatedFilter]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserManager<IdentityUser>>> GetUserByNameAsync(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
             return Ok(user);
+        }
+
+        [HttpGet("GetUserById/{id}")]
+        [IsAuthenticatedFilter]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserManager<IdentityUser>>> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            return Ok(user);
+        }
+
+
+        [HttpGet("GetUserRolesById/{id}")]
+        [IsAuthenticatedFilter]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<string>>> GetUserRolesById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var roles = await _userManager.GetRolesAsync(user!);
+
+            return Ok(roles);
+        }
+
+        private async void SetDefaultRoleInUser(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            await _userManager.AddToRoleAsync(user!, "user");
+        }
+
+        [HttpGet("GetUserInfoForClient/{username}")]
+        [IsAuthenticatedFilter]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserInfoModelForCilent>> GetUserInfoForClient(string username)
+        {
+            UserInfoModelForCilent userModel = new();
+
+            var userInfo = await _userManager.FindByNameAsync(username);
+            userModel.Username = userInfo!.UserName;
+            userModel.Id = userInfo.Id;
+
+            var userRoles = _userManager.GetRolesAsync(userInfo!);
+            userModel.Roles = userRoles.Result.ToList();
+
+            return Ok(userModel);
         }
     }
 }

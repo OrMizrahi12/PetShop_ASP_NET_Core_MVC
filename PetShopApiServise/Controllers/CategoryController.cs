@@ -8,6 +8,7 @@ namespace PetShopApiServise.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[PetShopExceptionFilter]
 public class CategoryController : ControllerBase
 {
     private readonly ICategoryRepository _categoryReposetory;
@@ -18,7 +19,6 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    [PetShopExceptionFilter]
     public async Task<ActionResult<IEnumerable<Categories>>> GetAllCategories()
     {
         var categories = await _categoryReposetory.GetAllCategories();
@@ -26,7 +26,6 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [PetShopExceptionFilter]
     public async Task<ActionResult<Categories>> GetCategoryById(int id)
     {
         var category = await _categoryReposetory.GetCategoryById(id);
@@ -38,7 +37,6 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    [PetShopExceptionFilter]
     public async Task<ActionResult<int>> AddCategory([FromBody] Categories category)
     {
         if (!ModelState.IsValid)
@@ -56,7 +54,6 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut]
-    [PetShopExceptionFilter]
     public async Task<IActionResult> UpdateCategory([FromBody] Categories category)
     {
         if (!ModelState.IsValid)
@@ -68,7 +65,6 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [PetShopExceptionFilter]
     public async Task<IActionResult> DeleteCategoryById(int id)
     {
         var result = await _categoryReposetory.DeleteCategoryById(id);

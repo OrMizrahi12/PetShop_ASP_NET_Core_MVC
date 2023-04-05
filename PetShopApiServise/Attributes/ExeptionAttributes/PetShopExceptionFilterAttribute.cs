@@ -1,46 +1,53 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
+using System.Net.Mail;
 
 namespace PetShopApiServise.Attributes.ExeptionAttributes
 {
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class PetShopExceptionFilterAttribute : ExceptionFilterAttribute
     {
         public override void OnException(ExceptionContext context)
         {
-            if (context.Exception is HttpRequestException exception)
+            if (context.Exception is HttpException exception)
             {
-                if (exception.StatusCode == HttpStatusCode.NotFound)
+                HttpStatusCode status = exception.StatusCode;
+
+                context.ExceptionHandled = true;
+                context.Result = new ObjectResult(new
                 {
-                    context.Result = new NotFoundObjectResult("Animals not found.");
-                }
-                else if (exception.StatusCode == HttpStatusCode.InternalServerError)
+                    StatusCode = status,
+                    exception.Message
+                }) 
                 {
-                    context.Result = new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-                }
-                else if(exception.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    context.Result = new StatusCodeResult((int)HttpStatusCode.Unauthorized);
-                }
-                else if(exception.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    context.Result = new BadRequestObjectResult("Invalid animal data.");
-                }
-                else if(exception.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    context.Result = new StatusCodeResult((int)HttpStatusCode.Forbidden);
-                }
-                else
-                {
-                    context.Result = new BadRequestObjectResult("Failed.");
-                }
+                    StatusCode = (int)status
+                };
             }
             else
             {
-                context.Result = new BadRequestObjectResult("Failed to retrieve animals.");
-            }
+                HttpStatusCode status = HttpStatusCode.InternalServerError;
 
-            context.ExceptionHandled = true;
+                context.ExceptionHandled = true;
+                context.Result = new ObjectResult(new
+                {
+                    StatusCode = status,
+                    context.Exception.Message,
+                    context.Exception.StackTrace
+                })
+                {
+                    StatusCode = (int)status
+                };
+            }
+        }
+    }
+    public class HttpException : Exception
+    {
+        public HttpStatusCode StatusCode { get; set; }
+
+        public HttpException(HttpStatusCode statusCode, string message) : base(message)
+        {
+            StatusCode = statusCode;
         }
     }
 }
