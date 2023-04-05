@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PetShopApiServise.Models
+namespace PetShopApiServise.Models.AccountModels
 {
     public class LoginModel
     {

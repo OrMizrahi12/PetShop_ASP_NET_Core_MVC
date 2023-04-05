@@ -1,0 +1,24 @@
+﻿@model PetShopClientServise.DtoModels.LoginModel; 
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<head>
+    <link rel="stylesheet" href="~/styles/Account/Login.css" />
+</head>
+
+
+<div class="login-container">
+    <h2>Login</h2>
+    <form method="post" asp-action="Login">
+        <div class="form-group">
+            <input placeholder="username" type="text" id="username" name="username" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input placeholder="password" type="password" id="password" name="password" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <a class="register-link" asp-action="Register" asp-controller="Account">New? register now >></a>
+    </form>
+</div>

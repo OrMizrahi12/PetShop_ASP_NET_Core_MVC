@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PetShopApiServise.Models;
-using System.Data.Entity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using PetShopApiServise.Data;
 using Microsoft.AspNetCore.Authorization;
 using PetShopApiServise.Models.AccountModels;
 

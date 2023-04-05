@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+}
+
+<head>
+    <link rel="stylesheet" href="~/styles/Account/Register.css" />
+</head>
+
+
+<div class="register-container">
+    <h2>Login</h2>
+    <form method="post" asp-action="Register">
+        <div class="form-group">
+            <input placeholder="username" type="text" id="username" name="username" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input placeholder="password" type="password" id="password" name="password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input placeholder="confirm password" type="password" id="confirmPassword" name="confirmPassword" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a class="login-link" asp-action="Login" asp-controller="Account">Member? login >></a>
+    </form>
+</div>
+
