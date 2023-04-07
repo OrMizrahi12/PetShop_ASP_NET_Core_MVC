@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using PetShopApiServise.Models.AccountModels;
 using PetShopApiServise.Attributes.AccountAttributes;
 using PetShopApiServise.Attributes.ExeptionAttributes;
+using Microsoft.EntityFrameworkCore;
 
 namespace PetShopApiServise.Controllers
 {
@@ -81,8 +82,17 @@ namespace PetShopApiServise.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ManageRolesOnUser([FromBody] ManageRolesOnUserModel manageRolesOnUserModel)
         {
-            var user = await _userManager.FindByNameAsync(manageRolesOnUserModel.Username!);
-            await _userManager.AddToRoleAsync(user!, manageRolesOnUserModel.Role!);
+            var user = await _userManager.FindByIdAsync(manageRolesOnUserModel.UserId!);
+            var roleByName = await _roleManager.FindByNameAsync(manageRolesOnUserModel?.RoleName!);
+
+            if (manageRolesOnUserModel!.AddTheRole)
+            {
+                await _userManager.AddToRoleAsync(user!, roleByName!.Name!);
+            }
+            else
+            {
+                await _userManager.RemoveFromRoleAsync(user!, roleByName!.Name!);
+            }
 
             return Ok(ModelState);
         }
@@ -109,7 +119,6 @@ namespace PetShopApiServise.Controllers
         [HttpGet("GetUsers")]
         [IsAuthenticatedFilter]
         [AllowAnonymous]
-
         public async Task<IActionResult> GetAllUsersAsync()
         {
             List<IdentityUser> users = await Task.Run(() => _userManager.Users.ToList());
@@ -149,6 +158,22 @@ namespace PetShopApiServise.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             return Ok(user);
+        }
+
+        [HttpGet("GetUserModelForClientById/{id}")]
+        [IsAuthenticatedFilter]
+        public async Task<ActionResult<UserInfoModelForCilent>> GetUserModelForClientById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            UserInfoModelForCilent userModel = new();
+            userModel.Username = user!.UserName;
+            userModel.Id = user.Id;
+
+            var userRoles = _userManager.GetRolesAsync(user!);
+            userModel.Roles = userRoles.Result.ToList();
+
+            return Ok(userModel);
         }
 
 
@@ -232,6 +257,10 @@ namespace PetShopApiServise.Controllers
             var user = await _userManager.GetUserAsync(User);
             UserInfoModelForCilent userModel = new();
 
+            if (user == null)
+            {
+                return Ok(userModel);
+            }
             var userInfo = await _userManager.FindByNameAsync(user!.UserName!);
 
             userModel.Username = userInfo!.UserName;
@@ -240,7 +269,22 @@ namespace PetShopApiServise.Controllers
             var userRoles = _userManager.GetRolesAsync(userInfo!);
             userModel.Roles = userRoles.Result.ToList();
             
-            return Ok(user);    
+            return Ok(userModel);    
         }
+
+        [HttpGet("GetAutorizationLevels")]
+        public async Task<ActionResult<List<IdentityRole>>> GetAutorizationLevels()
+        {
+            var authLevelsList = await _roleManager.Roles.ToListAsync(); 
+
+            return Ok(authLevelsList);
+
+        }
+
+        //[HttpPut("AddRoleToUserById")]
+        //public async Task<IActionResult> AddRoleToUserById(string userId, string roleId)
+        //{
+
+        //}
     }
 }

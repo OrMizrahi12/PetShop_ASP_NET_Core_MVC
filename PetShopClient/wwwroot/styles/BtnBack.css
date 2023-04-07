@@ -1,0 +1,24 @@
+﻿.button-back-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 24px;
+}
+
+.back-button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .back-button:hover {
+        background-color: #388e3c;
+    }

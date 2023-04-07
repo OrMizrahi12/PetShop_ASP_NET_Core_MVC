@@ -1,0 +1,61 @@
+﻿@model PetShopClientServise.CustomModelsForView.Admin.UserDetailsEditorModel;
+@{
+    Layout = "_Layout";
+}
+
+<head>
+    <link rel="stylesheet" href="~/styles/Admin/UserDetailsEditor.css" />
+        <link rel="stylesheet" href="/styles/BtnBack.css" />
+
+</head>
+
+@{
+    var username = Model.UserModelForCilent!.Username;
+    var userRoles = Model.UserModelForCilent.Roles!;
+    var userId = Model.UserModelForCilent.Id;
+    var allRoles = Model.RolesList;
+}
+
+@await Html.PartialAsync("Admin/_AdminDeshbord")
+	<div class="button-back-container">
+        <a href="javascript:history.back()" class="back-button">Go back</a>
+    </div>
+<div class="user-editor">
+    <h1>@username</h1>
+    <div class="role-container">
+        <h2>Roles</h2>
+        <ul class="role-list">
+            @foreach (var item in userRoles)
+            {
+                <li>
+                    <span>@item</span>
+                    <form method="post" asp-action="ManageRolesOnUser" asp-controller="Admin">
+                        <input type="hidden" name="userId" value="@userId" />
+                        <input type="hidden" name="roleName" value="@item" />
+                        <input type="hidden" name="isAddRole" value="false" />
+                        <button type="submit">Remove Role</button>
+                    </form>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div class="addRoleZone">
+    <h1>Add Roles</h1>
+    @foreach (var item in allRoles!)
+    {
+        if (!userRoles.Contains(item.Name))
+        {
+            <div class="addRoleItem">
+                <p>@item.Name</p>
+                <form method="post" asp-action="ManageRolesOnUser" asp-controller="Admin">
+                    <input type="hidden" name="userId" value="@userId" />
+                    <input type="hidden" name="roleName" value="@item.Name" />
+                    <input type="hidden" name="addTheRole" value="true" />
+                    <button type="submit">Add Role</button>
+                </form>
+            </div>
+        }
+    }
+</div>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
@@ -63,13 +64,13 @@ namespace PetShopClientServise.Servises.AccountServise
 
         public async Task<HttpStatusCode> ManageRolesOnUser(ManageRolesOnUserModel manageRolesOnUserModel)
         {
-            var res = await HttpClientInfo.HttpClientServises.PutAsJsonAsync("api/Account/ManageRolesOnUser", manageRolesOnUserModel);
+            var res = await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/ManageRolesOnUser", manageRolesOnUserModel);
             return res.StatusCode;
         }
 
         public async Task<HttpStatusCode> DeleteUserById(string id)
         {
-            var res = await HttpClientInfo.HttpClientServises.DeleteAsync($"api/Accoun/DeleteUserById{id}");
+            var res = await HttpClientInfo.HttpClientServises.DeleteAsync($"api/Account/DeleteUserById/{id}");
             return res.StatusCode;
         }
 
@@ -92,6 +93,38 @@ namespace PetShopClientServise.Servises.AccountServise
             else
             {
                 return(null!, res.StatusCode);   
+            }
+        }
+
+        public async Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> GetUserModelForClientById(string id)
+        {
+            var res = await HttpClientInfo.HttpClientServises.GetAsync($"api/Account/GetUserModelForClientById/{id}");
+
+            var userModel = await res.Content.ReadFromJsonAsync<UserInfoModelForCilent>();
+
+            if (res.StatusCode == HttpStatusCode.OK)
+            {
+                return (userModel!, res.StatusCode);
+            }
+            else
+            {
+                return(new UserInfoModelForCilent() { }!, res.StatusCode);
+            }
+        }
+
+        public async Task<(ActionResult<List<IdentityRole>>, HttpStatusCode)> GetAutorizationLevels()
+        {
+            var res = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/GetAutorizationLevels"); 
+
+           var rolesList = await res.Content.ReadFromJsonAsync<List<IdentityRole>>();    
+
+            if(res.StatusCode == HttpStatusCode.OK)
+            {
+                return (rolesList!, HttpStatusCode.OK);  
+            }
+            else
+            {
+                return(new List<IdentityRole>() { }, res.StatusCode);
             }
         }
     }

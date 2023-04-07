@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Mvc;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.DtoModels.AccountModels;
 using System;
@@ -21,5 +22,11 @@ namespace PetShopClientServise.Servises.AccountServise
         public Task<HttpStatusCode> Logout();
         public Task<HttpStatusCode> ManageRolesOnUser(ManageRolesOnUserModel manageRolesOnUserModel);
         public Task<HttpStatusCode> Register(RegisterModel registerModel);
+
+        public Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> GetUserModelForClientById(string id);
+
+        public Task<(ActionResult<List<IdentityRole>>, HttpStatusCode)> GetAutorizationLevels();
+
+        
     }
 }

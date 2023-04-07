@@ -8,9 +8,14 @@
     <title>@ViewBag.Title</title>
     <link href="~/styles/Admin/CategoryOverview.css" rel="stylesheet" />
     <link href="~/styles/Popup.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/styles/BtnBack.css" />
+
    
 </head>
 <body>
+    	<div class="button-back-container">
+        <a href="javascript:history.back()" class="back-button">Go back</a>
+    </div>
     <div class="category-container">
         @foreach (var item in Model)
         {

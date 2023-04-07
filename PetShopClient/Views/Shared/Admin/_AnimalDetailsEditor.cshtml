@@ -7,6 +7,7 @@
     <script src="~/scripts/jquery.min.js"></script>
     <script src="~/scripts/jquery.validate.min.js"></script>
     <script src="~/ValidationForms/AddAnimalFormValidation.js"></script>
+        <link rel="stylesheet" href="/styles/BtnBack.css" />
 
 </head>
 @{
@@ -15,7 +16,9 @@
 }
 
 
-<a asp-action="AnimalOverview" asp-controller="Admin" class="btnBack">Back</a>
+	<div class="button-back-container">
+        <a href="javascript:history.back()" class="back-button">Go back</a>
+    </div>
 <form asp-controller="Admin" asp-action="UpdateAnimal" method="post" enctype="multipart/form-data" class="AnimalEditor">
     <div class="form-group">
         <label for="Name" class="AnimalEditor-label">Name:</label>

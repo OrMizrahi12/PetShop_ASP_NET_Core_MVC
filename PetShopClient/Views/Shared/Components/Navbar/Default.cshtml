@@ -10,17 +10,21 @@
 @{
     var res = Model.IsAuthenticated ? "Yea" : "No";
     var userModel = Model!.UserModelForClient!.Username ?? "Unknown";
+    var permissions = Model.UserModelForClient.Roles ?? new List<string>() { };
 }
 
 <nav id="navbar" class="nav-menu">
     <ul>
         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-        <li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
+           
         @{
+            if(permissions.Contains("Administrators"))
+            {
+                 <li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
+            }
             if (Model.IsAuthenticated)
             {
                 <li  style="float: right"><a asp-controller="Account" asp-action="Logout">Logout</a></li>
-                <li><p>Hello @userModel!</p></li>
             }
             else
             {

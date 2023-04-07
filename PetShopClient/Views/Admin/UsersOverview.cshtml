@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewData["Title"] = "UsersOverview";
+}
+
+@await Html.PartialAsync("Admin/_AdminDeshbord", ViewData)
+<h1>UsersOverview</h1>
+
+ @await Component.InvokeAsync("UsersOverview")

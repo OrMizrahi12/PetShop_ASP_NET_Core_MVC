@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetShopClientServise.Attributes.AuthAttributes;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AccountServise;
@@ -53,6 +54,7 @@ namespace PetShopClient.Controllers
             }
         }
 
+        
         [HttpPost]
         [ClientAuthExceptionFilter("Register")]
         public async Task<IActionResult> Register(RegisterModel registerModel)

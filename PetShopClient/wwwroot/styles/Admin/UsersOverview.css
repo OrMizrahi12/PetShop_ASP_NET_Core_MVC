@@ -1,0 +1,80 @@
+﻿.users-overview {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+    .users-overview thead {
+        background-color: #1c2331;
+        color: #ffffff;
+    }
+
+    .users-overview th,
+    .users-overview td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .users-overview tbody tr:nth-child(even) {
+        background-color: #f3f3f3;
+    }
+
+    .users-overview tbody tr:hover {
+        background-color: #e0e0e0;
+    }
+
+    .users-overview ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+.btn {
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+    .btn:before {
+        content: "";
+        background: rgba(255, 255, 255, 0.1);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        transform: translateX(-100%);
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+    }
+
+        .btn:hover:before {
+            transform: translateX(0);
+        }
+
+.btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: none;
+}

@@ -1,0 +1,21 @@
+﻿@model PetShopClientServise.DtoModels.AccountModels.UserInfoModelForCilent
+
+
+<head>
+    <link rel="stylesheet" href="~/styles/Admin/UserDetailsEditor.css" />
+    <link rel="stylesheet" href="/styles/BtnBack.css" />
+</head>
+
+
+<div class="user-editor">
+    <h1>@Model.Username</h1>
+    <div class="role-container">
+        <h2>Roles</h2>
+        <ul class="role-list">
+            @foreach (var item in Model.Roles!)
+            {
+                <li>@item</li>
+            }
+        </ul>
+    </div>
+</div>

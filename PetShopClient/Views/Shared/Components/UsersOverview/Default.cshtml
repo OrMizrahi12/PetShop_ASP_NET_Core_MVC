@@ -1,0 +1,49 @@
+﻿@model PetShopClientServise.CustomModelsForView.Admin.UsersOverviewModel
+
+
+ <head>
+     <link rel="stylesheet" href="~/styles/Admin/UsersOverview.css" />
+         <link rel="stylesheet" href="/styles/BtnBack.css" />
+
+ </head>
+ 	<div class="button-back-container">
+        <a href="javascript:history.back()" class="back-button">Go back</a>
+    </div>
+<table class="users-overview">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Roles</th>
+            <th>See more</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.UserInfoModelForCilentsList!)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>
+                    <ul>
+                        @foreach (var role in user.Roles!)
+                        {
+                            <li>@role</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <form asp-action="UserDetailsEditor" asp-controller="Admin" method="post">
+                        <input type="hidden" name="id" value="@user.Id" />
+                        <button type="submit" class="btn btn-primary">See more</button>
+                    </form>
+                </td>
+                 <td>
+                     <form asp-action="DeleteUserById" asp-controller="Admin" method="post">
+                         <input type="hidden" name="id" value="@user.Id" /> 
+                         <button type="submit" class="btn btn-danger">Delete User</button>
+                     </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
