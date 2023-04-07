@@ -18,6 +18,7 @@ public class CategoryController : ControllerBase
         _categoryReposetory = categoryReposetory;
     }
 
+    [PetShopExceptionFilter]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Categories>>> GetAllCategories()
     {
@@ -25,6 +26,7 @@ public class CategoryController : ControllerBase
         return Ok(categories);
     }
 
+    [PetShopExceptionFilter]
     [HttpGet("{id}")]
     public async Task<ActionResult<Categories>> GetCategoryById(int id)
     {
@@ -36,6 +38,7 @@ public class CategoryController : ControllerBase
         return Ok(category);
     }
 
+    [PetShopExceptionFilter]
     [HttpPost]
     public async Task<ActionResult<int>> AddCategory([FromBody] Categories category)
     {
@@ -53,6 +56,7 @@ public class CategoryController : ControllerBase
         return Ok(result);
     }
 
+    [PetShopExceptionFilter]
     [HttpPut]
     public async Task<IActionResult> UpdateCategory([FromBody] Categories category)
     {
@@ -64,6 +68,7 @@ public class CategoryController : ControllerBase
         return Ok(result);
     }
 
+    [PetShopExceptionFilter]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCategoryById(int id)
     {

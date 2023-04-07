@@ -1,15 +1,12 @@
-﻿using PetShopClientServise.DtoModels;
+﻿using PetShopClientServise.Attributes.ExeptionAttributes;
+using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.CommentServise;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetShopClientServise.Servises.Filters
 {
     public class FiltersLogic
     {
+        [PetShopExceptionFilter]
         public static async Task<List<Animals>> PreperFilters(List<Animals> animals)
         {
             List<int> categoriesIds = CategoryFilter.CategoryIdArray ?? new List<int>();
@@ -31,6 +28,8 @@ namespace PetShopClientServise.Servises.Filters
         {
             return animals.Where(a => categoriesIds.Contains((int)a.CategoryId!)).ToList();
         }
+
+        [PetShopExceptionFilter]
         private async static Task<List<Animals>> FilterTopByAttributeAndHowMany(List<Animals> animals, string attribute, int howMany)
         {
             if (attribute == "Comments" && howMany > 0)
@@ -51,6 +50,8 @@ namespace PetShopClientServise.Servises.Filters
         {
             return animals.OrderByDescending(a => a.Age).Take(howMany).ToList();
         }
+
+        [PetShopExceptionFilter]
         private async static Task<List<Animals>> FilterByTopComment(List<Animals> animals, int howMany)
         {
             var (comments ,_) = await CommentApiService.GetAllCommentsStatic();

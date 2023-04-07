@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.CommentServise;
 
@@ -17,6 +18,8 @@ namespace PetShopClient.Controllers
         {
             return View();
         }
+
+        [PetShopExceptionFilter]
         public async Task<IActionResult> AddCommentOnAnimal(Comments comments)
         {
             if (!ModelState.IsValid)

@@ -22,6 +22,7 @@ namespace PetShopClient.Controllers
             return View();
         }
 
+        [PetShopExceptionFilter]
         [ClientAuthExceptionFilter("Logout")]
         public async Task<IActionResult> Logout()
         {
@@ -39,12 +40,14 @@ namespace PetShopClient.Controllers
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
 
-            var (userModel, status) = await _accountService.Login(loginModel);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var (_, status) = await _accountService.Login(loginModel);
 
             if (status == HttpStatusCode.OK)
             {
-                var res = await _accountService.CheckIfAuthenticated();
-
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -54,11 +57,15 @@ namespace PetShopClient.Controllers
             }
         }
 
-        
         [HttpPost]
         [ClientAuthExceptionFilter("Register")]
         public async Task<IActionResult> Register(RegisterModel registerModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Register");
+            }
+
             var res = await _accountService.Register(registerModel);
 
             if (res == HttpStatusCode.OK)

@@ -19,13 +19,14 @@ namespace PetShopClientServise.Servises.AccountServise
     [PetShopExceptionFilter]
     public class AccountService : IAccountService
     {
-
+        [PetShopExceptionFilter]
         public async Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> Login(LoginModel loginModel)
         {
             await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/Login", loginModel);
             return GetUserModelForClient(loginModel.Username!).Result;
         }
 
+        [PetShopExceptionFilter]
         public static async Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> GetUserModelForClient(string username)
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync($"api/Account/GetUserInfoForClient/{username}");
@@ -35,18 +36,21 @@ namespace PetShopClientServise.Servises.AccountServise
             return (userModel!, res.StatusCode);
         }
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> Register(RegisterModel registerModel)
         {
             var res = await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/Register", registerModel);
             return res.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> Logout()
         {
             var res = await HttpClientInfo.HttpClientServises.PostAsync("api/Account/Logout", null);
             return res.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<(ActionResult<IEnumerable<UserInfoModelForCilent>>, HttpStatusCode)> GetAllUsersInfoForClient()
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/GetAllUsersInfoForClient");
@@ -56,24 +60,28 @@ namespace PetShopClientServise.Servises.AccountServise
             return (usersModelList!.ToList(), res.StatusCode);
         }
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> CreateRole(RoleModel roleModel)
         {
             var res = await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/CreateRole", roleModel);
             return res.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> ManageRolesOnUser(ManageRolesOnUserModel manageRolesOnUserModel)
         {
             var res = await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/ManageRolesOnUser", manageRolesOnUserModel);
             return res.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<HttpStatusCode> DeleteUserById(string id)
         {
             var res = await HttpClientInfo.HttpClientServises.DeleteAsync($"api/Account/DeleteUserById/{id}");
             return res.StatusCode;
         }
 
+        [PetShopExceptionFilter]
         public async Task<bool> CheckIfAuthenticated()
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/CheckIfAuthenticated");
@@ -81,6 +89,7 @@ namespace PetShopClientServise.Servises.AccountServise
             return bool.Parse(content);
         }
 
+        [PetShopExceptionFilter]
         public async Task<(UserInfoModelForCilent, HttpStatusCode)> GetCurrentUser()
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/GetCurrentUser");
@@ -96,6 +105,7 @@ namespace PetShopClientServise.Servises.AccountServise
             }
         }
 
+        [PetShopExceptionFilter]
         public async Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> GetUserModelForClientById(string id)
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync($"api/Account/GetUserModelForClientById/{id}");
@@ -112,6 +122,7 @@ namespace PetShopClientServise.Servises.AccountServise
             }
         }
 
+        [PetShopExceptionFilter]
         public async Task<(ActionResult<List<IdentityRole>>, HttpStatusCode)> GetAutorizationLevels()
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/GetAutorizationLevels"); 

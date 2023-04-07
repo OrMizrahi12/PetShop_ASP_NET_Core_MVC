@@ -31,6 +31,7 @@ namespace PetShopClient.Controllers
             TopFilter.Attribute = attribute;
             TopFilter.HowMany = howMany;
             FilterUtils.AnimalCurrunFilter = "ByTop";
+
             return RedirectToAction("Index", "Home");
         }
 

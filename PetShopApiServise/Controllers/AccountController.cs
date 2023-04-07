@@ -26,6 +26,7 @@ namespace PetShopApiServise.Controllers
 
         #region Login, Register, Logout
 
+        [PetShopExceptionFilter]
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -40,6 +41,7 @@ namespace PetShopApiServise.Controllers
             return BadRequest(ModelState);
         }
 
+        [PetShopExceptionFilter]
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
@@ -49,7 +51,7 @@ namespace PetShopApiServise.Controllers
 
             if (result.Succeeded)
             {
-                SetDefaultRoleInUser(user.UserName!);
+                await _userManager.AddToRoleAsync(user, "user"); 
                 return Ok(result);
             }
 
@@ -57,6 +59,7 @@ namespace PetShopApiServise.Controllers
             return BadRequest(string.Join(Environment.NewLine, errors));
         }
 
+        [PetShopExceptionFilter]
         [HttpPost("Logout")]
         [IsAuthenticatedFilter]
         public async Task<IActionResult> Logout()
@@ -76,6 +79,7 @@ namespace PetShopApiServise.Controllers
 
         #region Administrator actions
 
+        [PetShopExceptionFilter]
         [Authorize(Roles = "Administrators")]
         [HttpPost("ManageRolesOnUser")]
         [IsAuthenticatedFilter]
@@ -97,6 +101,7 @@ namespace PetShopApiServise.Controllers
             return Ok(ModelState);
         }
 
+        [PetShopExceptionFilter]
         [Authorize(Roles = "Administrators")]
         [HttpPost("CreateRole")]
         [IsAuthenticatedFilter]
@@ -114,7 +119,7 @@ namespace PetShopApiServise.Controllers
             return BadRequest(result.Errors);
         }
 
-
+        [PetShopExceptionFilter]
         [Authorize(Roles = "Administrators")]
         [HttpGet("GetUsers")]
         [IsAuthenticatedFilter]
@@ -131,7 +136,7 @@ namespace PetShopApiServise.Controllers
         #endregion
 
 
-
+        [PetShopExceptionFilter]
         [HttpGet("GetUserRoles{username}")]
         [IsAuthenticatedFilter]
         [AllowAnonymous]
@@ -142,6 +147,7 @@ namespace PetShopApiServise.Controllers
             return Ok(roles);
         }
 
+        [PetShopExceptionFilter]
         [HttpGet("GetUserByName{username}")]
         [IsAuthenticatedFilter]
         [AllowAnonymous]
@@ -151,6 +157,7 @@ namespace PetShopApiServise.Controllers
             return Ok(user);
         }
 
+        [PetShopExceptionFilter]
         [HttpGet("GetUserById/{id}")]
         [IsAuthenticatedFilter]
         [AllowAnonymous]
@@ -160,6 +167,7 @@ namespace PetShopApiServise.Controllers
             return Ok(user);
         }
 
+        [PetShopExceptionFilter]
         [HttpGet("GetUserModelForClientById/{id}")]
         [IsAuthenticatedFilter]
         public async Task<ActionResult<UserInfoModelForCilent>> GetUserModelForClientById(string id)
@@ -176,7 +184,7 @@ namespace PetShopApiServise.Controllers
             return Ok(userModel);
         }
 
-
+        [PetShopExceptionFilter]
         [HttpGet("GetUserRolesById/{id}")]
         [IsAuthenticatedFilter]
         [AllowAnonymous]
@@ -188,12 +196,7 @@ namespace PetShopApiServise.Controllers
             return Ok(roles);
         }
 
-        private async void SetDefaultRoleInUser(string username)
-        {
-            var user = await _userManager.FindByNameAsync(username);
-            await _userManager.AddToRoleAsync(user!, "user");
-        }
-
+        [PetShopExceptionFilter]
         [HttpGet("GetUserInfoForClient/{username}")]
         [IsAuthenticatedFilter]
         [AllowAnonymous]
@@ -211,6 +214,7 @@ namespace PetShopApiServise.Controllers
             return Ok(userModel);
         }
 
+        [PetShopExceptionFilter]
         [HttpGet("GetAllUsersInfoForClient")]
         [IsAuthenticatedFilter]
         [AllowAnonymous]
@@ -234,6 +238,7 @@ namespace PetShopApiServise.Controllers
             return Ok(usersForClient);
         }
 
+        [PetShopExceptionFilter]
         [Authorize(Roles = "Administrators")]
         [HttpDelete("DeleteUserById/{id}")]
         [IsAuthenticatedFilter]
@@ -245,12 +250,14 @@ namespace PetShopApiServise.Controllers
             return Ok();
         }
 
+        [PetShopExceptionFilter]
         [HttpGet("CheckIfAuthenticated")]
         public bool CheckIfAuthenticated()
         {
             return User.Identity!.IsAuthenticated;
         }
 
+        [PetShopExceptionFilter]
         [HttpGet("GetCurrentUser")]
         public async Task<ActionResult<UserInfoModelForCilent>> GetCurrentUser()
         {
@@ -272,6 +279,7 @@ namespace PetShopApiServise.Controllers
             return Ok(userModel);    
         }
 
+        [PetShopExceptionFilter]
         [HttpGet("GetAutorizationLevels")]
         public async Task<ActionResult<List<IdentityRole>>> GetAutorizationLevels()
         {
@@ -280,11 +288,5 @@ namespace PetShopApiServise.Controllers
             return Ok(authLevelsList);
 
         }
-
-        //[HttpPut("AddRoleToUserById")]
-        //public async Task<IActionResult> AddRoleToUserById(string userId, string roleId)
-        //{
-
-        //}
     }
 }

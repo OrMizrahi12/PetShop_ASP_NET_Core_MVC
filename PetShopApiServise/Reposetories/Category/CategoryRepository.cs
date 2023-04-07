@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PetShopApiServise.Attributes.ExeptionAttributes;
 using PetShopApiServise.Models;
 
 namespace PetShopApiServise.Reposetories.Category;
-
+[PetShopExceptionFilter]
 public class CategoryRepository : ICategoryRepository
 {
     private readonly PetShopDBContext _context;
@@ -15,6 +16,7 @@ public class CategoryRepository : ICategoryRepository
         _logger = logger;
     }
 
+    [PetShopExceptionFilter]
     public async Task<int> AddCategory(Categories category)
     {
         try
@@ -29,6 +31,7 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
+    [PetShopExceptionFilter]
     public async Task<IEnumerable<Categories>> GetAllCategories()
     {
         try
@@ -42,6 +45,7 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
+    [PetShopExceptionFilter]
     public async Task<Categories> GetCategoryById(int id)
     {
         try
@@ -56,6 +60,7 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
+    [PetShopExceptionFilter]
     public async Task<int> UpdateCategory(Categories category)
     {
         try
@@ -71,6 +76,7 @@ public class CategoryRepository : ICategoryRepository
 
     }
 
+    [PetShopExceptionFilter]
     public async Task<int> DeleteCategoryById(int id)
     {
         try

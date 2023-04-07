@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels.AccountModels;
 using PetShopClientServise.DtoModels.HeaderModel;
 using PetShopClientServise.Servises.AccountServise;
@@ -7,13 +8,14 @@ namespace PetShopClient.ViewComponents
 {
     public class NavbarViewComponent : ViewComponent
     {
-        IAccountService _accountService;    
+        readonly IAccountService _accountService;    
 
         public NavbarViewComponent(IAccountService accountService) 
         {
             _accountService = accountService;
         }
 
+        [PetShopExceptionFilter]
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var isAuthenticated = await _accountService.CheckIfAuthenticated();

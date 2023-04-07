@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PetShopApiServise.Attributes.ExeptionAttributes;
 using PetShopApiServise.Models;
 using PetShopApiServise.Reposetories.Category;
 using PetShopApiServise.Utils.Serialization;
@@ -11,15 +12,13 @@ public class AnimalRepository : IAnimalRepository
 {
     private readonly PetShopDBContext _context;
     private readonly ILogger<AnimalRepository> _logger;
-
-
-
     public AnimalRepository(PetShopDBContext context, ILogger<AnimalRepository> logger)
     {
         _context = context;
         _logger = logger;
     }
 
+    [PetShopExceptionFilter]
     public async Task<int> AddAnimal(Animals animal)
     {
         try
@@ -39,18 +38,21 @@ public class AnimalRepository : IAnimalRepository
         }
     }
 
+    [PetShopExceptionFilter]
     [HttpGet]
     public async Task<IEnumerable<Animals>> GetAllAnimals()
     {
         return await _context.Animals.ToListAsync();
     }
 
+    [PetShopExceptionFilter]
     public async Task<Animals?> GetAnimalById(int id)
     {
         var animal = await _context.Animals.FindAsync(id);
         return animal!;
     }
 
+    [PetShopExceptionFilter]
     public async Task<int> UpdateAnimal(Animals animal)
     {
         try
@@ -88,6 +90,7 @@ public class AnimalRepository : IAnimalRepository
         }
     }
 
+    [PetShopExceptionFilter]
     public async Task<int> DeleteAnimalById(int animalId)
     {
         try
@@ -109,6 +112,7 @@ public class AnimalRepository : IAnimalRepository
         }
     }
 
+    [PetShopExceptionFilter]
     public async Task<IEnumerable<Animals>> GetAnimalsByCategory(int id)
     {
         var animals = await _context.Animals.Where(x => x.CategoryId == id).ToListAsync();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.CustomModelsForView.Admin;
 using PetShopClientServise.Servises.AccountServise;
 using System.Net;
@@ -14,7 +15,7 @@ namespace PetShopClient.ViewComponents.Admin
             _accountService = accountService;
         }
 
-
+        [PetShopExceptionFilter]
         public async Task<IViewComponentResult> InvokeAsync(string id)
         {
             UserDetailsEditorModel model = new();

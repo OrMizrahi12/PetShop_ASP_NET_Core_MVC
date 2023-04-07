@@ -19,6 +19,7 @@ public class CommentController : ControllerBase
         _commentRepository = commentRepository;
     }
 
+    [PetShopExceptionFilter]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Comments>>> GetAllComments()
     {
@@ -26,6 +27,7 @@ public class CommentController : ControllerBase
         return Ok(comments);
     }
 
+    [PetShopExceptionFilter]
     [HttpGet("{id}")]
     public async Task<ActionResult<Comments>> GetCommentById(int id)
     {
@@ -37,8 +39,8 @@ public class CommentController : ControllerBase
         return Ok(comment);
     }
 
+    [PetShopExceptionFilter]
     [HttpPost]
-
     public async Task<ActionResult<int>> AddComment([FromBody] Comments comment)
     {
         if (!ModelState.IsValid)
@@ -49,6 +51,7 @@ public class CommentController : ControllerBase
         return Ok(result);
     }
 
+    [PetShopExceptionFilter]
     [HttpPut]
     public async Task<IActionResult> UpdateComment([FromBody] Comments comment)
     {
@@ -61,6 +64,7 @@ public class CommentController : ControllerBase
 
     }
 
+    [PetShopExceptionFilter]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCommentById(int id)
     {
@@ -68,6 +72,7 @@ public class CommentController : ControllerBase
         return Ok(result);
     }
 
+    [PetShopExceptionFilter]
     [HttpGet("GetCommentsByAnimalId/{id}")]
     public async Task<ActionResult<IEnumerable<Comments>>> GetCommentsByAnimalId(int id)
     {

@@ -21,6 +21,7 @@ public class AnimalController : ControllerBase
         _animalReposetory = animalReposetory;
     }
 
+    [PetShopExceptionFilter]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Animals>>> GetAllAnimals()
     {
@@ -28,7 +29,7 @@ public class AnimalController : ControllerBase
         return Ok(animals);
     }
 
-
+    [PetShopExceptionFilter]
     [HttpGet("{id}")]
     public async Task<ActionResult<Animals>> GetAnimalById(int id)
     {
@@ -36,6 +37,7 @@ public class AnimalController : ControllerBase
         return Ok(animal);
     }
 
+    [PetShopExceptionFilter]
     [HttpPost]
     public async Task<ActionResult<int>> AddAnimal([FromBody] Animals animal)
     {
@@ -47,6 +49,7 @@ public class AnimalController : ControllerBase
         return Ok(result);
     }
 
+    [PetShopExceptionFilter]
     [HttpPut]
     public async Task<IActionResult> UpdateAnimal(Animals animal)
     {
@@ -59,6 +62,7 @@ public class AnimalController : ControllerBase
         return Ok(result);
     }
 
+    [PetShopExceptionFilter]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAnimalById(int id)
     {
@@ -66,6 +70,7 @@ public class AnimalController : ControllerBase
         return Ok(result);
     }
 
+    [PetShopExceptionFilter]
     [HttpGet("GetAnimalsByCategory/{id}")]  
     public async Task<IActionResult> GetAnimalsByCategory(int id)
     {

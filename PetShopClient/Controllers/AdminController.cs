@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetShopClient.ViewComponents.Admin;
 using PetShopClientServise.Attributes.AuthAttributes;
+using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AccountServise;
 using PetShopClientServise.Servises.AnimalServise;
@@ -28,6 +29,7 @@ namespace PetShopClient.Controllers
             return RedirectToAction("AnimalOverview");
         }
 
+        [PetShopExceptionFilter]
         [HttpGet]
         public async Task<IActionResult> AddAnimal()
         {
@@ -37,6 +39,7 @@ namespace PetShopClient.Controllers
             return View();
         }
 
+        [PetShopExceptionFilter]
         public async Task<IActionResult> AddAnimal(Animals animals)
         {
             if (!ModelState.IsValid)
@@ -48,6 +51,7 @@ namespace PetShopClient.Controllers
             return View();
         }
 
+        [PetShopExceptionFilter]
         public async Task<IActionResult> DeleteAnimalById(int id)
         {
             if (id < 0)
@@ -58,6 +62,7 @@ namespace PetShopClient.Controllers
             return RedirectToAction("AnimalOverview");
         }
 
+        [PetShopExceptionFilter]
         public async Task<IActionResult> UpdateAnimal(Animals animal)
         {
             if (!ModelState.IsValid)
@@ -68,8 +73,14 @@ namespace PetShopClient.Controllers
             return RedirectToAction("AnimalOverview");
         }
 
+        [PetShopExceptionFilter]
         public async Task<IActionResult> AnimalDetailsEditor(int id)
         {
+            if (id < 0)
+            {
+                return RedirectToAction("Index", "Error", new { HttpStatusCode.NotFound });
+            }
+
             var (categories, _) = await _categoryApiServise.GetAllCategories();
             ViewData["Categories"] = categories;
 
@@ -82,6 +93,7 @@ namespace PetShopClient.Controllers
             return View(animal);
         }
 
+        [PetShopExceptionFilter]
         public async Task<IActionResult> AnimalOverview()
         {
             var (animals, status) = await _animalApiServise.GetAllAnimals();
@@ -89,6 +101,7 @@ namespace PetShopClient.Controllers
             return View(animalsUnderFilter);
         }
 
+        [PetShopExceptionFilter]
         public async Task<IActionResult> AddCategory(Categories category)
         {
             if (!ModelState.IsValid)
@@ -124,7 +137,11 @@ namespace PetShopClient.Controllers
 
         public async Task<IActionResult> CategoryDetailsEditor(int id)
         {
+            if(id < 0)
+            {
+                return RedirectToAction("Index", "Error", new { HttpStatusCode.NotFound });
 
+            }
             var (category, status) = await _categoryApiServise.GetCategoryById(id);
             var (animals, statusAnimals) = await _animalApiServise.GetAnimalsByCategory(id);
 
@@ -146,7 +163,7 @@ namespace PetShopClient.Controllers
 
         public async Task<IActionResult> UsersOverview()
         {
-            var (rolesList, status) = await _accountService.GetAutorizationLevels();
+            var (rolesList, _) = await _accountService.GetAutorizationLevels();
 
             ViewData["rolesList"] = rolesList.Value;
             return View();
@@ -166,13 +183,18 @@ namespace PetShopClient.Controllers
 
         public async Task<IActionResult> ManageRolesOnUser(string userId, string roleName, bool addTheRole)
         {
-            ManageRolesOnUserModel manageRolesOnUserModel = new ManageRolesOnUserModel();
+            ManageRolesOnUserModel manageRolesOnUserModel = new()
+            {
+                UserId = userId,
+                RoleName = roleName,
+                AddTheRole = addTheRole
+            };
+            if(!ModelState.IsValid)
+            {
+                return ViewComponent("UserDetailsEditor", new { id = userId });
+            }
 
-            manageRolesOnUserModel.UserId = userId;
-            manageRolesOnUserModel.RoleName = roleName;
-            manageRolesOnUserModel.AddTheRole = addTheRole;
-
-            var res = await _accountService.ManageRolesOnUser(manageRolesOnUserModel);
+            await _accountService.ManageRolesOnUser(manageRolesOnUserModel);
 
             return ViewComponent("UserDetailsEditor", new { id = userId });
         }

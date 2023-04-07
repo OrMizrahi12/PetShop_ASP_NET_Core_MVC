@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CategoryServise;
 using PetShopClientServise.Servises.CommentServise;
@@ -17,9 +18,9 @@ namespace PetShopClient.Controllers
             _animalApiServise = animalApiServise;
             _commentApiServise = commentApiServise;
             _categoryApiServise = categoryApiServise;
-
         }
 
+        [PetShopExceptionFilter]
         public async Task<IActionResult> Index()
         {
             ViewData["CateforiesArrayFiltersId"] = CategoryFilter.CategoryIdArray ?? new List<int>();
@@ -38,8 +39,13 @@ namespace PetShopClient.Controllers
             return View(animals.ToList());
         }
 
+        [PetShopExceptionFilter]
         public async Task<IActionResult> ShowAnimalById(int id)
         {
+            if (id < 0)
+            {
+                return RedirectToAction("Index", "Error", new { HttpStatusCode.NotFound });
+            }   
 
             var (commentsById, _) = await _commentApiServise.GetCommentsByAnimalId(id);
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.CustomModelsForView.Admin;
 using PetShopClientServise.DtoModels.AccountModels;
 using PetShopClientServise.DtoModels.HeaderModel;
@@ -16,6 +17,7 @@ namespace PetShopClient.ViewComponents.Admin
             _accountService = accountService;
         }
 
+        [PetShopExceptionFilter]
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var (allUsersModel, usersStatus) = await _accountService.GetAllUsersInfoForClient();
