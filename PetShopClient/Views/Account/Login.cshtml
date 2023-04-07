@@ -6,22 +6,28 @@
 
 <head>
     <link rel="stylesheet" href="~/styles/Account/Login.css" />
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script src="~/ValidationForms/LoginFormValidation.js"></script>
 </head>
 @{
     var status = ViewBag.Status;
 }
 
 <div class="login-container">
-    <h2>Login</h2>
-    <form method="post" asp-action="Login" asp-controller="Account">
-        <div class="form-group">
-            <input placeholder="username" type="text" id="username" name="username" asp-for="Username" class="form-control" />
-        </div>
-        <div class="form-group">
-            <input placeholder="password" type="password" id="password" name="password" asp-for="Password" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-        <a class="register-link" asp-action="Register" asp-controller="Account">New? register now >></a>
-        <p class="errMsg">@status</p>
-    </form>
+  <h2>Login</h2>
+  <form method="post" asp-action="Login" asp-controller="Account">
+    <div class="form-group">
+      <input placeholder="username" type="text" id="username" name="username" asp-for="Username" class="form-control" />
+      <p style="color: red" id="username-error-msg"></p>
+    </div>
+    <div class="form-group">
+      <input placeholder="password" type="password" id="password" name="password" asp-for="Password" class="form-control" />
+      <p style="color: red" id="password-error-msg"></p>
+    </div>
+    <button type="submit" id="submitBtn" class="btn btn-primary">Login</button>
+    <a class="register-link" asp-action="Register" asp-controller="Account">New? register now >></a>
+    <p class="errMsg">@status</p>
+  </form>
 </div>

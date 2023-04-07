@@ -10,21 +10,34 @@
 @{
     var status = ViewBag.Status;
 }
-<div class="register-container">
-    <h2>Login</h2>
-    <form method="post" asp-action="Register">
-        <div class="form-group">
-            <input placeholder="username" type="text" id="username" name="username" class="form-control" />
-        </div>
-        <div class="form-group">
-            <input placeholder="password" type="password" id="password" name="password" class="form-control" />
-        </div>
-        <div class="form-group">
-            <input placeholder="confirm password" type="password" id="confirmPassword" name="confirmPassword" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-primary">Register</button>
-        <a class="login-link" asp-action="Login" asp-controller="Account">Member? login >></a>
-        <p class="errMsg">@status</p>
-    </form>
-</div>
 
+
+<head>
+    <link rel="stylesheet" href="~/styles/Account/Login.css" />
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script src="~/ValidationForms/RegisterFormValidation.js"></script>
+</head>
+
+
+<div class="register-container">
+  <h2>Register</h2>
+  <form method="post" asp-action="Register">
+    <div class="form-group">
+      <input placeholder="username" type="text" id="username" name="username" class="form-control" />
+      <p style="color: red" id="username-error-msg"></p>
+    </div>
+    <div class="form-group">
+      <input placeholder="password" type="password" id="password" name="password" class="form-control" />
+      <p style="color: red" id="password-error-msg"></p>
+    </div>
+    <div class="form-group">
+      <input placeholder="confirm password" type="password" id="confirmPassword" name="confirmPassword" class="form-control" />
+      <p style="color: red" id="confirmPassword-error-msg"></p>
+    </div>
+    <button type="submit" id="submitBtn" class="btn btn-primary">Register</button>
+    <a class="login-link" asp-action="Login" asp-controller="Account">Member? login >></a>
+    <p class="errMsg">@status</p>
+  </form>
+</div>
