@@ -4,7 +4,7 @@
  <head>
      <link rel="stylesheet" href="~/styles/Admin/UsersOverview.css" />
          <link rel="stylesheet" href="/styles/BtnBack.css" />
-
+            <link href="~/styles/Popup.css" rel="stylesheet" />
  </head>
  	<div class="button-back-container">
         <a href="javascript:history.back()" class="back-button">Go back</a>
@@ -38,12 +38,34 @@
                     </form>
                 </td>
                  <td>
-                     <form asp-action="DeleteUserById" asp-controller="Admin" method="post">
-                         <input type="hidden" name="id" value="@user.Id" /> 
-                         <button type="submit" class="btn btn-danger">Delete User</button>
-                     </form>
+                 <button type="button" class="btn btn-danger" onclick="openModal('@user.Id');" aria-label="Remove category">
+                    Delete User
+                </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+ <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to remove this user?</p>
+            <form id="deleteForm" asp-action="DeleteUserById" asp-controller="Admin" method="post">
+                <input type="hidden" id="deleteCategoryId" name="id" value="">
+                <button type="submit" class="modal-button yes">Yes</button>
+                <button type="button" class="modal-button no" onclick="closeModal();">No</button>
+            </form>
+        </div>
+</div>
+<script>
+    function openModal(userId) {
+        var modal = document.getElementById("confirmModal");
+        modal.classList.add("show");
+        document.getElementById("deleteCategoryId").value = userId;
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("confirmModal");
+        modal.classList.remove("show");
+    }
+</script>

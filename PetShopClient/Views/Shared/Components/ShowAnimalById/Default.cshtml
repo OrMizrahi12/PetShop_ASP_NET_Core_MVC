@@ -1,0 +1,122 @@
+﻿@model PetShopClientServise.CustomModelsForView.Animal.ShowAnimalByIdModel
+
+@{
+    Layout = "_Layout";
+}
+
+
+@{
+    ViewBag.Title = "AnimalDetailsById";
+}
+
+<header>
+    <link href="~/styles/Home/AnimalDetailsById.css" rel="stylesheet" />
+    <script src="~/scripts/jquery.min.js"></script>
+    <script src="~/scripts/jquery.validate.min.js"></script>
+    <script src="~/ValidationForms/CommentForm.js"></script>
+    
+</header>
+
+<style>
+    label.error {
+        color: red;
+    }
+</style>
+
+@{
+    var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = Model.AnimalById!.Picture }); 
+    var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = Model.AnimalById.CategoryId });
+    var usersList = Model.UsersList!.ToList();
+}
+<div class="animal-details-wrapper">
+    <div class="animal-details-container">
+        <h1 class="animal-title">@Model.AnimalById.Name</h1>
+        <img class="animal-image" src="@ImageSrc"  alt="@Model.AnimalById.Name" />
+        <div class="animal-info">
+            <div class="animal-age"><strong>Age:</strong> @Model.AnimalById.Age</div>
+            <div class="animal-category"><strong>Category:</strong>@CategoryName</div>
+        </div>
+        <h2 class="comments-title">Comments</h2>
+
+        <div class="addCommentForm">
+
+        <form id="add-comment-form" asp-controller="Comment" asp-action="AddCommentOnAnimal" method="post">
+            <input type="text" name="Comment" placeholder="Add comment" />
+            <input hidden name="AnimalId" value="@Model.AnimalById.AnimalId" />
+            <button type="submit">Add</button>
+        </form>
+</div>
+<div class="centerice">
+    <button class="show-comments-btn">Show comments</button>
+<button class="hide-comments-btn">Hide comments</button>
+</div>
+        
+        <ul class="comments-list">
+
+        @foreach (var comment in Model.Comments!.ToList())
+        {
+            var userName = comment?.UserId != null ?
+            usersList!.FirstOrDefault(u => u.Id == comment.UserId)?.Username 
+            : "Unknown";
+            
+            <li 
+                class="comment-item">
+                @if (comment!.UserId == Model.CurrentUser!.Id)
+                {
+                    <form 
+                        id="delete-form" 
+                        method="post" 
+                        asp-action="DeleteComment" 
+                        asp-controller="Comment" 
+                        asp-route-animalId="@Model.AnimalById.AnimalId" 
+                        asp-route-id="@comment.CommentId"
+                        asp-route-currentUserId="@Model.CurrentUser.Id"
+                    >
+                       <button type="submit" class="delete-comment">Delete comment</button>
+                    </form>        
+                }
+                @comment!.Comment
+                <p>By: @userName</p>
+            </li>
+        }                
+    
+    </ul>
+
+     </div>
+
+     
+
+</div>
+
+
+  <script>
+        var showCommentsBtn = document.querySelector('.show-comments-btn');
+        var hideCommentsBtn = document.querySelector('.hide-comments-btn');
+        var commentItems = document.querySelectorAll('.comment-item');
+        var commentDetails = document.querySelectorAll('.comments-list');
+
+        commentDetails.forEach(function (commentDetail) {
+            commentDetail.style.display = 'none';
+        });
+
+        showCommentsBtn.addEventListener('click', function () {
+
+            commentItems.forEach(function (commentItem) {
+                commentItem.style.display = 'block';
+            });
+            commentDetails.forEach(function (commentDetail) {
+                commentDetail.style.display = 'block';
+            });
+            showCommentsBtn.style.display = 'none';
+            hideCommentsBtn.style.display = 'block';
+        });
+        hideCommentsBtn.addEventListener('click', function () {
+            commentDetails.forEach(function (commentDetail) {
+                commentDetail.style.display = 'none';
+            });
+            hideCommentsBtn.style.display = 'none';
+            showCommentsBtn.style.display = 'block';
+        });
+    </script>
+}
+

@@ -196,3 +196,19 @@
     .animal-category span {
         font-weight: normal;
     }
+
+.delete-comment {
+    color: #dc3545;
+    text-decoration: none;
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+    padding: 4px 8px;
+    transition: background-color 0.3s ease-in-out;
+    float: right;
+}
+
+    .delete-comment:hover {
+        background-color: #dc3545;
+        color: #fff;
+        cursor: pointer;
+    }

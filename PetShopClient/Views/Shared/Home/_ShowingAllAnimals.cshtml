@@ -9,7 +9,6 @@
     <link href="~/styles/Home/Home.css" rel="stylesheet" />
 </head>
 
-
 <body>
     <div class="container">
                       
@@ -33,3 +32,44 @@
         }
     </div>
 </body>
+
+@*@model IEnumerable<PetShopClientServise.DtoModels.Animals>
+@{
+    ViewBag.Title = "Index";
+    var pageNum = ViewData["Page"];
+}
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/styles/Home/Home.css" rel="stylesheet" />
+</head>
+
+
+<body>
+    <div class="container">
+                      
+        @foreach(var item in Model.Skip(int.Parse(pageNum.ToString()) * 6).Take(6))
+        {            
+            var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = item.Picture }); 
+            var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = item.CategoryId });
+
+            <div class="animal-item" >
+                <h2 class="animal-name" > Name @item.Name</h2>
+                <hr />
+                <br /> 
+                <p class="animal-age">Age: @item.Age</p>
+                <p class="animal-category">Category: @CategoryName</p>
+                <br /> 
+                <img class="animal-image" src="@ImageSrc"  alt="@item.Name" />
+              <div class="centerize">
+                <a class="see-more" asp-controller="Home" asp-action="ShowAnimalById" asp-route-id="@item.AnimalId">See More</a>
+              </div>
+            </div>
+        }
+    </div>
+<a asp-action="Index" asp-controller="Home" asp-route-next="true" class="btnPagination next">Next</a>
+<a asp-action="Index" asp-controller="Home" asp-route-next="false" class="btnPagination back">Back</a>
+    
+    
+</body>
+*@

@@ -5,6 +5,7 @@ using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CategoryServise;
 using PetShopClientServise.Servises.CommentServise;
 using PetShopClientServise.Servises.Filters;
+using PetShopClientServise.Utils.Pagination;
 using System.Net;
 
 namespace PetShopClient.Controllers;
@@ -20,14 +21,14 @@ public class HomeController : Controller
         _animalApiServise = animalApiServise;
         _commentApiServise = commentApiServise;
         _categoryApiServise = categoryApiServise;
-            _accountService = accountService;
+        _accountService = accountService;
     }
 
     [PetShopExceptionFilter]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(bool next)
     {
         ViewData["CateforiesArrayFiltersId"] = CategoryFilter.CategoryIdArray ?? new List<int>();
-        
+
         var (categories, _) = await _categoryApiServise.GetAllCategories();
         ViewData["Categories"] = categories;
 
@@ -39,32 +40,31 @@ public class HomeController : Controller
         }
 
         animals = await FiltersLogic.PreperFilters(animals);
+        
+        if(next)
+        {
+            PaginationUtils.PageNumber++;
+        }
+        else
+        {
+            PaginationUtils.PageNumber--;
+        }
+       
+        ViewData["Page"] = PaginationUtils.PageNumber;
         return View(animals.ToList());
     }
+
 
     [PetShopExceptionFilter]
     public async Task<IActionResult> ShowAnimalById(int id)
     {
-        if (id < 0)
-        {
-            return RedirectToAction("Index", "Error", new { HttpStatusCode.NotFound });
-        }   
-
-        var (commentsById, _) = await _commentApiServise.GetCommentsByAnimalId(id);
-
-        ViewData["Comments"] = commentsById;
-
         var (animal, status) = await _animalApiServise.GetAnimalById(id);
 
-        if (status != HttpStatusCode.OK)
+        if(status != HttpStatusCode.OK)
         {
             return RedirectToAction("Index", "Error", new { status });
         }
 
-        var (usersList, _) = await _accountService.GetAllUsersInfoForClient();
-
-         ViewData["UsersList"] = usersList.Value!.ToList();
-
-        return View(animal);
+        return ViewComponent("ShowAnimalById", new { id });
     }
 }

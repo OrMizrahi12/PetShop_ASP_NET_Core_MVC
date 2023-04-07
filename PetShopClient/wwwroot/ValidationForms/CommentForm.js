@@ -1,6 +1,6 @@
 ﻿
 document.addEventListener("DOMContentLoaded", function () {
-    $('form').validate({
+    $('#add-comment-form').validate({
         rules: {
             Comment: {
                 required: true,

@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IAnimalApiService, AnimalApiService>();
+builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddApiServises();
 
 builder.Services.AddDistributedMemoryCache();

@@ -9,7 +9,6 @@
     <link href="~/styles/Admin/CategoryOverview.css" rel="stylesheet" />
     <link href="~/styles/Popup.css" rel="stylesheet" />
         <link rel="stylesheet" href="/styles/BtnBack.css" />
-
    
 </head>
 <body>
@@ -32,28 +31,30 @@
             </div>
         }
     </div>
+
+
     <div id="confirmModal" class="modal">
         <div class="modal-content">
             <p>Are you sure you want to remove this category?</p>
             <form id="deleteForm" asp-action="DeleteCategoryById" asp-controller="Admin" method="post">
                 <input type="hidden" id="deleteCategoryId" name="id" value="">
-<button type="submit" class="modal-button yes">Yes</button>
-<button type="button" class="modal-button no" onclick="closeModal();">No</button>
-
+                <button type="submit" class="modal-button yes">Yes</button>
+                <button type="button" class="modal-button no" onclick="closeModal();">No</button>
             </form>
         </div>
     </div>
-    <script>
-function openModal(categoryId) {
-    var modal = document.getElementById("confirmModal");
-    modal.classList.add("show");
-    document.getElementById("deleteCategoryId").value = categoryId;
-}
 
-function closeModal() {
-    var modal = document.getElementById("confirmModal");
-    modal.classList.remove("show");
-}
+    <script>
+        function openModal(categoryId) {
+            var modal = document.getElementById("confirmModal");
+            modal.classList.add("show");
+            document.getElementById("deleteCategoryId").value = categoryId;
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("confirmModal");
+            modal.classList.remove("show");
+        }
     </script>
 </body>
 </html>

@@ -38,6 +38,21 @@ namespace PetShopClient.Controllers
             return RedirectToAction("ShowAnimalById", "Home", new { id = comments.AnimalId });
         }
 
+        [PetShopAutherizationLevel("user")]
+        [PetShopExceptionFilter]
+        public async Task<IActionResult> DeleteComment(int id, int animalId, string currentUserId)
+        {
+            var (user, _) = await _accountService.GetCurrentUser();
+            if (user.Id != currentUserId)
+            {
+                return ViewComponent("ShowAnimalById", new { id = animalId });
+
+            }
+
+            var (comment, _) = await _commentApiServise.GetCommentById(id);
+            await _commentApiServise.DeleteCommentById(id);
+            return ViewComponent("ShowAnimalById", new { id = animalId });
+        }
 
 
     }

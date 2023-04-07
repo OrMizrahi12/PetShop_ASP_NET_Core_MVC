@@ -39,7 +39,7 @@ namespace PetShopClientServise.Servises.AnimalServise
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync($"api/Animal/{id}");
 
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
                 var animal = await response.Content.ReadFromJsonAsync<Animals>();
                 return (animal, HttpStatusCode.OK);
