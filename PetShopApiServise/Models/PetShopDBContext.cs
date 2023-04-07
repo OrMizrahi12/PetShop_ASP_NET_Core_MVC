@@ -54,10 +54,6 @@ public partial class PetShopDBContext : DbContext
             entity.HasOne(d => d.Animal).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.AnimalId)
                 .HasConstraintName("FK__Comments__Animal__2B3F6F97");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Comments)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Comments__UserId__2C3393D0");
         });
 
         modelBuilder.Entity<Users>(entity =>

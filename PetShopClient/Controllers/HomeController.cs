@@ -1,64 +1,70 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetShopClientServise.Attributes.ExeptionAttributes;
+using PetShopClientServise.Servises.AccountServise;
 using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CategoryServise;
 using PetShopClientServise.Servises.CommentServise;
 using PetShopClientServise.Servises.Filters;
 using System.Net;
 
-namespace PetShopClient.Controllers
+namespace PetShopClient.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly IAnimalApiService _animalApiServise;
+    private readonly ICommentApiService _commentApiServise;
+    private readonly ICategoryApiService _categoryApiServise;
+    private readonly IAccountService _accountService;
+    public HomeController(IAnimalApiService animalApiServise, ICommentApiService commentApiServise, ICategoryApiService categoryApiServise, IAccountService accountService)
     {
-        private readonly IAnimalApiService _animalApiServise;
-        private readonly ICommentApiService _commentApiServise;
-        private readonly ICategoryApiService _categoryApiServise;
-        public HomeController(IAnimalApiService animalApiServise, ICommentApiService commentApiServise, ICategoryApiService categoryApiServise)
+        _animalApiServise = animalApiServise;
+        _commentApiServise = commentApiServise;
+        _categoryApiServise = categoryApiServise;
+            _accountService = accountService;
+    }
+
+    [PetShopExceptionFilter]
+    public async Task<IActionResult> Index()
+    {
+        ViewData["CateforiesArrayFiltersId"] = CategoryFilter.CategoryIdArray ?? new List<int>();
+        
+        var (categories, _) = await _categoryApiServise.GetAllCategories();
+        ViewData["Categories"] = categories;
+
+        var (animals, statusCode) = await _animalApiServise.GetAllAnimals();
+
+        if (statusCode != HttpStatusCode.OK)
         {
-            _animalApiServise = animalApiServise;
-            _commentApiServise = commentApiServise;
-            _categoryApiServise = categoryApiServise;
+            return RedirectToAction("Index", "Error", new { status = statusCode });
         }
 
-        [PetShopExceptionFilter]
-        public async Task<IActionResult> Index()
+        animals = await FiltersLogic.PreperFilters(animals);
+        return View(animals.ToList());
+    }
+
+    [PetShopExceptionFilter]
+    public async Task<IActionResult> ShowAnimalById(int id)
+    {
+        if (id < 0)
         {
-            ViewData["CateforiesArrayFiltersId"] = CategoryFilter.CategoryIdArray ?? new List<int>();
-            
-            var (categories, _) = await _categoryApiServise.GetAllCategories();
-            ViewData["Categories"] = categories;
+            return RedirectToAction("Index", "Error", new { HttpStatusCode.NotFound });
+        }   
 
-            var (animals, statusCode) = await _animalApiServise.GetAllAnimals();
+        var (commentsById, _) = await _commentApiServise.GetCommentsByAnimalId(id);
 
-            if (statusCode != HttpStatusCode.OK)
-            {
-                return RedirectToAction("Index", "Error", new { status = statusCode });
-            }
+        ViewData["Comments"] = commentsById;
 
-            animals = await FiltersLogic.PreperFilters(animals);
-            return View(animals.ToList());
+        var (animal, status) = await _animalApiServise.GetAnimalById(id);
+
+        if (status != HttpStatusCode.OK)
+        {
+            return RedirectToAction("Index", "Error", new { status });
         }
 
-        [PetShopExceptionFilter]
-        public async Task<IActionResult> ShowAnimalById(int id)
-        {
-            if (id < 0)
-            {
-                return RedirectToAction("Index", "Error", new { HttpStatusCode.NotFound });
-            }   
+        var (usersList, _) = await _accountService.GetAllUsersInfoForClient();
 
-            var (commentsById, _) = await _commentApiServise.GetCommentsByAnimalId(id);
+         ViewData["UsersList"] = usersList.Value!.ToList();
 
-            ViewData["Comments"] = commentsById;
-
-            var (animal, status) = await _animalApiServise.GetAnimalById(id);
-
-            if (status != HttpStatusCode.OK)
-            {
-                return RedirectToAction("Index", "Error", new { status });
-            }
-
-            return View(animal);
-        }
+        return View(animal);
     }
 }

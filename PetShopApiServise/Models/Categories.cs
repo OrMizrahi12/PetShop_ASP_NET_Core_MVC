@@ -10,9 +10,8 @@ public partial class Categories
 {
     public int CategoryId { get; set; }
 
-    [Required(ErrorMessage = "Please enter a name")]
-    [MinLength(5, ErrorMessage = "Name must be at least 2 characters long")]
-    [MaxLength(20, ErrorMessage = "The name cant be larger than 20 chars")]
+    [Required]
+    [Range(4, 25)]
     public string Name { get; set; }
 
     public virtual ICollection<Animals> Animals { get; } = new List<Animals>();

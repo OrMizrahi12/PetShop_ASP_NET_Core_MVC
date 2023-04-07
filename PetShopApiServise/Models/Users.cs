@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace PetShopApiServise.Models;
 
@@ -10,8 +9,5 @@ public partial class Users
 {
     public int UserId { get; set; }
 
-    [Required]
     public string Username { get; set; }
-
-    public virtual ICollection<Comments> Comments { get; } = new List<Comments>();
 }

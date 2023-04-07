@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetShopClientServise.Attributes.AuthAttributes;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
+using PetShopClientServise.Servises.AccountServise;
 using PetShopClientServise.Servises.CommentServise;
 
 namespace PetShopClient.Controllers
@@ -8,10 +10,12 @@ namespace PetShopClient.Controllers
     public class CommentController : Controller
     {
         private readonly ICommentApiService _commentApiServise;
+        private readonly IAccountService _accountService;
 
-        public CommentController(ICommentApiService commentApiServise)
+        public CommentController(ICommentApiService commentApiServise, IAccountService accountService)
         {
             _commentApiServise = commentApiServise;
+            _accountService = accountService;
         }
 
         public IActionResult Index()
@@ -19,6 +23,7 @@ namespace PetShopClient.Controllers
             return View();
         }
 
+        [PetShopAutherizationLevel("user")]
         [PetShopExceptionFilter]
         public async Task<IActionResult> AddCommentOnAnimal(Comments comments)
         {
@@ -26,7 +31,9 @@ namespace PetShopClient.Controllers
             {
                 return RedirectToAction("ShowAnimalById", "Home", new { id = comments.AnimalId });
             }
-
+            var (user,_) = await _accountService.GetCurrentUser();
+            
+            comments.UserId = user.Id;
             await _commentApiServise.AddComment(comments!);
             return RedirectToAction("ShowAnimalById", "Home", new { id = comments.AnimalId });
         }

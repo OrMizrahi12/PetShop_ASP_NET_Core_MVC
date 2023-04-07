@@ -10,17 +10,16 @@ public partial class Comments
 {
     public int CommentId { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Please, you must inseret an animal")]
     public int? AnimalId { get; set; }
 
     [Required(ErrorMessage = "Please enter a comment")]
-    [MinLength(5, ErrorMessage = "Comment must be at least 5 characters long")]
-    [MaxLength(100, ErrorMessage = "The comment cant be larger than 100 chars")]
+    [StringLength(100, MinimumLength = 10, ErrorMessage = "Comment must be between 10 and 100 characters")]
     public string Comment { get; set; }
 
-    public int? UserId { get; set; }
+
+    [Required]
+    public string UserId { get; set; }
 
     public virtual Animals Animal { get; set; }
-
-    public virtual Users User { get; set; }
 }

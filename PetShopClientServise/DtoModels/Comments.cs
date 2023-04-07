@@ -17,7 +17,7 @@ public partial class Comments
     [StringLength(100, MinimumLength = 10, ErrorMessage = "Comment must be between 10 and 100 characters")]
     public string Comment { get; set; }
 
-    public int? UserId { get; set; }
+    public string UserId { get; set; }
 
     public virtual Animals Animal { get; set; }
 

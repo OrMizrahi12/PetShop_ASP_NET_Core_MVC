@@ -216,7 +216,6 @@ namespace PetShopApiServise.Controllers
 
         [PetShopExceptionFilter]
         [HttpGet("GetAllUsersInfoForClient")]
-        [IsAuthenticatedFilter]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<UserInfoModelForCilent>>> GetAllUsersInfoForClient()
         {

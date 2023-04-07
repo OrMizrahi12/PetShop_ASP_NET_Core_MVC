@@ -20,6 +20,7 @@
 @{
     var ImageSrc = await Component.InvokeAsync("ByteToImgFile", new { ImgByte = Model.Picture }); 
     var CategoryName = await Component.InvokeAsync("CategoryName", new { categoryId = Model.CategoryId });
+    var usersList = ViewData["UsersList"] as List<PetShopClientServise.DtoModels.AccountModels.UserInfoModelForCilent>;
 }
 <div class="animal-details-wrapper">
     <div class="animal-details-container">
@@ -49,16 +50,29 @@
     {
         @foreach (var comment in comments)
         {
-            <li class="comment-item">@comment.Comment</li>
+            var userName = comment?.UserId != null ?
+            usersList!.FirstOrDefault(u => u.Id == comment.UserId)?.Username 
+            : "Unknown";
+
+            <li 
+                class="comment-item">@comment!.Comment
+                <p>By: @userName</p>
+            </li>
         }                
     }
     </ul>
 
      </div>
 
+     
 
 </div>
-
+@{
+    foreach (var item in usersList!)
+    {
+        <p>@item.Username</p>
+    }
+}
 
   <script>
         var showCommentsBtn = document.querySelector('.show-comments-btn');
