@@ -84,20 +84,20 @@ namespace PetShopClient.Controllers
             var (categories, _) = await _categoryApiServise.GetAllCategories();
             ViewData["Categories"] = categories;
 
-            var (animal, status) = await _animalApiServise.GetAnimalById(id);
-            if (status != HttpStatusCode.OK)
+            var res = await _animalApiServise.GetAnimalById(id);
+            if (res.StatusCode != HttpStatusCode.OK)
             {
-                return RedirectToAction("Index", "Error", new { status });
+                return RedirectToAction("Index", "Error", new { res.StatusCode });
             }
 
-            return View(animal);
+            return View(res.Data);
         }
 
         [PetShopExceptionFilter]
         public async Task<IActionResult> AnimalOverview()
         {
-            var (animals, status) = await _animalApiServise.GetAllAnimals();
-            var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(animals.ToList());
+            var res = await _animalApiServise.GetAllAnimals();
+            var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(res.Data!.ToList());
             return View(animalsUnderFilter);
         }
 
@@ -143,14 +143,14 @@ namespace PetShopClient.Controllers
 
             }
             var (category, status) = await _categoryApiServise.GetCategoryById(id);
-            var (animals, statusAnimals) = await _animalApiServise.GetAnimalsByCategory(id);
+            var res = await _animalApiServise.GetAnimalsByCategory(id);
 
-            if ((status | statusAnimals) != HttpStatusCode.OK)
+            if ((status | res.StatusCode) != HttpStatusCode.OK)
             {
                 return RedirectToAction("Index", "Error", new { status });
             }
 
-            var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(animals.ToList());
+            var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(res.Data!.ToList());
             ViewData["CategoryName"] = category!.Name;
 
             return View(animalsUnderFilter);

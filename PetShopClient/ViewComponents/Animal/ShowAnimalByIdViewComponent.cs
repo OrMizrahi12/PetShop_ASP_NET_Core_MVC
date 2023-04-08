@@ -29,12 +29,12 @@ namespace PetShopClient.ViewComponents.Animal
 
 
 
-            var (animal, status) = await _animalApiService.GetAnimalById(id);
+            var res  = await _animalApiService.GetAnimalById(id);
             var (commentsById, _) = await _commentApiService.GetCommentsByAnimalId(id);
             var (usersList, _) = await _accountService.GetAllUsersInfoForClient();
             var (currentUser, _) = await _accountService.GetCurrentUser();
 
-            showAnimalByIdModel.AnimalById = animal;
+            showAnimalByIdModel.AnimalById = res.Data;
             showAnimalByIdModel.Comments = commentsById;
             showAnimalByIdModel.UsersList = usersList.Value!.ToList();
             showAnimalByIdModel.CurrentUser = currentUser;

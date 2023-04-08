@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Utils.HttpClientUtils;
+using PetShopClientServise.Utils.Responses;
 using PetShopClientServise.Utils.Serialization;
 using System.Net;
 using System.Net.Http.Json;
@@ -35,18 +36,18 @@ namespace PetShopClientServise.Servises.AnimalServise
         }
 
         [PetShopExceptionFilter]
-        public async Task<(Animals? animal, HttpStatusCode statusCode)> GetAnimalById(int id)
+        public async Task<ClientResponse<Animals>> GetAnimalById(int id)
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync($"api/Animal/{id}");
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
             {
                 var animal = await response.Content.ReadFromJsonAsync<Animals>();
-                return (animal, HttpStatusCode.OK);
+                return new ClientResponse<Animals> { Data = animal, StatusCode = HttpStatusCode.OK };
             }
             else
             {
-                return (new Animals { }, response.StatusCode);
+                return new ClientResponse<Animals> { Data = new Animals(), StatusCode = response.StatusCode };
             }
         }
 
@@ -65,37 +66,36 @@ namespace PetShopClientServise.Servises.AnimalServise
         }
 
         [PetShopExceptionFilter]
-        public async Task<(List<Animals> animals, HttpStatusCode statusCode)> GetAllAnimals()
-        {
-            var response = await HttpClientInfo.HttpClientServises.GetAsync("api/Animal");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var animals = await response.Content.ReadFromJsonAsync<List<Animals>>();
-                return (animals!, HttpStatusCode.OK);
-            }
-            else
-            {
-                return (new List<Animals> { }, response.StatusCode);
-            }
-        }
-
-        [PetShopExceptionFilter]
-        public async Task<(List<Animals> animals, HttpStatusCode statusCode)> GetAnimalsByCategory(int id)
+        public async Task<ClientResponse<List<Animals>>> GetAnimalsByCategory(int id)
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync($"api/Animal/GetAnimalsByCategory/{id}");
 
             if (response.IsSuccessStatusCode)
             {
                 var animals = await response.Content.ReadFromJsonAsync<List<Animals>>();
-                return (animals!, HttpStatusCode.OK);
+                return new ClientResponse<List<Animals>> { Data = animals, StatusCode = HttpStatusCode.OK };
             }
             else
             {
-                return (new List<Animals> { }, response.StatusCode);
+                return new ClientResponse<List<Animals>> { Data = new List<Animals>(), StatusCode = response.StatusCode };
             }
         }
 
+        [PetShopExceptionFilter]
+        public async Task<ClientResponse<List<Animals>>> GetAllAnimals()
+        {
+            var response = await HttpClientInfo.HttpClientServises.GetAsync("api/Animal");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var animals = await response.Content.ReadFromJsonAsync<List<Animals>>();
+                return new ClientResponse<List<Animals>> { Data = animals, StatusCode = HttpStatusCode.OK };
+            }
+            else
+            {
+                return new ClientResponse<List<Animals>> { Data = new List<Animals>(), StatusCode = response.StatusCode };
+            }
+        }
 
     }
 }

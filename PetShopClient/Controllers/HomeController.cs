@@ -32,25 +32,26 @@ public class HomeController : Controller
         var (categories, _) = await _categoryApiServise.GetAllCategories();
         ViewData["Categories"] = categories;
 
-        var (animals, statusCode) = await _animalApiServise.GetAllAnimals();
+        var res = await _animalApiServise.GetAllAnimals();
 
-        if (statusCode != HttpStatusCode.OK)
+        if (res.StatusCode != HttpStatusCode.OK)
         {
-            return RedirectToAction("Index", "Error", new { status = statusCode });
+            return RedirectToAction("Index", "Error", new { status = res.StatusCode });
         }
 
-        animals = await FiltersLogic.PreperFilters(animals);
+        var animals = res.Data;
+        animals = await FiltersLogic.PreperFilters(animals!);
         
-        if(next)
-        {
-            PaginationUtils.PageNumber++;
-        }
-        else
-        {
-            PaginationUtils.PageNumber--;
-        }
+        //if(next)
+        //{
+        //    PaginationUtils.PageNumber++;
+        //}
+        //else
+        //{
+        //    PaginationUtils.PageNumber--;
+        //}
        
-        ViewData["Page"] = PaginationUtils.PageNumber;
+        //ViewData["Page"] = PaginationUtils.PageNumber;
         return View(animals.ToList());
     }
 
@@ -58,11 +59,11 @@ public class HomeController : Controller
     [PetShopExceptionFilter]
     public async Task<IActionResult> ShowAnimalById(int id)
     {
-        var (animal, status) = await _animalApiServise.GetAnimalById(id);
+        var res = await _animalApiServise.GetAnimalById(id);
 
-        if(status != HttpStatusCode.OK)
+        if(res.StatusCode != HttpStatusCode.OK)
         {
-            return RedirectToAction("Index", "Error", new { status });
+            return RedirectToAction("Index", "Error", new { res.StatusCode });
         }
 
         return ViewComponent("ShowAnimalById", new { id });

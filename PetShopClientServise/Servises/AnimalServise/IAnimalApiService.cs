@@ -1,16 +1,16 @@
 ﻿using PetShopClientServise.DtoModels;
+using PetShopClientServise.Utils.Responses;
 using System.Net;
 
 namespace PetShopClientServise.Servises.AnimalServise
 {
     public interface IAnimalApiService
     {
-        public Task<(Animals? animal, HttpStatusCode statusCode)> GetAnimalById(int id);
+        public Task<ClientResponse<Animals>> GetAnimalById(int id);
         public Task<HttpStatusCode> AddAnimal(Animals animal);
         public Task<HttpStatusCode> UpdateAnimal(Animals animal);
         public Task<HttpStatusCode> DeleteAnimalById(int animalId);
-        public Task<(List<Animals> animals, HttpStatusCode statusCode)> GetAllAnimals();
-
-        public Task<(List<Animals> animals, HttpStatusCode statusCode)> GetAnimalsByCategory(int id);
+        public Task<ClientResponse<List<Animals>>> GetAllAnimals();
+        public Task<ClientResponse<List<Animals>>> GetAnimalsByCategory(int id);
     }
 }
