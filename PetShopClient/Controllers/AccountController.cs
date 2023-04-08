@@ -1,82 +1,81 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetShopClientServise.Attributes.AuthAttributes;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AccountServise;
 using System.Net;
 
-namespace PetShopClient.Controllers
+
+namespace PetShopClient.Controllers;
+
+public class AccountController : Controller
 {
-    public class AccountController : Controller
+    private readonly IAccountService _accountService;
+
+
+    public AccountController(IAccountService accountService)
     {
-        private readonly IAccountService _accountService;
+        _accountService = accountService;
+    }
 
+    public IActionResult Login()
+    {
+        return View();
+    }
 
-        public AccountController(IAccountService accountService)
-        {
-            _accountService = accountService;
-        }
+    [PetShopExceptionFilter]
+    [ClientAuthExceptionFilter("Logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await _accountService.Logout();
+        return View("Login");
+    }
 
-        public IActionResult Login()
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ClientAuthExceptionFilter("Login")]
+    public async Task<IActionResult> Login(LoginModel loginModel)
+    {
+
+        if (!ModelState.IsValid)
         {
             return View();
         }
+        var (_, status) = await _accountService.Login(loginModel);
 
-        [PetShopExceptionFilter]
-        [ClientAuthExceptionFilter("Logout")]
-        public async Task<IActionResult> Logout()
+        if (status == HttpStatusCode.OK)
         {
-            await _accountService.Logout();
+            return RedirectToAction("Index", "Home");
+        }
+        else
+        {
+            ViewBag.Status = status;
             return View("Login");
         }
+    }
 
-        public IActionResult Register()
+    [HttpPost]
+    [ClientAuthExceptionFilter("Register")]
+    public async Task<IActionResult> Register(RegisterModel registerModel)
+    {
+        if (!ModelState.IsValid)
         {
-            return View();
+            return View("Register");
         }
 
-        [HttpPost]
-        [ClientAuthExceptionFilter("Login")]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        var res = await _accountService.Register(registerModel);
+
+        if (res == HttpStatusCode.OK)
         {
-
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            var (_, status) = await _accountService.Login(loginModel);
-
-            if (status == HttpStatusCode.OK)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                ViewBag.Status = status;
-                return View("Login");
-            }
+            return View("Login");
         }
-
-        [HttpPost]
-        [ClientAuthExceptionFilter("Register")]
-        public async Task<IActionResult> Register(RegisterModel registerModel)
+        else
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Register");
-            }
-
-            var res = await _accountService.Register(registerModel);
-
-            if (res == HttpStatusCode.OK)
-            {
-                return View("Login");
-            }
-            else
-            {
-                ViewBag.Status = res;
-                return View("Register");
-            }
+            ViewBag.Status = res;
+            return View("Register");
         }
     }
 }

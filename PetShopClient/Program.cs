@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Diagnostics;
-using PetShopClient.ViewComponents;
 using PetShopClientServise.Extensions;
 using PetShopClientServise.Servises.AnimalServise;
 
@@ -10,14 +8,6 @@ builder.Services.AddTransient<IAnimalApiService, AnimalApiService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddApiServises();
 
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-
 var app = builder.Build();
 
 app.UseCors(builder =>
@@ -27,9 +17,7 @@ app.UseCors(builder =>
 
 app.UseStatusCodePagesWithReExecute("/Error/Index/{0}");
 
-
 app.UseStaticFiles();
-app.UseSession();
 app.UseRouting();
 
 

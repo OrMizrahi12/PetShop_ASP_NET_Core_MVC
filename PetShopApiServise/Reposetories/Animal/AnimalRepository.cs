@@ -53,6 +53,7 @@ public class AnimalRepository : IAnimalRepository
     }
 
     [PetShopExceptionFilter]
+    [HttpPut("UpdateAnimal")]
     public async Task<int> UpdateAnimal(Animals animal)
     {
         try

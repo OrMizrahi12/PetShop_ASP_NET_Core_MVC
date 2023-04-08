@@ -21,8 +21,9 @@ public partial class Animals
     public int Age { get; set; }
 
     [NotMapped]
-    [Required(ErrorMessage = "Please select a file")]
     public IFormFile ImageFile { get; set; }
+
+    //[Required(ErrorMessage = "Please select a file")]
     public byte[] Picture { get; set; }
 
     [Required(ErrorMessage = "Please enter a description")]

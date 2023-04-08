@@ -104,10 +104,10 @@ namespace PetShopClient.Controllers
         [PetShopExceptionFilter]
         public async Task<IActionResult> AddCategory(Categories category)
         {
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("AddCategotyForm");
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return RedirectToAction("AddCategotyForm");
+            //}
             await _categoryApiServise.AddCategory(category);
             return RedirectToAction("CategoryOverview");
         }

@@ -59,7 +59,7 @@ namespace PetShopClientServise.Servises.AnimalServise
                 animal.ImageFile = null;
             }
 
-            var response = await HttpClientInfo.HttpClientServises.PutAsJsonAsync("api/Animal", animal);
+            var response = await HttpClientInfo.HttpClientServises.PutAsJsonAsync("api/Animal/UpdateAnimal", animal);
 
             return response.StatusCode;
         }

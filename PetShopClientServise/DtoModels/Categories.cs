@@ -8,11 +8,9 @@ namespace PetShopClientServise.DtoModels;
 
 public partial class Categories
 {
-
     public int CategoryId { get; set; }
 
     [Required]
-    [Range(4, 25)]
     public string Name { get; set; }
 
     public virtual ICollection<Animals> Animals { get; } = new List<Animals>();

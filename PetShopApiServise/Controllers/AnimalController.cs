@@ -50,7 +50,7 @@ public class AnimalController : ControllerBase
     }
 
     [PetShopExceptionFilter]
-    [HttpPut]
+    [HttpPut("UpdateAnimal")]
     public async Task<IActionResult> UpdateAnimal(Animals animal)
     {
         if (!ModelState.IsValid)
