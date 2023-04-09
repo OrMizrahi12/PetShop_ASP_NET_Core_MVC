@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PetShopApiServise.Attributes.ExeptionAttributes;
 using PetShopApiServise.Models;
-using PetShopApiServise.Reposetories.Animal;
-using System.Net;
-using System.Net.Http;
+using PetShopApiServise.Reposetories.Data;
+
 
 namespace PetShopApiServise.Controllers;
 
@@ -14,18 +12,17 @@ namespace PetShopApiServise.Controllers;
 
 public class AnimalController : ControllerBase
 {
-    private readonly IAnimalRepository _animalReposetory;
-
-    public AnimalController(IAnimalRepository animalReposetory)
+    private readonly IDataRepository<Animals> _dataRepository;
+    public AnimalController(IDataRepository<Animals> dataRepository)
     {
-        _animalReposetory = animalReposetory;
+        _dataRepository = dataRepository;
     }
 
     [PetShopExceptionFilter]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Animals>>> GetAllAnimals()
     {
-        var animals = await _animalReposetory.GetAllAnimals();
+        var animals = await _dataRepository.GetAll();
         return Ok(animals);
     }
 
@@ -33,7 +30,7 @@ public class AnimalController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Animals>> GetAnimalById(int id)
     {
-        var animal = await _animalReposetory.GetAnimalById(id);
+        var animal = await _dataRepository.GetById(id);
         return Ok(animal);
     }
 
@@ -45,7 +42,7 @@ public class AnimalController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        var result = await _animalReposetory.AddAnimal(animal);
+        var result = await _dataRepository.Post(animal);
         return Ok(result);
     }
 
@@ -58,7 +55,7 @@ public class AnimalController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var result = await _animalReposetory.UpdateAnimal(animal);
+        var result = await _dataRepository.Put(animal);
         return Ok(result);
     }
 
@@ -66,15 +63,17 @@ public class AnimalController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAnimalById(int id)
     {
-        var result = await _animalReposetory.DeleteAnimalById(id);
+        var result = await _dataRepository.DeleteById(id);
+        
         return Ok(result);
     }
 
     [PetShopExceptionFilter]
-    [HttpGet("GetAnimalsByCategory/{id}")]  
+    [HttpGet("GetAnimalsByCategory/{id}")]
     public async Task<IActionResult> GetAnimalsByCategory(int id)
-    {
-        var result = await _animalReposetory.GetAnimalsByCategory(id);
-        return Ok(result);
+    {        
+        var result = await _dataRepository.GetByCondition(a => a.CategoryId == id);
+        return Ok(result.ToList());
     }
+
 }

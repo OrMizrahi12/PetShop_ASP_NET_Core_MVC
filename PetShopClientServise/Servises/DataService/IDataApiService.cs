@@ -10,7 +10,6 @@ namespace PetShopClientServise.Servises.DataService
 {
     public interface IDataApiService<T>
     {
-        public Task<ClientResponse<T>> Get(string url);
         public Task<ClientResponse<T>> GetById(string url, int id);
         public Task<HttpStatusCode> Post(string url, T item);
         public Task<HttpStatusCode> Put(string url, T item);

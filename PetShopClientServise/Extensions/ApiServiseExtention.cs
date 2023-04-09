@@ -13,18 +13,14 @@ namespace PetShopClientServise.Extensions
     {
         public static IServiceCollection AddApiServises(this IServiceCollection services)
         {
-            services.AddTransient<IAnimalApiService, AnimalApiService>();
-            services.AddTransient<ICategoryApiService, CategoryApiService>();
-            services.AddTransient<ICommentApiService, CommentApiService>();
             services.AddTransient(typeof(IDataApiService<>), typeof(DataApiService<>));
+            services.AddTransient<IAccountService, AccountService>();
 
             services.AddTransient<CategoryFilter>();
             services.AddTransient<TopFilter>();
             services.AddTransient<FiltersLogic>();
             services.AddTransient<FilterUtils>();
-            services.AddTransient<IAccountService, AccountService>();
 
-            
             return services;
         }
     }

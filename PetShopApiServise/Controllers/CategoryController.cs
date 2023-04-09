@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetShopApiServise.Attributes.ExeptionAttributes;
 using PetShopApiServise.Models;
 using PetShopApiServise.Reposetories.Category;
+using PetShopApiServise.Reposetories.Data;
 
 namespace PetShopApiServise.Controllers;
 
@@ -12,9 +13,11 @@ namespace PetShopApiServise.Controllers;
 public class CategoryController : ControllerBase
 {
     private readonly ICategoryRepository _categoryReposetory;
+    private readonly IDataRepository<Categories> _dataRepository;
 
-    public CategoryController(ICategoryRepository categoryReposetory)
+    public CategoryController(IDataRepository<Categories> dataRepository, ICategoryRepository categoryReposetory)
     {
+        _dataRepository = dataRepository;
         _categoryReposetory = categoryReposetory;
     }
 
@@ -22,7 +25,10 @@ public class CategoryController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Categories>>> GetAllCategories()
     {
-        var categories = await _categoryReposetory.GetAllCategories();
+      // var categories = await _categoryReposetory.GetAllCategories();
+        
+        var categories = await _dataRepository.GetAll();
+        
         return Ok(categories);
     }
 
@@ -30,7 +36,11 @@ public class CategoryController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Categories>> GetCategoryById(int id)
     {
-        var category = await _categoryReposetory.GetCategoryById(id);
+       // var category = await _categoryReposetory.GetCategoryById(id);
+       
+        var category = await _dataRepository.GetById(id);
+        
+
         if (category == null)
         {
             return NotFound();
@@ -47,7 +57,10 @@ public class CategoryController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var result = await _categoryReposetory.AddCategory(category);
+      //  var result = await _categoryReposetory.AddCategory(category);
+
+        var result = await _dataRepository.Post(category);
+
         if (result == -1)
         {
             return BadRequest("Invalid category data.");
@@ -64,7 +77,10 @@ public class CategoryController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        var result = await _categoryReposetory.UpdateCategory(category);
+       // var result = await _categoryReposetory.UpdateCategory(category);
+        
+        var result = await _dataRepository.Put(category);
+
         return Ok(result);
     }
 
@@ -72,7 +88,10 @@ public class CategoryController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCategoryById(int id)
     {
-        var result = await _categoryReposetory.DeleteCategoryById(id);
+       // var result = await _categoryReposetory.DeleteCategoryById(id);
+
+        var result = await _dataRepository.DeleteById(id);
+
         return Ok(result);
     }
 }

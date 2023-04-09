@@ -5,6 +5,7 @@ using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AccountServise;
 using PetShopClientServise.Servises.DataService;
 using PetShopClientServise.Servises.Filters;
+using PetShopClientServise.Utils.AnimalsUtils;
 using PetShopClientServise.Utils.Endpoints;
 using PetShopClientServise.Utils.Serialization;
 using System.Net;
@@ -46,11 +47,7 @@ namespace PetShopClient.Controllers
                 return View();
             }
 
-            if (animals.ImageFile != null)
-            {
-                animals.Picture = ImageSerialization.ImageToByteArray(animals.ImageFile);
-                animals.ImageFile = null;
-            }
+            animals = AnimalsUtils.PrepereImage(animals);
 
             await _dataApiService.Post(PetShopApiEndpoints.AddAnimal, animals);
 
@@ -77,10 +74,15 @@ namespace PetShopClient.Controllers
                 return RedirectToAction("AnimalDetailsEditor", new { id = animal.AnimalId });
             }
 
-            if (animal.ImageFile != null)
+            if(animal.ImageFile.Length == 0)
             {
-                animal.Picture = ImageSerialization.ImageToByteArray(animal.ImageFile);
+                var animalRes = await _dataApiService.GetById(PetShopApiEndpoints.GetAnimalById, animal.AnimalId);
+                animal.Picture = animalRes.Data!.Picture;
                 animal.ImageFile = null;
+            }
+            else
+            {
+                animal = AnimalsUtils.PrepereImage(animal);
             }
 
             await _dataApiService.Put(PetShopApiEndpoints.UpdateAnimal, animal);            

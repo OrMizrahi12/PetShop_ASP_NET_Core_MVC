@@ -1,4 +1,5 @@
-﻿using PetShopClientServise.Utils.HttpClientUtils;
+﻿using PetShopClientServise.Attributes.ExeptionAttributes;
+using PetShopClientServise.Utils.HttpClientUtils;
 using PetShopClientServise.Utils.Responses;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,13 @@ using System.Threading.Tasks;
 
 namespace PetShopClientServise.Servises.DataService
 {
+    [PetShopExceptionFilter]
     public class DataApiService<T> : IDataApiService<T>
     {
         public async Task<HttpStatusCode> Delete(string url, int id)
         {
             var res = await HttpClientInfo.HttpClientServises.DeleteAsync($"{url}/{id}");
             return res.StatusCode;
-        }
-
-        public async Task<ClientResponse<T>> Get(string url)
-        {
-            var response = await HttpClientInfo.HttpClientServises.GetAsync(url);
-
-            var item = await response.Content.ReadFromJsonAsync<T>();
-            
-            return new ClientResponse<T>
-            {
-                Data = item,
-                StatusCode = response.StatusCode
-            };
         }
 
         public async Task<ClientResponse<IEnumerable<T>>> GetAll(string url)

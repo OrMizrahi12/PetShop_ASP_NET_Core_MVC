@@ -61,6 +61,7 @@ public class AnimalRepository : IAnimalRepository
             var existingAnimal = await GetAnimalById(animal.AnimalId);
             byte[] imageBt = existingAnimal!.Picture;
 
+
             if (existingAnimal != null)
             {
 
@@ -81,7 +82,6 @@ public class AnimalRepository : IAnimalRepository
                 _context.Animals.Update(existingAnimal);
                 return await _context.SaveChangesAsync();
             }
-
             return -1;
         }
         catch (Exception ex)
