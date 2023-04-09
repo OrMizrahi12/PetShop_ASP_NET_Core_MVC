@@ -1,4 +1,5 @@
 ﻿using PetShopClientServise.DtoModels;
+using PetShopClientServise.Utils.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,10 @@ namespace PetShopClientServise.Servises.CommentServise
     {
         Task<HttpStatusCode> AddComment(Comments comment);
         Task<HttpStatusCode> DeleteCommentById(int id);
-        Task<(IEnumerable<Comments> comments, HttpStatusCode statusCode)> GetAllComments();
-        Task<(Comments? comment, HttpStatusCode statusCode)> GetCommentById(int id);
+        Task<ClientResponse<IEnumerable<Comments>>> GetAllComments();
+        Task<ClientResponse<Comments>> GetCommentById(int id);
         Task<HttpStatusCode> UpdateComment(Comments comment);
-        Task<(IEnumerable<Comments> comments, HttpStatusCode statusCode)> GetCommentsByAnimalId(int id);
+        Task<ClientResponse<IEnumerable<Comments>>> GetCommentsByAnimalId(int id);
     }
 
 }

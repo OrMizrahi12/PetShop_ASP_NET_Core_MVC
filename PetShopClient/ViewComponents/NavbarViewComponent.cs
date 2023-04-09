@@ -19,9 +19,9 @@ namespace PetShopClient.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var isAuthenticated = await _accountService.CheckIfAuthenticated();
-            var (userModel, _) = await _accountService.GetCurrentUser();
+            var userRes = await _accountService.GetCurrentUser();
 
-            var user = userModel ?? new UserInfoModelForCilent { Id="", Roles = new List<string> { }, Username = "Unknon" };
+            var user = userRes.Data?? new UserInfoModelForCilent { Id="", Roles = new List<string> { }, Username = "Unknon" };
             var modelView = new NavbarModel { IsAuthenticated = isAuthenticated , UserModelForClient = user };
 
             return View(modelView);

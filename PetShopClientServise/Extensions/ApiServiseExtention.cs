@@ -3,6 +3,7 @@ using PetShopClientServise.Servises.AccountServise;
 using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CategoryServise;
 using PetShopClientServise.Servises.CommentServise;
+using PetShopClientServise.Servises.DataService;
 using PetShopClientServise.Servises.Filters;
 
 
@@ -15,12 +16,15 @@ namespace PetShopClientServise.Extensions
             services.AddTransient<IAnimalApiService, AnimalApiService>();
             services.AddTransient<ICategoryApiService, CategoryApiService>();
             services.AddTransient<ICommentApiService, CommentApiService>();
+            services.AddTransient(typeof(IDataApiService<>), typeof(DataApiService<>));
+
             services.AddTransient<CategoryFilter>();
             services.AddTransient<TopFilter>();
             services.AddTransient<FiltersLogic>();
             services.AddTransient<FilterUtils>();
             services.AddTransient<IAccountService, AccountService>();
 
+            
             return services;
         }
     }

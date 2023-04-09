@@ -33,9 +33,10 @@ namespace PetShopClientServise.Attributes.AuthAttributes
             }
             else if (isAuthenticated && _requiredPermission != null)
             {
-                var (currentUser, _) = await _accountService!.GetCurrentUser();
+                var res = await _accountService!.GetCurrentUser();
 
-                if (!currentUser.Roles!.Contains(_requiredPermission))
+                
+                if (!res.Data!.Roles!.Contains(_requiredPermission))
                 {
                     context.Result = new RedirectToActionResult("Index", "Home", null);
                 }

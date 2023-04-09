@@ -1,4 +1,5 @@
 ﻿using PetShopClientServise.DtoModels;
+using PetShopClientServise.Utils.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,10 @@ namespace PetShopClientServise.Servises.CategoryServise
 {
     public interface ICategoryApiService
     {
-        public Task<(Categories? category, HttpStatusCode statusCode)> GetCategoryById(int id);
+        public Task<ClientResponse<Categories>> GetCategoryById(int id);
         public Task<HttpStatusCode> AddCategory(Categories category);
         public Task<HttpStatusCode> UpdateCategory(Categories category);
-        public Task<(IEnumerable<Categories> categories, HttpStatusCode statusCode)> GetAllCategories();
+        public Task<ClientResponse<IEnumerable<Categories>>> GetAllCategories();
         public Task<HttpStatusCode> DeleteCategoryById(int id);
     }
 }

@@ -119,6 +119,4 @@ public class AnimalRepository : IAnimalRepository
         var animals = await _context.Animals.Where(x => x.CategoryId == id).ToListAsync();
         return animals;
     }
-
-
 }

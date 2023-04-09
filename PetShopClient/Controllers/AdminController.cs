@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetShopClient.ViewComponents.Admin;
 using PetShopClientServise.Attributes.AuthAttributes;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AccountServise;
-using PetShopClientServise.Servises.AnimalServise;
-using PetShopClientServise.Servises.CategoryServise;
+using PetShopClientServise.Servises.DataService;
 using PetShopClientServise.Servises.Filters;
+using PetShopClientServise.Utils.Endpoints;
+using PetShopClientServise.Utils.Serialization;
 using System.Net;
 
 namespace PetShopClient.Controllers
@@ -14,14 +14,14 @@ namespace PetShopClient.Controllers
     [PetShopAutherizationLevel("Administrators")]
     public class AdminController : Controller
     {
-        private readonly IAnimalApiService _animalApiServise;
-        private readonly ICategoryApiService _categoryApiServise;
         private readonly IAccountService _accountService;
-        public AdminController(IAnimalApiService animalApiServise, ICategoryApiService categoryApiServise, IAccountService accountService)
+        private readonly IDataApiService<Animals> _dataApiService;
+        private readonly IDataApiService<Categories> _categoryApiServise;
+        public AdminController(IDataApiService<Categories> categoryApiServise, IAccountService accountService, IDataApiService<Animals> dataApiService)
         {
-            _animalApiServise = animalApiServise;
             _categoryApiServise = categoryApiServise;
             _accountService = accountService;
+            _dataApiService = dataApiService;
         }
 
         public IActionResult Index()
@@ -33,9 +33,8 @@ namespace PetShopClient.Controllers
         [HttpGet]
         public async Task<IActionResult> AddAnimal()
         {
-            var (categories, status) = await _categoryApiServise.GetAllCategories();
-
-            ViewData["Categories"] = categories;
+           var res = await _categoryApiServise.GetAll(PetShopApiEndpoints.GetAllCategory);
+            ViewData["Categories"] = res.Data;
             return View();
         }
 
@@ -47,7 +46,14 @@ namespace PetShopClient.Controllers
                 return View();
             }
 
-            await _animalApiServise.AddAnimal(animals);
+            if (animals.ImageFile != null)
+            {
+                animals.Picture = ImageSerialization.ImageToByteArray(animals.ImageFile);
+                animals.ImageFile = null;
+            }
+
+            await _dataApiService.Post(PetShopApiEndpoints.AddAnimal, animals);
+
             return View();
         }
 
@@ -58,7 +64,8 @@ namespace PetShopClient.Controllers
             {
                 RedirectToAction("AnimalOverview");
             }
-            await _animalApiServise.DeleteAnimalById(id);
+            await _dataApiService.Delete(PetShopApiEndpoints.DeleteAnimalById, id);
+
             return RedirectToAction("AnimalOverview");
         }
 
@@ -69,7 +76,15 @@ namespace PetShopClient.Controllers
             {
                 return RedirectToAction("AnimalDetailsEditor", new { id = animal.AnimalId });
             }
-            await _animalApiServise.UpdateAnimal(animal);
+
+            if (animal.ImageFile != null)
+            {
+                animal.Picture = ImageSerialization.ImageToByteArray(animal.ImageFile);
+                animal.ImageFile = null;
+            }
+
+            await _dataApiService.Put(PetShopApiEndpoints.UpdateAnimal, animal);            
+            
             return RedirectToAction("AnimalOverview");
         }
 
@@ -81,22 +96,25 @@ namespace PetShopClient.Controllers
                 return RedirectToAction("Index", "Error", new { HttpStatusCode.NotFound });
             }
 
-            var (categories, _) = await _categoryApiServise.GetAllCategories();
-            ViewData["Categories"] = categories;
+            var categoryRes = await _categoryApiServise.GetAll(PetShopApiEndpoints.GetAllCategory);
+            
+            ViewData["Categories"] = categoryRes.Data;
 
-            var res = await _animalApiServise.GetAnimalById(id);
-            if (res.StatusCode != HttpStatusCode.OK)
+            var animalRes = await _dataApiService.GetById(PetShopApiEndpoints.GetAnimalById, id);   
+
+            if (animalRes.StatusCode != HttpStatusCode.OK)
             {
-                return RedirectToAction("Index", "Error", new { res.StatusCode });
+                return RedirectToAction("Index", "Error", new { animalRes.StatusCode });
             }
 
-            return View(res.Data);
+            return View(animalRes.Data);
         }
 
         [PetShopExceptionFilter]
         public async Task<IActionResult> AnimalOverview()
         {
-            var res = await _animalApiServise.GetAllAnimals();
+            var res = await _dataApiService.GetAll(PetShopApiEndpoints.GetAllAnimal);
+            
             var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(res.Data!.ToList());
             return View(animalsUnderFilter);
         }
@@ -104,11 +122,11 @@ namespace PetShopClient.Controllers
         [PetShopExceptionFilter]
         public async Task<IActionResult> AddCategory(Categories category)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return RedirectToAction("AddCategotyForm");
-            //}
-            await _categoryApiServise.AddCategory(category);
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("AddCategotyForm");
+            }
+            await _categoryApiServise.Post(PetShopApiEndpoints.AddCategory, category);
             return RedirectToAction("CategoryOverview");
         }
 
@@ -118,41 +136,41 @@ namespace PetShopClient.Controllers
             {
                 RedirectToAction("CategoryOverview");
             }
-
-            var res = await _categoryApiServise.DeleteCategoryById(id);
+            
+            var res = await _categoryApiServise.Delete(PetShopApiEndpoints.DeleteCategoryById, id);
             return RedirectToAction("CategoryOverview");
         }
 
         public async Task<IActionResult> CategoryOverview()
         {
-            var (categories, status) = await _categoryApiServise.GetAllCategories();
+            var res = await _categoryApiServise.GetAll(PetShopApiEndpoints.GetAllCategory);
 
-            if (status != HttpStatusCode.OK)
+            if (res.StatusCode != HttpStatusCode.OK)
             {
-                return RedirectToAction("Index", "Error", new { status });
+                return RedirectToAction("Index", "Error", new { res.StatusCode });
             }
 
-            return View(categories);
+            return View(res.Data);
         }
 
         public async Task<IActionResult> CategoryDetailsEditor(int id)
         {
-            if(id < 0)
+            if (id < 0)
             {
                 return RedirectToAction("Index", "Error", new { HttpStatusCode.NotFound });
 
             }
-            var (category, status) = await _categoryApiServise.GetCategoryById(id);
-            var res = await _animalApiServise.GetAnimalsByCategory(id);
 
-            if ((status | res.StatusCode) != HttpStatusCode.OK)
+            var categoryRes = await _categoryApiServise.GetById(PetShopApiEndpoints.GetCategoryById, id);
+
+            var animalRes = await _dataApiService.GetAllById(PetShopApiEndpoints.GetAnimalByCategory, id);
+            if ((categoryRes.StatusCode | animalRes.StatusCode) != HttpStatusCode.OK)
             {
-                return RedirectToAction("Index", "Error", new { status });
+                return RedirectToAction("Index", "Error", new { categoryRes.StatusCode });
             }
 
-            var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(res.Data!.ToList());
-            ViewData["CategoryName"] = category!.Name;
-
+            var animalsUnderFilter = FilterColumnAnimalOverview.PreperFilterByColumn(animalRes.Data!.ToList());
+            ViewData["CategoryName"] = categoryRes.Data!.Name;
             return View(animalsUnderFilter);
         }
 
@@ -163,9 +181,9 @@ namespace PetShopClient.Controllers
 
         public async Task<IActionResult> UsersOverview()
         {
-            var (rolesList, _) = await _accountService.GetAutorizationLevels();
+            var res = await _accountService.GetAutorizationLevels();
 
-            ViewData["rolesList"] = rolesList.Value;
+            ViewData["rolesList"] = res.Data;
             return View();
         }
 
@@ -189,7 +207,7 @@ namespace PetShopClient.Controllers
                 RoleName = roleName,
                 AddTheRole = addTheRole
             };
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return ViewComponent("UserDetailsEditor", new { id = userId });
             }

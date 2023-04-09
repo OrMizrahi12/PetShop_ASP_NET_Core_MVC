@@ -3,16 +3,17 @@ using PetShopClientServise.Attributes.AuthAttributes;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AccountServise;
-using PetShopClientServise.Servises.CommentServise;
+using PetShopClientServise.Servises.DataService;
+using PetShopClientServise.Utils.Endpoints;
 
 namespace PetShopClient.Controllers
 {
     public class CommentController : Controller
     {
-        private readonly ICommentApiService _commentApiServise;
+        private readonly IDataApiService<Comments> _commentApiServise;
         private readonly IAccountService _accountService;
 
-        public CommentController(ICommentApiService commentApiServise, IAccountService accountService)
+        public CommentController(IDataApiService<Comments> commentApiServise, IAccountService accountService)
         {
             _commentApiServise = commentApiServise;
             _accountService = accountService;
@@ -31,10 +32,12 @@ namespace PetShopClient.Controllers
             {
                 return RedirectToAction("ShowAnimalById", "Home", new { id = comments.AnimalId });
             }
-            var (user,_) = await _accountService.GetCurrentUser();
+            var res = await _accountService.GetCurrentUser();
             
-            comments.UserId = user.Id;
-            await _commentApiServise.AddComment(comments!);
+            comments.UserId = res.Data!.Id;
+            
+            await _commentApiServise.Post(PetShopApiEndpoints.AddComments, comments);
+            
             return RedirectToAction("ShowAnimalById", "Home", new { id = comments.AnimalId });
         }
 
@@ -42,15 +45,13 @@ namespace PetShopClient.Controllers
         [PetShopExceptionFilter]
         public async Task<IActionResult> DeleteComment(int id, int animalId, string currentUserId)
         {
-            var (user, _) = await _accountService.GetCurrentUser();
-            if (user.Id != currentUserId)
+            var res = await _accountService.GetCurrentUser();
+            if (res.Data!.Id != currentUserId)
             {
                 return ViewComponent("ShowAnimalById", new { id = animalId });
 
             }
-
-            var (comment, _) = await _commentApiServise.GetCommentById(id);
-            await _commentApiServise.DeleteCommentById(id);
+            await _commentApiServise.Delete(PetShopApiEndpoints.DeleteCommentsById,id);
             return ViewComponent("ShowAnimalById", new { id = animalId });
         }
 

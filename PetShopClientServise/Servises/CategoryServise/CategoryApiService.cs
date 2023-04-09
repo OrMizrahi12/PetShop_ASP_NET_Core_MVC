@@ -1,6 +1,7 @@
 ﻿using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Utils.HttpClientUtils;
+using PetShopClientServise.Utils.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,36 +29,37 @@ namespace PetShopClientServise.Servises.CategoryServise
         }
 
         [PetShopExceptionFilter]
-        public async Task<(IEnumerable<Categories> categories, HttpStatusCode statusCode)> GetAllCategories()
+        public async Task<ClientResponse<IEnumerable<Categories>>> GetAllCategories()
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync("api/Category");
 
             if (response.IsSuccessStatusCode)
             {
                 var categories = await response.Content.ReadFromJsonAsync<IEnumerable<Categories>>();
-                return (categories!, HttpStatusCode.OK);
+                return new ClientResponse<IEnumerable<Categories>> { Data = categories, StatusCode = response.StatusCode};  
             }
             else
             {
-                return (new List<Categories> { }, response.StatusCode);
+                return new ClientResponse<IEnumerable<Categories>> { Data = new List<Categories>(), StatusCode = response.StatusCode };
             }
         }
 
         [PetShopExceptionFilter]
-        public async Task<(Categories? category, HttpStatusCode statusCode)> GetCategoryById(int id)
+        public async Task<ClientResponse<Categories>> GetCategoryById(int id)
         {
             var response = await HttpClientInfo.HttpClientServises.GetAsync($"api/Category/{id}");
 
             if (response.IsSuccessStatusCode)
             {
                 var category = await response.Content.ReadFromJsonAsync<Categories>();
-                return (category, HttpStatusCode.OK);
+                return new ClientResponse<Categories> { Data = category, StatusCode = response.StatusCode };
             }
             else
             {
-                return (new Categories { }, response.StatusCode);
+                return new ClientResponse<Categories> { Data = new Categories { }, StatusCode = response.StatusCode };
             }
         }
+
 
         [PetShopExceptionFilter]
         public async Task<HttpStatusCode> UpdateCategory(Categories category)

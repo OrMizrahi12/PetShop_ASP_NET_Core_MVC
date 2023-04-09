@@ -54,10 +54,10 @@ namespace PetShopClientServise.Servises.Filters
         [PetShopExceptionFilter]
         private async static Task<List<Animals>> FilterByTopComment(List<Animals> animals, int howMany)
         {
-            var (comments ,_) = await CommentApiService.GetAllCommentsStatic();
+            var res = await CommentApiService.GetAllCommentsStatic();
 
             return animals
-                   .OrderByDescending(a => comments.Count(c => a.AnimalId == c.AnimalId))
+                   .OrderByDescending(a =>res.Data!.Count(c => a.AnimalId == c.AnimalId))
                    .Take(howMany)
                    .ToList();
         }

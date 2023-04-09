@@ -44,15 +44,15 @@ public class AccountController : Controller
         {
             return View();
         }
-        var (_, status) = await _accountService.Login(loginModel);
+        var res = await _accountService.Login(loginModel);
 
-        if (status == HttpStatusCode.OK)
+        if (res.StatusCode== HttpStatusCode.OK)
         {
             return RedirectToAction("Index", "Home");
         }
         else
         {
-            ViewBag.Status = status;
+            ViewBag.Status = res.StatusCode;
             return View("Login");
         }
     }

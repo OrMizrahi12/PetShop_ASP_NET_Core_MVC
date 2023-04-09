@@ -64,7 +64,6 @@ namespace PetShopClientServise.Servises.AnimalServise
 
             return response.StatusCode;
         }
-
         [PetShopExceptionFilter]
         public async Task<ClientResponse<List<Animals>>> GetAnimalsByCategory(int id)
         {

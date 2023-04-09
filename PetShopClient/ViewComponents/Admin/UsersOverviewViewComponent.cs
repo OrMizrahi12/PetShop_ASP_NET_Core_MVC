@@ -20,18 +20,19 @@ namespace PetShopClient.ViewComponents.Admin
         [PetShopExceptionFilter]
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var (allUsersModel, usersStatus) = await _accountService.GetAllUsersInfoForClient();
-            var (rolesList, rolseStatus) = await _accountService.GetAutorizationLevels();
+            var userRes = await _accountService.GetAllUsersInfoForClient();
+
+            var rolesRes = await _accountService.GetAutorizationLevels();
 
             UsersOverviewModel usersOverviewModel = new();
 
-            if (usersStatus != HttpStatusCode.OK || rolseStatus != HttpStatusCode.OK) 
+            if (userRes.StatusCode != HttpStatusCode.OK || rolesRes.StatusCode!= HttpStatusCode.OK) 
             { 
                 return View(usersOverviewModel);
             }
 
-            usersOverviewModel.UserInfoModelForCilentsList = allUsersModel.Value!.ToList();
-            usersOverviewModel.RolesList = rolesList.Value!.ToList();    
+            usersOverviewModel.UserInfoModelForCilentsList = userRes.Data!.ToList();
+            usersOverviewModel.RolesList = rolesRes.Data!.ToList();    
 
             return View(usersOverviewModel);
         }

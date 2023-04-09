@@ -20,16 +20,16 @@ namespace PetShopClient.ViewComponents.Admin
         {
             UserDetailsEditorModel model = new();
 
-            var (user, userStatus) = await _accountService.GetUserModelForClientById(id);
-            var (rolesList, rolesStatus) = await _accountService.GetAutorizationLevels();
+            var userRes = await _accountService.GetUserModelForClientById(id);
+            var roleRes = await _accountService.GetAutorizationLevels();
 
-            if ((userStatus | rolesStatus) != HttpStatusCode.OK)
+            if ((userRes.StatusCode | roleRes.StatusCode) != HttpStatusCode.OK)
             {
                 return View(model);
             }
 
-            model.UserModelForCilent = user.Value;
-            model.RolesList = rolesList.Value!.ToList();
+            model.UserModelForCilent = userRes.Data;
+            model.RolesList = roleRes.Data!.ToList();
 
             return View(model);
         }

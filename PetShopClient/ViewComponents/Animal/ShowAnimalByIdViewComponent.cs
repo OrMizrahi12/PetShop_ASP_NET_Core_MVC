@@ -1,25 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.CustomModelsForView.Animal;
+using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AccountServise;
 using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CommentServise;
+using PetShopClientServise.Servises.DataService;
+using PetShopClientServise.Utils.Endpoints;
 using System.Net;
 
 namespace PetShopClient.ViewComponents.Animal
 {
     public class ShowAnimalByIdViewComponent : ViewComponent
     {
-        private readonly ICommentApiService _commentApiService;
+        private readonly IDataApiService<Comments> _commentApiService;
         private readonly IAccountService _accountService;
-        private readonly IAnimalApiService _animalApiService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public ShowAnimalByIdViewComponent(ICommentApiService commentApiService, IAnimalApiService animalApiService, IAccountService accountService, IHttpContextAccessor httpContextAccessor)
+        private readonly IDataApiService<Animals> _animalApiService;
+        public ShowAnimalByIdViewComponent(IDataApiService<Comments> commentApiService, IDataApiService<Animals> animalApiService, IAccountService accountService)
         {
             _commentApiService = commentApiService;
             _accountService = accountService;
             _animalApiService = animalApiService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [PetShopExceptionFilter]
@@ -27,17 +28,15 @@ namespace PetShopClient.ViewComponents.Animal
         {
             ShowAnimalByIdModel showAnimalByIdModel = new();
 
-
-
-            var res  = await _animalApiService.GetAnimalById(id);
-            var (commentsById, _) = await _commentApiService.GetCommentsByAnimalId(id);
-            var (usersList, _) = await _accountService.GetAllUsersInfoForClient();
-            var (currentUser, _) = await _accountService.GetCurrentUser();
+            var res  = await _animalApiService.GetById(PetShopApiEndpoints.GetAnimalById, id);
+            var categoryRes = await _commentApiService.GetAllById(PetShopApiEndpoints.GetCommentsByAnimalId, id);
+            var usersListRes = await _accountService.GetAllUsersInfoForClient();
+            var userRes = await _accountService.GetCurrentUser();
 
             showAnimalByIdModel.AnimalById = res.Data;
-            showAnimalByIdModel.Comments = commentsById;
-            showAnimalByIdModel.UsersList = usersList.Value!.ToList();
-            showAnimalByIdModel.CurrentUser = currentUser;
+            showAnimalByIdModel.Comments = categoryRes.Data;
+            showAnimalByIdModel.UsersList = usersListRes.Data!.ToList();
+            showAnimalByIdModel.CurrentUser = userRes.Data;
 
             return View(showAnimalByIdModel);
         }

@@ -2,6 +2,7 @@
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Utils.HttpClientUtils;
+using PetShopClientServise.Utils.Responses;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -26,34 +27,34 @@ public class CommentApiService : ICommentApiService
     }
 
     [PetShopExceptionFilter]
-    public async Task<(IEnumerable<Comments> comments, HttpStatusCode statusCode)> GetAllComments()
+    public async Task<ClientResponse<IEnumerable<Comments>>> GetAllComments()
     {
         var response = await HttpClientInfo.HttpClientServises.GetAsync("api/Comment");
 
         if (response.IsSuccessStatusCode)
         {
             var comments = await response.Content.ReadFromJsonAsync<IEnumerable<Comments>>();
-            return (comments!, HttpStatusCode.OK);
+            return new ClientResponse<IEnumerable<Comments>> { Data = comments, StatusCode = HttpStatusCode.OK };
         }
         else
         {
-            return (new List<Comments> { }, response.StatusCode);
+            return new ClientResponse<IEnumerable<Comments>> { Data = new List<Comments> { }, StatusCode = response.StatusCode };
         }
     }
 
     [PetShopExceptionFilter]
-    public async Task<(Comments? comment, HttpStatusCode statusCode)> GetCommentById(int id)
+    public async Task<ClientResponse<Comments>> GetCommentById(int id)
     {
         var response = await HttpClientInfo.HttpClientServises.GetAsync($"api/Comment/{id}");
 
         if (response.IsSuccessStatusCode)
         {
             var comment = await response.Content.ReadFromJsonAsync<Comments>();
-            return (comment, HttpStatusCode.OK);
+            return new ClientResponse<Comments> { Data = comment, StatusCode = response.StatusCode };
         }
         else
         {
-            return (new Comments { }, response.StatusCode);
+            return new ClientResponse<Comments> { Data = new Comments { }, StatusCode = response.StatusCode };
         }
     }
 
@@ -64,37 +65,37 @@ public class CommentApiService : ICommentApiService
         return response.StatusCode;
     }
 
+    
     [PetShopExceptionFilter]
-    public async Task<(IEnumerable<Comments> comments, HttpStatusCode statusCode)> GetCommentsByAnimalId(int id)
+    public async Task<ClientResponse<IEnumerable<Comments>>> GetCommentsByAnimalId(int id)
     {
         var response = await HttpClientInfo.HttpClientServises.GetAsync($"api/Comment/GetCommentsByAnimalId/{id}");
 
         if (response.IsSuccessStatusCode)
         {
             var comments = await response.Content.ReadFromJsonAsync<IEnumerable<Comments>>();
-            return (comments!, HttpStatusCode.OK);
+            return new ClientResponse<IEnumerable<Comments>> { Data = comments, StatusCode = response.StatusCode };
         }
         else
         {
-            return (new List<Comments> { }, response.StatusCode);
+            return new ClientResponse<IEnumerable<Comments>> {Data = new List<Comments> { }, StatusCode=response.StatusCode };
         }
     }
 
     [PetShopExceptionFilter]
-    public static async Task<(IEnumerable<Comments> comments, HttpStatusCode statusCode)> GetAllCommentsStatic()
+    public static async Task<ClientResponse<IEnumerable<Comments>>> GetAllCommentsStatic()
     {
         var response = await HttpClientInfo.HttpClientServises.GetAsync("api/Comment");
 
         if (response.IsSuccessStatusCode)
         {
             var comments = await response.Content.ReadFromJsonAsync<IEnumerable<Comments>>();
-            return (comments!, HttpStatusCode.OK);
+
+            return new ClientResponse<IEnumerable<Comments>> { Data= comments, StatusCode = response.StatusCode };
         }
         else
         {
-            return (new List<Comments> { }, response.StatusCode);
+            return new ClientResponse<IEnumerable<Comments>> { Data = new List<Comments> { }, StatusCode = response.StatusCode };       
         }
     }
-
-
 }

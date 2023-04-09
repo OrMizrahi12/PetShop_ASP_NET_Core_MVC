@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetShopClientServise.Attributes.ExeptionAttributes;
+using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AccountServise;
 using PetShopClientServise.Servises.AnimalServise;
 using PetShopClientServise.Servises.CategoryServise;
 using PetShopClientServise.Servises.CommentServise;
+using PetShopClientServise.Servises.DataService;
 using PetShopClientServise.Servises.Filters;
+using PetShopClientServise.Utils.Endpoints;
 using PetShopClientServise.Utils.Pagination;
 using System.Net;
 
@@ -12,16 +15,12 @@ namespace PetShopClient.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IAnimalApiService _animalApiServise;
-    private readonly ICommentApiService _commentApiServise;
-    private readonly ICategoryApiService _categoryApiServise;
-    private readonly IAccountService _accountService;
-    public HomeController(IAnimalApiService animalApiServise, ICommentApiService commentApiServise, ICategoryApiService categoryApiServise, IAccountService accountService)
+    private readonly IDataApiService<Categories> _categoryApiServise;
+    private readonly IDataApiService<Animals> _animalApiService;
+    public HomeController(IDataApiService<Categories> categoryApiServise, IDataApiService<Animals> animalApiService)
     {
-        _animalApiServise = animalApiServise;
-        _commentApiServise = commentApiServise;
         _categoryApiServise = categoryApiServise;
-        _accountService = accountService;
+        _animalApiService = animalApiService;
     }
 
     [PetShopExceptionFilter]
@@ -29,18 +28,20 @@ public class HomeController : Controller
     {
         ViewData["CateforiesArrayFiltersId"] = CategoryFilter.CategoryIdArray ?? new List<int>();
 
-        var (categories, _) = await _categoryApiServise.GetAllCategories();
-        ViewData["Categories"] = categories;
+        var categoryRes = await _categoryApiServise.GetAll(PetShopApiEndpoints.GetAllCategory);
+        
 
-        var res = await _animalApiServise.GetAllAnimals();
+        ViewData["Categories"] = categoryRes.Data;
 
-        if (res.StatusCode != HttpStatusCode.OK)
+        var animalRes = await _animalApiService.GetAll(PetShopApiEndpoints.GetAllAnimal);
+
+        if (animalRes.StatusCode != HttpStatusCode.OK)
         {
-            return RedirectToAction("Index", "Error", new { status = res.StatusCode });
+            return RedirectToAction("Index", "Error", new { status = animalRes.StatusCode });
         }
 
-        var animals = res.Data;
-        animals = await FiltersLogic.PreperFilters(animals!);
+        var animals = animalRes.Data;
+        animals = await FiltersLogic.PreperFilters(animals!.ToList()!);
         
         //if(next)
         //{
@@ -59,7 +60,8 @@ public class HomeController : Controller
     [PetShopExceptionFilter]
     public async Task<IActionResult> ShowAnimalById(int id)
     {
-        var res = await _animalApiServise.GetAnimalById(id);
+
+        var res = await _animalApiService.GetById(PetShopApiEndpoints.GetAnimalById, id);
 
         if(res.StatusCode != HttpStatusCode.OK)
         {

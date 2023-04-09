@@ -5,6 +5,7 @@ using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.DtoModels.AccountModels;
 using PetShopClientServise.Utils.HttpClientUtils;
+using PetShopClientServise.Utils.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,20 +21,20 @@ namespace PetShopClientServise.Servises.AccountServise
     public class AccountService : IAccountService
     {
         [PetShopExceptionFilter]
-        public async Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> Login(LoginModel loginModel)
+        public async Task<ClientResponse<UserInfoModelForCilent>> Login(LoginModel loginModel)
         {
             await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/Login", loginModel);
             return GetUserModelForClient(loginModel.Username!).Result;
         }
 
         [PetShopExceptionFilter]
-        public static async Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> GetUserModelForClient(string username)
+        public static async Task<ClientResponse<UserInfoModelForCilent>> GetUserModelForClient(string username)
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync($"api/Account/GetUserInfoForClient/{username}");
 
             var userModel = await res.Content.ReadFromJsonAsync<UserInfoModelForCilent>();
 
-            return (userModel!, res.StatusCode);
+            return new ClientResponse<UserInfoModelForCilent> { Data = userModel, StatusCode = res.StatusCode };
         }
 
         [PetShopExceptionFilter]
@@ -51,13 +52,13 @@ namespace PetShopClientServise.Servises.AccountServise
         }
 
         [PetShopExceptionFilter]
-        public async Task<(ActionResult<IEnumerable<UserInfoModelForCilent>>, HttpStatusCode)> GetAllUsersInfoForClient()
+        public async Task<ClientResponse<IEnumerable<UserInfoModelForCilent>>> GetAllUsersInfoForClient()
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/GetAllUsersInfoForClient");
 
             var usersModelList = await res.Content.ReadFromJsonAsync<IEnumerable<UserInfoModelForCilent>>();
 
-            return (usersModelList!.ToList(), res.StatusCode);
+            return new ClientResponse<IEnumerable<UserInfoModelForCilent>> { Data = usersModelList, StatusCode = res.StatusCode };
         }
 
         [PetShopExceptionFilter]
@@ -90,23 +91,23 @@ namespace PetShopClientServise.Servises.AccountServise
         }
 
         [PetShopExceptionFilter]
-        public async Task<(UserInfoModelForCilent, HttpStatusCode)> GetCurrentUser()
+        public async Task<ClientResponse<UserInfoModelForCilent>> GetCurrentUser()
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/GetCurrentUser");
             var userModel = await res.Content.ReadFromJsonAsync<UserInfoModelForCilent>();
 
             if(res.StatusCode == HttpStatusCode.OK)
             {
-                return (userModel!, res.StatusCode);
+                return new ClientResponse<UserInfoModelForCilent> { Data = userModel, StatusCode = res.StatusCode };
             }
             else
             {
-                return(null!, res.StatusCode);   
+                return new ClientResponse<UserInfoModelForCilent> { Data = new UserInfoModelForCilent() { }, StatusCode = res.StatusCode };   
             }
         }
 
         [PetShopExceptionFilter]
-        public async Task<(ActionResult<UserInfoModelForCilent>, HttpStatusCode)> GetUserModelForClientById(string id)
+        public async Task<ClientResponse<UserInfoModelForCilent>> GetUserModelForClientById(string id)
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync($"api/Account/GetUserModelForClientById/{id}");
 
@@ -114,16 +115,16 @@ namespace PetShopClientServise.Servises.AccountServise
 
             if (res.StatusCode == HttpStatusCode.OK)
             {
-                return (userModel!, res.StatusCode);
+                return new ClientResponse<UserInfoModelForCilent> { Data = userModel, StatusCode = res.StatusCode };
             }
             else
             {
-                return(new UserInfoModelForCilent() { }!, res.StatusCode);
+                return new ClientResponse<UserInfoModelForCilent> { Data = new UserInfoModelForCilent { }, StatusCode = res.StatusCode };
             }
         }
 
         [PetShopExceptionFilter]
-        public async Task<(ActionResult<List<IdentityRole>>, HttpStatusCode)> GetAutorizationLevels()
+        public async Task<ClientResponse<IEnumerable<IdentityRole>>> GetAutorizationLevels()
         {
             var res = await HttpClientInfo.HttpClientServises.GetAsync("api/Account/GetAutorizationLevels"); 
 
@@ -131,11 +132,11 @@ namespace PetShopClientServise.Servises.AccountServise
 
             if(res.StatusCode == HttpStatusCode.OK)
             {
-                return (rolesList!, HttpStatusCode.OK);  
+                return new ClientResponse<IEnumerable<IdentityRole>> { Data = rolesList, StatusCode = res.StatusCode };
             }
             else
             {
-                return(new List<IdentityRole>() { }, res.StatusCode);
+                return new ClientResponse<IEnumerable<IdentityRole>> { Data = new List<IdentityRole> { }, StatusCode = res.StatusCode };
             }
         }
     }
