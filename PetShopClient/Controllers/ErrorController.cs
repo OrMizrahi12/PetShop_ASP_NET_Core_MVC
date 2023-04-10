@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace PetShopClient.Controllers
+namespace PetShopClient.Controllers;
+
+public class ErrorController : Controller
 {
-    public class ErrorController : Controller
+    public IActionResult Index(int status = 404)
     {
-        public IActionResult Index(int status = 404)
-        {
-            return View(status);
-        }
+        return View(status);
     }
 }

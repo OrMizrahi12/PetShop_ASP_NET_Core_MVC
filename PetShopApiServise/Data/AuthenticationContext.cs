@@ -2,12 +2,11 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace PetShopApiServise.Data
+namespace PetShopApiServise.Data;
+
+public class AuthenticationContext : IdentityDbContext<IdentityUser>
 {
-    public class AuthenticationContext : IdentityDbContext<IdentityUser>
+    public AuthenticationContext(DbContextOptions<AuthenticationContext> options) : base(options)
     {
-        public AuthenticationContext(DbContextOptions<AuthenticationContext> options) : base(options)
-        {
-        }
     }
 }

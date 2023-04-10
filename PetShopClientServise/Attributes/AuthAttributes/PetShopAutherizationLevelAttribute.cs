@@ -1,45 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PetShopClientServise.Servises.AccountServise;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PetShopClientServise.Attributes.AuthAttributes
+
+namespace PetShopClientServise.Attributes.AuthAttributes;
+
+public class PetShopAutherizationLevelAttribute : Attribute, IAsyncAuthorizationFilter
 {
-    public class PetShopAutherizationLevelAttribute : Attribute, IAsyncAuthorizationFilter
+
+    private readonly string? _requiredPermission;
+    private readonly IAccountService? _accountService;
+
+    public PetShopAutherizationLevelAttribute(string requiredPermission)
     {
+        _requiredPermission = requiredPermission;
+        _accountService = new AccountService();
+    }
+    public PetShopAutherizationLevelAttribute() { }
 
-        private readonly string? _requiredPermission;
-        private readonly IAccountService? _accountService;
+    public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+    {
+        bool isAuthenticated = await _accountService!.CheckIfAuthenticated();
 
-        public PetShopAutherizationLevelAttribute(string requiredPermission)
+        if (!isAuthenticated)
         {
-            _requiredPermission = requiredPermission;
-            _accountService = new AccountService();
+            context.Result = new RedirectToActionResult("Login", "Account", null);
         }
-        public PetShopAutherizationLevelAttribute() { }
-
-        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        else if (isAuthenticated && _requiredPermission != null)
         {
-            bool isAuthenticated = await _accountService!.CheckIfAuthenticated();
+            var res = await _accountService!.GetCurrentUser();
 
-            if (!isAuthenticated)
+            
+            if (!res.Data!.Roles!.Contains(_requiredPermission))
             {
-                context.Result = new RedirectToActionResult("Login", "Account", null);
-            }
-            else if (isAuthenticated && _requiredPermission != null)
-            {
-                var res = await _accountService!.GetCurrentUser();
-
-                
-                if (!res.Data!.Roles!.Contains(_requiredPermission))
-                {
-                    context.Result = new RedirectToActionResult("Index", "Home", null);
-                }
+                context.Result = new RedirectToActionResult("Index", "Home", null);
             }
         }
     }

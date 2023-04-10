@@ -2,43 +2,37 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PetShopClientServise.Attributes.ExeptionAttributes
+namespace PetShopClientServise.Attributes.ExeptionAttributes;
+
+public class ClientAuthExceptionFilterAttribute : ExceptionFilterAttribute
 {
-    public class ClientAuthExceptionFilterAttribute : ExceptionFilterAttribute
+    private readonly string _viewName;
+
+    public ClientAuthExceptionFilterAttribute(string viewName)
     {
-        private readonly string _viewName;
+        _viewName = viewName;
+    }
 
-        public ClientAuthExceptionFilterAttribute(string viewName)
+    public override void OnException(ExceptionContext context)
+    {
+        if (context.Exception is HttpException exception)
         {
-            _viewName = viewName;
+            context.ExceptionHandled = true;
+            context.Result = new ViewResult
+            {
+                ViewName = _viewName,
+                ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), context.ModelState) { { "Status", exception.StatusCode } }
+            };
         }
-
-        public override void OnException(ExceptionContext context)
+        else
         {
-            if (context.Exception is HttpException exception)
+            context.ExceptionHandled = true;
+            context.Result = new ViewResult
             {
-                context.ExceptionHandled = true;
-                context.Result = new ViewResult
-                {
-                    ViewName = _viewName,
-                    ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), context.ModelState) { { "Status", exception.StatusCode } }
-                };
-            }
-            else
-            {
-                context.ExceptionHandled = true;
-                context.Result = new ViewResult
-                {
-                    ViewName = _viewName,
-                    ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), context.ModelState) { { "Status", "Something went wrong." } }
-                };
-            }
+                ViewName = _viewName,
+                ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), context.ModelState) { { "Status", "Something went wrong." } }
+            };
         }
     }
 }

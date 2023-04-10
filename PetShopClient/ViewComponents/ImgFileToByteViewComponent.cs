@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace PetShopClient.ViewComponents
+namespace PetShopClient.ViewComponents;
+
+public class ImgFileToByteViewComponent : ViewComponent
 {
-    public class ImgFileToByteViewComponent : ViewComponent
+    public async Task<byte[]> InvokeAsync(IFormFile file)
     {
-        public async Task<byte[]> InvokeAsync(IFormFile file)
+        if (file == null)
         {
-            if (file == null)
-            {
-                return null!;
-            }
-            using var memoryStream = new MemoryStream();
-            await file.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
+            return null!;
         }
+        using var memoryStream = new MemoryStream();
+        await file.CopyToAsync(memoryStream);
+        return memoryStream.ToArray();
     }
 }

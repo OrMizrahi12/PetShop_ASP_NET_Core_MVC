@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace PetShopClient.ViewComponents
+namespace PetShopClient.ViewComponents;
+
+public class ByteToImgFileViewComponent : ViewComponent
 {
-    public class ByteToImgFileViewComponent : ViewComponent
+    public string Invoke(byte[] imgByte)
     {
-        public string Invoke(byte[] imgByte)
+        if (imgByte == null)
         {
-            if (imgByte == null)
-            {
-                return "";
-            }
-            var base64 = Convert.ToBase64String(imgByte);
-            var imgSrc = string.Format("data:image/gif;base64,{0}", base64);
-            return imgSrc;
+            return "";
         }
+        var base64 = Convert.ToBase64String(imgByte);
+        var imgSrc = string.Format("data:image/gif;base64,{0}", base64);
+        return imgSrc;
     }
 }

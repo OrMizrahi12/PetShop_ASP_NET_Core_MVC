@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PetShopApiServise.Models.AccountModels
-{
-    public class RoleModel
-    {
+namespace PetShopApiServise.Models.AccountModels;
 
-        [Required]
-        public string? RoleName { get; set; }
-    }
+public class RoleModel
+{
+
+    [Required]
+    public string? RoleName { get; set; }
 }

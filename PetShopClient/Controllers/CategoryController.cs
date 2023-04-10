@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace PetShopClient.Controllers
+namespace PetShopClient.Controllers;
+
+public class CategoryController : Controller
 {
-    public class CategoryController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-
+        return View();
     }
+
+
 }

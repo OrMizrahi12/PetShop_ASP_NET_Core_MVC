@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
-using PetShopClientServise.Servises.AccountServise;
-using PetShopClientServise.Servises.AnimalServise;
-using PetShopClientServise.Servises.CategoryServise;
-using PetShopClientServise.Servises.CommentServise;
 using PetShopClientServise.Servises.DataService;
 using PetShopClientServise.Servises.Filters;
 using PetShopClientServise.Utils.Endpoints;
-using PetShopClientServise.Utils.Pagination;
 using System.Net;
 
 namespace PetShopClient.Controllers;

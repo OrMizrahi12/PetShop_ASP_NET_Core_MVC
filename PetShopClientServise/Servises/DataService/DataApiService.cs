@@ -1,76 +1,70 @@
 ﻿using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.Utils.HttpClientUtils;
 using PetShopClientServise.Utils.Responses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PetShopClientServise.Servises.DataService
+namespace PetShopClientServise.Servises.DataService;
+
+[PetShopExceptionFilter]
+public class DataApiService<T> : IDataApiService<T>
 {
-    [PetShopExceptionFilter]
-    public class DataApiService<T> : IDataApiService<T>
+    public async Task<HttpStatusCode> Delete(string url, int id)
     {
-        public async Task<HttpStatusCode> Delete(string url, int id)
+        var res = await HttpClientInfo.HttpClientServises.DeleteAsync($"{url}/{id}");
+        return res.StatusCode;
+    }
+
+    public async Task<ClientResponse<IEnumerable<T>>> GetAll(string url)
+    {
+        var response = await HttpClientInfo.HttpClientServises.GetAsync(url);
+
+        var item = await response.Content.ReadFromJsonAsync<IEnumerable<T>>();
+
+        return new ClientResponse<IEnumerable<T>>
         {
-            var res = await HttpClientInfo.HttpClientServises.DeleteAsync($"{url}/{id}");
-            return res.StatusCode;
-        }
+            Data = item,
+            StatusCode = response.StatusCode
+        };
+    }
 
-        public async Task<ClientResponse<IEnumerable<T>>> GetAll(string url)
+    public async Task<ClientResponse<IEnumerable<T>>> GetAllById(string url, int id)
+    {
+        var response = await HttpClientInfo.HttpClientServises.GetAsync($"{url}/{id}");
+
+        var elements = await response.Content.ReadFromJsonAsync<IEnumerable<T>>();
+
+        return new ClientResponse<IEnumerable<T>>
         {
-            var response = await HttpClientInfo.HttpClientServises.GetAsync(url);
+            Data = elements,
+            StatusCode = response.StatusCode
+        };
+    }
 
-            var item = await response.Content.ReadFromJsonAsync<IEnumerable<T>>();
+    public async Task<ClientResponse<T>> GetById(string url, int id)
+    {
+        var response = await HttpClientInfo.HttpClientServises.GetAsync($"{url}/{id}");
 
-            return new ClientResponse<IEnumerable<T>>
-            {
-                Data = item,
-                StatusCode = response.StatusCode
-            };
-        }
+        var item = await response.Content.ReadFromJsonAsync<T>();
 
-        public async Task<ClientResponse<IEnumerable<T>>> GetAllById(string url, int id)
+        return new ClientResponse<T>
         {
-            var response = await HttpClientInfo.HttpClientServises.GetAsync($"{url}/{id}");
+            Data = item,
+            StatusCode = response.StatusCode
+        };
+    }
 
-            var elements = await response.Content.ReadFromJsonAsync<IEnumerable<T>>();
+    public async Task<HttpStatusCode> Post(string url, T item)
+    {
+        var response = await HttpClientInfo.HttpClientServises.PostAsJsonAsync(url, item);
 
-            return new ClientResponse<IEnumerable<T>>
-            {
-                Data = elements,
-                StatusCode = response.StatusCode
-            };
-        }
+        return response.StatusCode;
+    }
 
-        public async Task<ClientResponse<T>> GetById(string url, int id)
-        {
-            var response = await HttpClientInfo.HttpClientServises.GetAsync($"{url}/{id}");
+    public async Task<HttpStatusCode> Put(string url, T item)
+    {
+        var response = await HttpClientInfo.HttpClientServises.PutAsJsonAsync(url, item);
 
-            var item = await response.Content.ReadFromJsonAsync<T>();
-
-            return new ClientResponse<T>
-            {
-                Data = item,
-                StatusCode = response.StatusCode
-            };
-        }
-
-        public async Task<HttpStatusCode> Post(string url, T item)
-        {
-            var response = await HttpClientInfo.HttpClientServises.PostAsJsonAsync(url, item);
-
-            return response.StatusCode;
-        }
-
-        public async Task<HttpStatusCode> Put(string url, T item)
-        {
-            var response = await HttpClientInfo.HttpClientServises.PutAsJsonAsync(url, item);
-
-            return response.StatusCode;
-        }
+        return response.StatusCode;
     }
 }
