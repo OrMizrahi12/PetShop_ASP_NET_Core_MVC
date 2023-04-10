@@ -52,40 +52,78 @@
 </div>
         
         <ul class="comments-list">
+@foreach (var comment in Model.Comments!.ToList())
+{
+        var userName = comment?.UserId != null ?
+            usersList!.FirstOrDefault(u => u.Id == comment.UserId)?.Username  : "Unknown";
+        var formId = "update-comment-form-" + comment!.CommentId; 
+        var deleteFormId = "delete-form-" + comment.CommentId; 
 
-        @foreach (var comment in Model.Comments!.ToList())
+    <li class="comment-item">
+        @if (comment!.UserId == Model.CurrentUser!.Id)
         {
-            var userName = comment?.UserId != null ?
-            usersList!.FirstOrDefault(u => u.Id == comment.UserId)?.Username 
-            : "Unknown";
+            <button class="update-comment" onclick="showForm('@formId')">Update comment</button>
+            <form 
+                id="@deleteFormId" 
+                method="post" 
+                asp-action="DeleteComment" 
+                asp-controller="Comment" 
+                asp-route-animalId="@Model.AnimalById.AnimalId" 
+                asp-route-id="@comment.CommentId"
+                asp-route-currentUserId="@Model.CurrentUser.Id"
+            >
+                <button type="submit" class="delete-comment">Delete comment</button>
+            </form> 
+       
             
-            <li 
-                class="comment-item">
-                @if (comment!.UserId == Model.CurrentUser!.Id)
-                {
-                    <form 
-                        id="delete-form" 
-                        method="post" 
-                        asp-action="DeleteComment" 
-                        asp-controller="Comment" 
-                        asp-route-animalId="@Model.AnimalById.AnimalId" 
-                        asp-route-id="@comment.CommentId"
-                        asp-route-currentUserId="@Model.CurrentUser.Id"
-                    >
-                       <button type="submit" class="delete-comment">Delete comment</button>
-                    </form>        
-                }
-                @comment!.Comment
-                <p>By: @userName</p>
-            </li>
-        }                
-    
+            <br />
+
+            <form 
+                id="@formId" 
+                method="post" 
+                asp-action="UpdateComment" 
+                asp-controller="Comment"
+                asp-route-txtComment=""
+                hidden
+            >
+                <input class="input-comment-txt" type="text" name="commentTxt" />
+                <input hidden name="commentId" value="@comment.CommentId" />
+                <input hidden name="animalId" value="@comment.AnimalId" />
+                <button type="submit" class="submit-comment">Submit changes</button>
+            </form>
+        }
+        
+        @comment!.Comment
+        <p>By: @userName</p>
+
+             <script>
+                $(document).ready(function () {
+                    $('#@formId').validate({
+                        rules: {
+                            commentTxt: {
+                                required: true,
+                                minlength:5
+                            }
+                        },
+                        messages: {
+                            commentTxt: {
+                                required: "Please enter a comment",
+                                minlength: "Comment should be at least 5 characters long"
+                            }
+                        },
+                        submitHandler: function (form) {
+                            form.submit();
+                        }
+                    });
+                });
+            </script>
+    </li>
+
+
+}
+
     </ul>
-
      </div>
-
-     
-
 </div>
 
 
@@ -94,6 +132,7 @@
         var hideCommentsBtn = document.querySelector('.hide-comments-btn');
         var commentItems = document.querySelectorAll('.comment-item');
         var commentDetails = document.querySelectorAll('.comments-list');
+
 
         commentDetails.forEach(function (commentDetail) {
             commentDetail.style.display = 'none';
@@ -117,6 +156,16 @@
             hideCommentsBtn.style.display = 'none';
             showCommentsBtn.style.display = 'block';
         });
+
+         var btnShowForm = document.getElementById("btnShowForm");
+         btnShowForm.addEventListener("click", showForm);
+
+        function showForm(formId) {
+            var form = document.getElementById(formId);            
+            form.hidden = form.hidden ? false : true;
+        }
     </script>
-}
+
+
+
 

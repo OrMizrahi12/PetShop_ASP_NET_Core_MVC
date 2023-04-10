@@ -4,6 +4,7 @@ using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
 using PetShopClientServise.Servises.AccountServise;
 using PetShopClientServise.Servises.DataService;
+using PetShopClientServise.Utils.CommentUtils;
 using PetShopClientServise.Utils.Endpoints;
 
 namespace PetShopClient.Controllers;
@@ -33,11 +34,11 @@ public class CommentController : Controller
             return RedirectToAction("ShowAnimalById", "Home", new { id = comments.AnimalId });
         }
         var res = await _accountService.GetCurrentUser();
-        
+
         comments.UserId = res.Data!.Id;
-        
+
         await _commentApiServise.Post(PetShopApiEndpoints.AddComments, comments);
-        
+
         return RedirectToAction("ShowAnimalById", "Home", new { id = comments.AnimalId });
     }
 
@@ -51,7 +52,14 @@ public class CommentController : Controller
             return ViewComponent("ShowAnimalById", new { id = animalId });
 
         }
-        await _commentApiServise.Delete(PetShopApiEndpoints.DeleteCommentsById,id);
+        await _commentApiServise.Delete(PetShopApiEndpoints.DeleteCommentsById, id);
+        return ViewComponent("ShowAnimalById", new { id = animalId });
+    }
+
+    public async Task<IActionResult> UpdateComment(int commentId, string commentTxt, int animalId)
+    {
+        var comment = await CommentUtils.PrepereComments(commentId, commentTxt);
+        await _commentApiServise.Put(PetShopApiEndpoints.UpdateComments, comment!);
         return ViewComponent("ShowAnimalById", new { id = animalId });
     }
 

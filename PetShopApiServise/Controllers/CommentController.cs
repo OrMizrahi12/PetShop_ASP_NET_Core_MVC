@@ -61,9 +61,7 @@ public class CommentController : ControllerBase
         }
 
         var result = await _dataRepository.Put(comment);
-
         return Ok(result);
-
     }
 
     [PetShopExceptionFilter]

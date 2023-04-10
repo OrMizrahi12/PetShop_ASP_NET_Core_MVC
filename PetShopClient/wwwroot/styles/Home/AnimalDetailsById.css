@@ -212,3 +212,53 @@
         color: #fff;
         cursor: pointer;
     }
+
+.update-comment {
+    color: orange;
+    text-decoration: none;
+    border: 1px solid orange;
+    border-radius: 4px;
+    padding: 4px 8px;
+    transition: background-color 0.3s ease-in-out;
+    float : left;
+    margin-top: -5px; 
+    
+  
+}
+
+.update-comment:hover {
+    background-color:orange;
+    color: #fff;
+    cursor: pointer;
+}
+
+.submit-comment {
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #007BFF;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px;
+    transition: background-color 0.3s ease-in-out;
+    background-color: dodgerblue;
+}
+
+.submit-comment:hover {
+    background-color: darkblue;
+    color: #fff;
+    cursor: pointer;
+}
+
+.input-comment-txt{
+
+    width: 300px;
+    height: 40px;
+    padding: 10px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+}
