@@ -45,3 +45,14 @@ nav.nav-menu a:hover {
 .item-rigth{
     float:right;
 }
+
+.hello-user {
+    color: white;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-top: 15px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

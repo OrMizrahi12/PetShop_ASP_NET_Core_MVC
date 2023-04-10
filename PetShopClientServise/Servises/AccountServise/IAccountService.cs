@@ -20,5 +20,8 @@ public interface IAccountService
     public Task<ClientResponse<UserInfoModelForCilent>> GetUserModelForClientById(string id);
     public Task<ClientResponse<IEnumerable<IdentityRole>>> GetAutorizationLevels();
 
+    public Task<HttpStatusCode> ChangeUsername(ChangeUsernameModel changeUsernameModel);
+    public Task<HttpStatusCode> ChangePassword(ChangePasswordModel changePasswordModel);
+
     
 }

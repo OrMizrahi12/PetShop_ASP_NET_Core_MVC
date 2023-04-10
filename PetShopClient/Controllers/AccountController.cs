@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetShopClientServise.Attributes.ExeptionAttributes;
 using PetShopClientServise.DtoModels;
+using PetShopClientServise.DtoModels.AccountModels;
 using PetShopClientServise.Servises.AccountServise;
 using System.Net;
 
@@ -46,7 +47,7 @@ public class AccountController : Controller
         }
         var res = await _accountService.Login(loginModel);
 
-        if (res.StatusCode== HttpStatusCode.OK)
+        if (res.StatusCode == HttpStatusCode.OK)
         {
             return RedirectToAction("Index", "Home");
         }
@@ -78,4 +79,21 @@ public class AccountController : Controller
             return View("Register");
         }
     }
+
+    public IActionResult UserPage()
+    {
+        return ViewComponent("UserPage");
+    }
+
+    public async Task<IActionResult> ChangePassword(string newPassword, string oldPassword)
+    {
+        var res = await _accountService.ChangePassword(
+            new ChangePasswordModel
+            {
+                NewPassword = newPassword,
+                OldPassword = oldPassword
+            });
+        return RedirectToAction("UserPage");
+    }
+
 }

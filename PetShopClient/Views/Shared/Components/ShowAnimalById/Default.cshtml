@@ -36,10 +36,12 @@
             <div class="animal-age"><strong>Age:</strong> @Model.AnimalById.Age</div>
             <div class="animal-category"><strong>Category:</strong>@CategoryName</div>
         </div>
+        <div class="description-wrapper">
+            <h3 class="description-title">Description:</h3>
+            <p class="description-content">@Model.AnimalById.Description</p>
+        </div>
         <h2 class="comments-title">Comments</h2>
-
         <div class="addCommentForm">
-
         <form id="add-comment-form" asp-controller="Comment" asp-action="AddCommentOnAnimal" method="post">
             <input type="text" name="Comment" placeholder="Add comment" />
             <input hidden name="AnimalId" value="@Model.AnimalById.AnimalId" />

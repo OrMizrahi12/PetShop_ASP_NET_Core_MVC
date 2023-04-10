@@ -1,0 +1,63 @@
+﻿@model PetShopClientServise.CustomModelsForView.Account.UserPageModel
+
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <title>@ViewBag.Title</title>
+  <link rel="stylesheet" href="~/styles/Account/UserPage.css" />
+</head>
+@{
+  ViewData["Title"] = "User Page";
+}
+@{
+  Layout = "_Layout";
+}
+<div class="container">
+<div class="block-left">
+  <div class="change-pass-block">
+    <h2>Change Password</h2>
+    <form>
+      <label for="old-password">Old Password:</label>
+      <input type="password" id="old-password" name="old-password"><br>
+      <label for="new-password">New Password:</label>
+      <input type="password" id="new-password" name="new-password"><br>
+      <input type="submit" value="Change password">
+    </form>
+  </div>
+
+  <div class="change-username-block">
+          <h2>Change Username</h2>
+      <form>
+          <input type="text" id="new-username" name="new-username"><br>
+          <input type="submit" value="Change username">
+      </form>
+  </div>
+</div>
+
+<div class="block-right">
+
+
+
+<div class="userPage-wrapper">
+  <div class="userPage-container">
+    <h1 class="userPage-title">@Model.UserModelForClient!.Username</h1>
+    <div class="userPage-roles">
+      <table class="userPage-roles-table">
+        <thead>
+          <tr>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var item in Model.UserModelForClient.Roles!)
+          {
+            <tr>
+              <td>@item</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+</div>

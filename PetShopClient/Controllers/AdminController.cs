@@ -17,11 +17,13 @@ public class AdminController : Controller
     private readonly IAccountService _accountService;
     private readonly IDataApiService<Animals> _dataApiService;
     private readonly IDataApiService<Categories> _categoryApiServise;
-    public AdminController(IDataApiService<Categories> categoryApiServise, IAccountService accountService, IDataApiService<Animals> dataApiService)
+    private readonly IDataApiService<Comments> _commentApiServise;  
+    public AdminController(IDataApiService<Categories> categoryApiServise, IAccountService accountService, IDataApiService<Animals> dataApiService, IDataApiService<Comments> commentApiServise)
     {
         _categoryApiServise = categoryApiServise;
         _accountService = accountService;
         _dataApiService = dataApiService;
+        _commentApiServise = commentApiServise;
     }
 
     public IActionResult Index()
@@ -218,5 +220,23 @@ public class AdminController : Controller
         return ViewComponent("UserDetailsEditor", new { id = userId });
     }
 
+    public async Task<IActionResult>CommentsOverview()
+    {
+        var comments = await _commentApiServise.GetAll(PetShopApiEndpoints.GetAllComments);
+        return ViewComponent("CommentsOverview");
+
+    }
+
+    // delete comment
+
+    public async Task<IActionResult> DeleteCommentById(int id)
+    {
+        if (id < 0)
+        {
+            RedirectToAction("CommentsOverview");
+        }
+        await _commentApiServise.Delete(PetShopApiEndpoints.DeleteCommentsById, id);
+        return RedirectToAction("CommentsOverview");
+    }
 }
 

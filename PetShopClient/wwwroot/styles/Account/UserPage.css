@@ -1,0 +1,200 @@
+﻿/* Styles for left block */
+/*.block-left {
+    width: 30%;
+    float: left;
+    margin-right: 5%;
+}
+
+.change-pass-block {
+    margin-bottom: 20px;
+}
+
+    .change-pass-block h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .change-pass-block label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .change-pass-block input[type="password"] {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+
+    .change-pass-block input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float: right;
+    }*/
+
+/* Styles for right block */
+/*.block-right {
+    width: 30%;
+    float: right;
+    margin-left: 5%;
+}*/
+
+/* Styles for user page */
+/*.userPage-wrapper {
+    margin-top: 50px;
+}
+
+.userPage-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.userPage-roles-table {
+    border-collapse: collapse;
+}
+
+    .userPage-roles-table th,
+    .userPage-roles-table td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .userPage-roles-table th {
+        background-color: #f2f2f2;
+    }
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 auto;
+    width: 95%;
+    max-width: 1200px;
+    padding: 0 20px;
+}*/
+
+
+
+/* Styles for left block */
+.block-left {
+    width: 30%;
+    float: left;
+    margin-right: 5%;
+}
+
+.change-pass-block {
+    margin-bottom: 20px;
+}
+
+    .change-pass-block h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .change-pass-block label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .change-pass-block input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    .change-pass-block input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float: right;
+    }
+
+/* Styles for right block */
+.block-right {
+    width: 30%;
+    float: right;
+    margin-left: 5%;
+}
+
+/* Styles for user page */
+.userPage-wrapper {
+    margin-top: 50px;
+}
+
+.userPage-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.userPage-roles-table {
+    border-collapse: collapse;
+}
+
+    .userPage-roles-table th,
+    .userPage-roles-table td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .userPage-roles-table th {
+        background-color: #f2f2f2;
+    }
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 auto;
+    width: 95%;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    background-image: linear-gradient(to right, #f5f5f5, #fff);
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+    font-size: 16px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+    input[type="submit"]:hover {
+        background-color: #3e8e41;
+    }

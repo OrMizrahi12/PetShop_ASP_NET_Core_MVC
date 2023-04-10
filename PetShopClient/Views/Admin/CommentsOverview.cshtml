@@ -1,0 +1,9 @@
+﻿@model IEnumerable<PetShopClientServise.DtoModels.Comments>
+@{
+    ViewData["Title"] = "CommentsOverview";
+}
+
+@await Html.PartialAsync("Admin/_AdminDeshbord", ViewData)
+@await Html.PartialAsync("Admin/_CommentsOverview", Model)
+
+

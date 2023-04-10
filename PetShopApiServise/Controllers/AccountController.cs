@@ -287,4 +287,36 @@ public class AccountController : ControllerBase
         return Ok(authLevelsList);
 
     }
+
+    // change password
+
+    [PetShopExceptionFilter]
+    [HttpPost("ChangePassword")]
+    [IsAuthenticatedFilter]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel changePasswordModel)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        var result = await _userManager.ChangePasswordAsync(user!, changePasswordModel.OldPassword!, changePasswordModel.NewPassword!);
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "Password has been changed successfully." });
+        }
+        return BadRequest(result.Errors);
+    }
+
+
+    [PetShopExceptionFilter]
+    [HttpPost("ChangeUsername")]
+    [IsAuthenticatedFilter]
+    public async Task<IActionResult> ChangeUsername([FromBody] ChangeUsernameModel changeUsernameModel)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        user!.UserName = changeUsernameModel.NewUsername;
+        var result = await _userManager.UpdateAsync(user);
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "Username has been changed successfully." });
+        }
+        return BadRequest(result.Errors);
+    }
 }

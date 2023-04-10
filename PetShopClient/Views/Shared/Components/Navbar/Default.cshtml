@@ -20,10 +20,11 @@
         @{
             if(permissions.Contains("Administrators"))
             {
-                 <li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
+                 <li><a  style="float: right" asp-controller="Admin" asp-action="Index">Admin</a></li>
             }
             if (Model.IsAuthenticated)
             {
+                <li  style="float: right" ><a style="float: right" asp-controller="Account" asp-action="UserPage" >@userModel 🤵🏻‍</a></li>
                 <li  style="float: right"><a asp-controller="Account" asp-action="Logout">Logout</a></li>
             }
             else

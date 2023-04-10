@@ -1,0 +1,54 @@
+﻿@model PetShopClientServise.CustomModelsForView.Admin.CommentsOverviewModel
+
+@{
+    ViewData["Title"] = "Comments Overview";
+}
+@{
+    Layout = "_Layout"; 
+}
+@await Html.PartialAsync("Admin/_AdminDeshbord")
+
+
+    <head>
+        <link rel="stylesheet" href="~/styles/Admin/CommentsOverview.css" />
+    </head>
+<div class="comments-overview-wrapper">
+  <div class="comments-overview-container">
+    <h1 class="comments-overview-title">Comments Overview</h1>
+    <div class="comments-overview-content">
+      <table class="overviewTable">
+        <thead>
+          <tr>
+            <th class="name-th">Comment</th>
+            <th class="id-th">Animal</th>
+            <th class="category-th">User</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var comment in Model.Comments!)
+          {
+              var animal = Model.Animals!.FirstOrDefault(a => a.AnimalId == comment.AnimalId);
+              var user = Model.Users!.FirstOrDefault(u => u.Id == comment.UserId);
+              var animalName = animal?.Name ?? "Deleted animal/unknon";
+              var username = user?.Username ?? "Deleted user/unknon";
+
+            <tr>
+              <td>@comment.Comment</td>
+              
+              <td>
+                <a class="link-to-animal-page" asp-action="ShowAnimalById" asp-controller="Home" asp-route-id="@comment.AnimalId">@animalName</a>
+              </td>
+              <td>@username</td>
+              <td>
+                <form method="post" asp-action="DeleteCommentById" asp-controller="Admin" asp-route-id="@comment.CommentId" class="delete-form">
+                  <button type="submit" class="deleteBtn">Delete</button>
+                </form>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+﻿.overviewTable {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+    .overviewTable th,
+    .overviewTable td {
+        border: 1px solid #ddd;
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    .overviewTable th {
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+        .overviewTable th.name-th:hover,
+        .overviewTable th.id-th:hover,
+        .overviewTable th.category-th:hover {
+            background-color: gray;
+            color: black;
+        }
+
+    .overviewTable tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .overviewTable tbody tr:hover {
+        background-color: #e8f1ff;
+    }
+
+    .overviewTable img {
+        max-width: 100%;
+        height: auto;
+    }
+
+.editBtn {
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+    .editBtn:hover {
+        background-color: #3c8c3f;
+    }
+
+.deleteBtn {
+    border: none;
+    background-color: #f44336;
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.deleteBtn:hover {
+    background-color: #d32f2f;
+}
+
+.link-to-animal-page {
+    display: inline-block;
+    padding: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #0077cc;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+    .link-to-animal-page:hover {
+        background-color: #0066b2;
+    }
