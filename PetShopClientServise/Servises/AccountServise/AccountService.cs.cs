@@ -131,4 +131,16 @@ public class AccountService : IAccountService
             return new ClientResponse<IEnumerable<IdentityRole>> { Data = new List<IdentityRole> { }, StatusCode = res.StatusCode };
         }
     }
+
+    public async Task<HttpStatusCode> ChangeUsername(ChangeUsernameModel changeUsernameModel)
+    {
+        var res = await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/ChangeUsername", changeUsernameModel);
+        return res.StatusCode;
+    }
+
+    public async Task<HttpStatusCode> ChangePassword(ChangePasswordModel changePasswordModel)
+    {
+        var res = await HttpClientInfo.HttpClientServises.PostAsJsonAsync("api/Account/ChangePassword", changePasswordModel);
+        return res.StatusCode;
+    }
 }

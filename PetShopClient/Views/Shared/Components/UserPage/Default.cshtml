@@ -4,6 +4,10 @@
   <meta name="viewport" content="width=device-width" />
   <title>@ViewBag.Title</title>
   <link rel="stylesheet" href="~/styles/Account/UserPage.css" />
+    <script src="~/ValidationForms/ChangePasswordForm.js"></script>
+    <script src="~/ValidationForms/ChangeUsernameForm.js"></script>
+    <script src="~/scripts/jquery.min.js"></script>
+    <script src="~/scripts/jquery.validate.min.js"></script>
 </head>
 @{
   ViewData["Title"] = "User Page";
@@ -11,23 +15,27 @@
 @{
   Layout = "_Layout";
 }
+
 <div class="container">
 <div class="block-left">
   <div class="change-pass-block">
     <h2>Change Password</h2>
-    <form>
-      <label for="old-password">Old Password:</label>
-      <input type="password" id="old-password" name="old-password"><br>
-      <label for="new-password">New Password:</label>
-      <input type="password" id="new-password" name="new-password"><br>
+    <form id="form-change-password" asp-action="ChangePassword" asp-controller="Account">
+      <label for="oldPassword">Old Password:</label>
+      <input type="password" id="oldPassword" name="oldPassword"><br>
+
+      <label for="newPassword">New Password:</label>
+      <input type="password" id="newPassword" name="newPassword"><br>
+
       <input type="submit" value="Change password">
     </form>
   </div>
 
   <div class="change-username-block">
           <h2>Change Username</h2>
-      <form>
-          <input type="text" id="new-username" name="new-username"><br>
+      <form id="form-change-username" asp-action="ChangeUserName" asp-controller="Account">
+          <label for="newUserName">New Username:</label>
+          <input type="text" id="newUserName" name="newUserName"><br>
           <input type="submit" value="Change username">
       </form>
   </div>

@@ -1,9 +1,11 @@
 ﻿using PetShopApiServise.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using PetShopApiServise.Attributes.ExeptionAttributes;
 
 namespace PetShopApiServise.Reposetories.Data;
 
+[PetShopExceptionFilter]
 public class DataRepository<T> : IDataRepository<T> where T : class
 {
     private readonly PetShopDBContext _context;

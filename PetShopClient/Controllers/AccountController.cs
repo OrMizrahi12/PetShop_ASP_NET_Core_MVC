@@ -96,4 +96,14 @@ public class AccountController : Controller
         return RedirectToAction("UserPage");
     }
 
+    public async Task<IActionResult> ChangeUserName(string newUserName)
+    {
+        var res = await _accountService.ChangeUsername(
+            new ChangeUsernameModel
+            {
+                NewUsername = newUserName
+            });
+        return RedirectToAction("UserPage");
+    }
+
 }

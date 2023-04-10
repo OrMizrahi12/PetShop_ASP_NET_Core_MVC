@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShopApiServise", "PetSho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShopProject", "..\PetShopProject\PetShopProject\PetShopProject.csproj", "{4E4F96DD-76C5-4736-8996-A184F10553A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetShopClientServise", "PetShopClientServise\PetShopClientServise.csproj", "{B6877B38-BF72-468E-B786-426F5526760F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShopClientServise", "PetShopClientServise\PetShopClientServise.csproj", "{B6877B38-BF72-468E-B786-426F5526760F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetShopClient", "PetShopClient\PetShopClient.csproj", "{FAA7E1B2-C0A4-4CD9-A4B9-97FFBE0EE973}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShopClient", "PetShopClient\PetShopClient.csproj", "{FAA7E1B2-C0A4-4CD9-A4B9-97FFBE0EE973}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetShop.Test", "PetShop.Test\PetShop.Test.csproj", "{7F4144D3-D285-45D5-8D35-E9433B429ADD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{FAA7E1B2-C0A4-4CD9-A4B9-97FFBE0EE973}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAA7E1B2-C0A4-4CD9-A4B9-97FFBE0EE973}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAA7E1B2-C0A4-4CD9-A4B9-97FFBE0EE973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F4144D3-D285-45D5-8D35-E9433B429ADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F4144D3-D285-45D5-8D35-E9433B429ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F4144D3-D285-45D5-8D35-E9433B429ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F4144D3-D285-45D5-8D35-E9433B429ADD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

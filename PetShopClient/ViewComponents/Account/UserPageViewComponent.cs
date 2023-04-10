@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetShopClientServise.CustomModelsForView.Account;
 using PetShopClientServise.Servises.AccountServise;
+using System.Net;
 
 namespace PetShopClient.ViewComponents.Account
 {
@@ -15,8 +16,11 @@ namespace PetShopClient.ViewComponents.Account
         public async Task<IViewComponentResult> InvokeAsync()
         {
             UserPageModel userPageModel = new();  
+
             var res = await _accountService.GetCurrentUser();
             userPageModel.UserModelForClient = res.Data;
+
+            
             return View(userPageModel);
         }
 
