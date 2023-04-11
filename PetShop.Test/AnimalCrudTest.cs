@@ -34,7 +34,6 @@ public class AnimalCrudTest
         // Assert
         Assert.AreEqual(1, animals.Count());
         Assert.AreEqual("Fluffy", animals.First().Name);
-        Assert.AreEqual("Dog", animals.First().Name);
     }
 
     [TestMethod]
